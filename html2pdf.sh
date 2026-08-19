@@ -226,7 +226,6 @@ if (( SYNC )); then
     pdf_dir="$(dirname "$html_dir")/pdf"
     pdf="$pdf_dir/$(basename "${html%.*}").pdf"
     if [[ -s "$pdf" ]]; then
-      note "skip (exists): ${pdf#"$SCRIPT_DIR"/}"
       (( ++skipped ))
       continue
     fi
