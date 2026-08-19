@@ -1,0 +1,53 @@
+# CV tailoring workspace -- source is tracked, rendered output is not.
+#
+# Every PDF and DOCX here is generated from a track's
+# Dexter_Fernandes_Master_CV.md plus Dexter_Fernandes_Resume_template.html.
+# Re-render with Resumes/HTML/html2pdf.sh instead of committing binaries:
+# git cannot diff them, so each re-render would add a full copy to history.
+
+# --- Rendered CVs and cover letters ------------------------------------
+**/Resumes/pdf/*
+**/Resumes/docx/*
+**/Resumes/HTML/*
+**/Cover Letters/*
+**/Form Answers/*
+
+# A reference document, not a generated CV. Uncomment to track it.
+# !CV/Cover Letters/Masters-degree-calculator.pdf
+
+# --- html2pdf.sh intermediates -----------------------------------------
+# The render copy written beside the source with fonts inlined. Normally
+# removed on exit, but survives a crash or a killed run -- and a leading
+# dot does not make git ignore it.
+.*.render.html
+
+# --- Office / LibreOffice lock and owner files -------------------------
+~$*
+.~lock.*#
+*.tmp
+
+# --- OS cruft ----------------------------------------------------------
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+desktop.ini
+*:Zone.Identifier
+
+# --- Editors -----------------------------------------------------------
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+
+# --- Claude Code ------------------------------------------------------
+# Project skill, slash command and CLAUDE.md are shared and stay tracked.
+# Machine-local settings and session state are not.
+.claude/settings.local.json
+.claude/*.local.json
+
+**/*.woff2
+**/*.css
