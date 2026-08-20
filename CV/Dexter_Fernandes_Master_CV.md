@@ -109,6 +109,16 @@ Machine learning engineer with 3+ years delivering computer vision models into 2
 - Converted YOLO26n to a dynamic-batch TensorRT FP16 engine on 6GB VRAM Turing hardware, validating FP16 against FP32 accuracy and profiling p99 latency to sustain 29.7 FPS per stream live.
 - Implemented a C++ and CUDA TensorRT decode plugin with IPluginV2DynamicExt, moving post-processing into the inference engine to support custom-layer deployment.
 - Benchmarked IoU, NvDCF and NvSORT trackers on MOTA, IDF1, ID switches, fragmentation, FPS and VRAM impact to guide tracker selection.
+- Designed a geometry-first cross-camera (MTMC) identity layer over per-camera DeepStream trackers, lifting pooled IDF1 from 0.198 to 0.245 on WildTrack.
+- Fit uncertainty-aware ground-plane homographies per camera with a held-out quality gate (median <0.10m, p90 <0.30m), propagating foot-point pixel uncertainty into projection.
+- Built a CPU-testable MTMC association core using constrained union-find clustering and mutual-nearest-neighbour matching, reaching 100% online/offline agreement across 10,608 rows.
+- Added an optional DeepStream ReID SGIE for sparse appearance fusion; a 28% throughput hit for only 0.002 F1 gain over geometry-only led me to ship geometry as the default.
+- Hardened cross-camera fusion for real deployments: derived NTP-based timestamps across RTSP sources, gated fusion on clock skew, and incremented reconnect generations to stop stale tracker-ID reuse.
+- Instrumented the pipeline with structured JSON-line logging and a per-sensor health monitor tracking liveness, FPS vs expected and time-since-last-detection, flagging stalled streams in real time.
+- Wrote a failure-mode playbook for stuck streams, silent detector degradation, OOM and silent reconnects, grounded in real logged events including a genuine nvtracker association bug.
+- Built an automated model-promotion gate checking match-rate and mean-IoU against a signed SHA-256 manifest, and wired GPU smoke plus MOT17 integration tests into GitHub Actions CI.
+- Ran an O(1)-inference confidence-threshold sweep against WildTrack ground truth, lifting operating-point F1 from 0.218 to 0.591 and logging results to Weights & Biases.
+- Hardened the RTSP source path with TCP transport and NTP-synced clocks, cutting batched-push timeout from 4s to about one frame interval so one stalled source can't stall the shared batch.
 
 ### ROS2 SLAM and Nav2 Simulation (02/2026)
 - Built a simulation-based robotics stack in ROS2 Jazzy and Gazebo Harmonic to evaluate LiDAR-centric SLAM, LiDAR and RGB fusion SLAM, and autonomous navigation in structured scenarios.
@@ -165,13 +175,13 @@ Dissertation: Radiological SLAM with LiDAR Odometry
 
 **Edge inference and optimisation:** TensorRT (custom plugins, dynamic batching), OpenVINO, ONNX, quantisation-aware training, post-training quantisation, FP16/INT8, structured pruning, layer fusion, latency and throughput profiling, VRAM profiling, Intel VTune, Intel Movidius Myriad VPU, Intel Core i7 industrial edge (VTC7252-7C4IP), NVIDIA Jetson AGX Xavier, JetPack
 
-**Video pipelines:** NVIDIA DeepStream 6.x/9.0, GStreamer, FFmpeg, RTSP, nvinfer, nvstreammux, nvtracker, nvdsosd, NvDCF, NvSORT, ByteTrack, multi-stream video analytics, multi-camera synchronisation, ISP and camera tuning (RGB and IR)
+**Video pipelines:** NVIDIA DeepStream 6.x/9.0, GStreamer, FFmpeg, RTSP, nvinfer, nvstreammux, nvtracker, nvdsosd, NvDCF, NvSORT, ByteTrack, multi-stream video analytics, multi-camera synchronisation, multi-target multi-camera (MTMC) tracking, homography calibration, ground-plane projection, union-find clustering, ISP and camera tuning (RGB and IR)
 
 **Robotics and SLAM:** ROS2 (Robot Operating System 2), rclcpp, rclpy, tf2, rosbag2, Gazebo, RTAB-Map, LIO-SAM, Cartographer, GLIM, Nav2, LiDAR SLAM, pose graph optimisation, ICP (Iterative Closest Point), scan matching, LiDAR extrinsics calibration, PCL (Point Cloud Library), Open3D, Eigen, Ceres, g2o, GTSAM, robot_localization, EKF
 
-**MLOps and experimentation:** MLflow, DVC (Data Version Control), Apache Airflow, Apache Kafka, Optuna, Weights & Biases, Jupyter, CVAT (Computer Vision Annotation Tool), automated labelling, dataset versioning, synthetic data generation, benchmarking harnesses, ablation studies, hypothesis testing, Bayesian optimisation, failure-mode analysis, drift tracking, Grad-CAM, TIDE (Toolbox for Identifying Detection Errors), COCO annotation format
+**MLOps and experimentation:** MLflow, DVC (Data Version Control), Apache Airflow, Apache Kafka, Optuna, Weights & Biases, Jupyter, CVAT (Computer Vision Annotation Tool), automated labelling, dataset versioning, synthetic data generation, benchmarking harnesses, ablation studies, hypothesis testing, Bayesian optimisation, failure-mode analysis, drift tracking, Grad-CAM, TIDE (Toolbox for Identifying Detection Errors), COCO annotation format, model-promotion gates
 
-**Production and cloud:** Docker, CI/CD, Git, CMake, pytest, unittest, gtest, Microsoft Azure (Container Apps, Blob Storage, queues), REST API design, containerised microservices, multiprocessing, autoscaling, cost-per-inference, PostgreSQL, Django, structured logging, health checks, observability, production monitoring, Linux
+**Production and cloud:** Docker, CI/CD, GitHub Actions, Git, CMake, pytest, unittest, gtest, Microsoft Azure (Container Apps, Blob Storage, queues), REST API design, containerised microservices, multiprocessing, autoscaling, cost-per-inference, PostgreSQL, Django, structured logging, health monitoring, health checks, observability, production monitoring, Linux
 
 **Time series and classical ML:** MultiRocket, gradient boosting, random forests, scikit-learn, Pandas, multivariate time-series classification
 
