@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dexter Fernandes CV</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#f3f2f2; font-family:Archivo, system-ui, sans-serif; }
+  .page {
+    width:210mm; min-height:297mm; margin:16px auto; padding:0.5in;
+    background:#fff; box-shadow:0 1px 6px rgba(0,0,0,0.12);
+  }
+  li::marker { color:#ec3013; }
+  a { color:#201e1d; text-decoration:none; border-bottom:1px solid #bab6b6; }
+  a:hover { color:#ae1800; border-bottom-color:#ec3013; }
+  @page { size:A4; margin:0.5in; }
+  @media print {
+    body { background:#fff; }
+    .page { width:auto; min-height:0; margin:0; padding:0; box-shadow:none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div style="color:#201e1d;font-size:10.4px;line-height:1.4;letter-spacing:0">
+
+<!-- ============ HEADER ============ -->
+<h1 style="font-weight:800;font-size:31px;line-height:0.95;letter-spacing:-1px;text-transform:uppercase;margin:0 0 8px 0">Dexter Fernandes</h1>
+<div style="height:3px;background:#ec3013;margin:0 0 6px 0"></div>
+<div style="display:flex;flex-wrap:wrap;gap:4px 14px;font-size:9.4px;font-weight:500;letter-spacing:0.02em;margin:0 0 3px 0">
+  <span>Embedded Software Engineer</span>
+  <span style="color:#7d7979">Bristol, UK</span>
+  <span>+44 7436 007369</span>
+  <span><a href="mailto:dexterfernandes11@gmail.com">dexterfernandes11@gmail.com</a></span>
+  <span><a href="https://linkedin.com/in/dexterferns">linkedin.com/in/dexterferns</a></span>
+  <span><a href="https://github.com/Dexter-Fernandes">github.com/Dexter-Fernandes</a></span>
+</div>
+
+<!-- ============ SUMMARY ============ -->
+<div style="height:2px;background:#201e1d;margin:10px 0 6px 0"></div>
+<div style="font-size:9.2px;font-weight:700;text-transform:uppercase;letter-spacing:0.10em;margin:0 0 4px 0">Summary</div>
+<p style="margin:0;orphans:3;widows:3">Software engineer with 3+ years building and shipping real-time C++17 systems on embedded and edge compute hardware, from Intel Movidius VPUs to NVIDIA Jetson platforms. Delivered deterministic real-time inference pipelines to 24/7 industrial field deployments, tripling throughput on embedded hardware and cutting live pipeline crashes by 67% through reliability engineering. Built autonomous robotics systems in ROS2 and C++, including real-time SLAM and multi-sensor fusion on a mobile platform. Practised test-first development with gtest and pytest across the embedded inference stack, and led a four-engineer team through a production two-stage detector deployment in Texas. MSc Robotics, University of Bristol, based in Bristol.</p>
+
+<!-- ============ EXPERIENCE ============ -->
+<div style="height:2px;background:#201e1d;margin:7px 0 5px 0"></div>
+<div style="font-size:9.2px;font-weight:700;text-transform:uppercase;letter-spacing:0.10em;margin:0 0 6px 0">Relevant Experience</div>
+
+<!-- ---- Independent Engineering ---- -->
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:0 0 3px 0">
+  <div style="font-size:12.5px;font-weight:800;letter-spacing:-0.2px">Independent Engineering <span style="font-weight:500;color:#444141">— Self-Directed Software Engineer</span></div>
+  <div style="font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#ae1800;white-space:nowrap">09/2024 – 04/2026 · Remote</div>
+</div>
+<ul style="margin:0;padding-left:12px">
+  <li style="list-style:square;margin:0 0 1px 0;padding-left:2px">Ran a self-directed engineering programme covering modern detection architectures and embedded deployment paths, delivering open-source projects with published benchmarks.</li>
+  <li style="list-style:square;margin:0 0 1px 0;padding-left:2px">Rebuilt and benchmarked current detector families (YOLOv8 through YOLO26, RT-DETR, EfficientViT) against production deployment criteria: latency, model size and export path for edge and embedded targets.</li>
+  <li style="list-style:square;margin:0 0 1px 0;padding-left:2px">Shipped a real-time multi-stream RTSP video pipeline in C++ and CUDA on constrained edge hardware, published on GitHub.</li>
+  <li style="list-style:square;margin:0;padding-left:2px">Documented a reproducible benchmarking methodology for detector comparison, publishing results and code alongside each project for peer review.</li>
+</ul>
+
+<div style="height:1px;background:#d7d3d3;margin:7px 0"></div>
+
+<!-- ---- Esbaar ---- -->
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:0 0 3px 0">
+  <div style="font-size:12.5px;font-weight:800;letter-spacing:-0.2px">Esbaar <span style="font-weight:500;color:#444141">— AI Engineer</span></div>
+  <div style="font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#ae1800;white-space:nowrap">01/2023 – 08/2023 · Muscat, Oman</div>
+</div>
+<ul style="margin:0;padding-left:12px">
+  <li style="list-style:square;margin:0 0 1px 0;padding-left:2px">Hardened deployed services with Dockerised microservices, health checks and safe restarts, cutting live video pipeline crashes by 67% and enabling recovery without site visits.</li>
+  <li style="list-style:square;margin:0 0 1px 0;padding-left:2px">Developed a watchdog application that detected and restarted failed services on edge devices autonomously, removing the need for engineer callouts.</li>
+  <li style="list-style:square;margin:0 0 1px 0;padding-left:2px">Developed and maintained NVIDIA DeepStream 6.x video inference pipelines for 24/7 industrial perception in harsh desert environments, diagnosing model failures under lighting, motion and environmental stressors and turning findings into fixes for live operation.</li>
+  <li style="list-style:square;margin:0 0 1px 0;padding-left:2px">Built a repeatable optimisation workflow from baseline to FP16 to validation, and owned the end-to-end ML lifecycle for real-time perception on BP drilling rigs from data curation through on-site validation, improving F1 by 15% under 24/7 operation.</li>
+  <li style="list-style:square;margin:0 0 1px 0;padding-left:2px">Introduced pytest, unittest and linting into CI for edge inference modules, improving release consistency across hardware targets.</li>
+  <li style="list-style:square;margin:0;padding-left:2px">Documented failure modes, recovery procedures and deployment guardrails for the engineers supporting fielded embedded systems.</li>
+</ul>
+
+<div style="height:1px;background:#d7d3d3;margin:7px 0"></div>
+
+<!-- ---- LivNSense ---- -->
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:0 0 3px 0">
+  <div style="font-size:12.5px;font-weight:800;letter-spacing:-0.2px">LivNSense Technologies <span style="font-weight:500;color:#444141">— Lead Software Engineer, AI</span></div>
+  <div style="font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#ae1800;white-space:nowrap">05/2020 – 12/2022 · Bengaluru, India</div>
+</div>
+<ul style="margin:0;padding-left:12px">
+  <li style="list-style:square;margin:0 0 1px 0;padding-left:2px">Built asynchronous C++17 perception pipelines on OpenVINO and Intel Movidius VPUs, tripling throughput from 5 to 15 FPS and holding deterministic real-time inference on embedded Intel hardware.</li>
+  <li style="list-style:square;margin:0 0 1px 0;padding-left:2px">Drove the C++ inference path test-first, specifying pre-processing, inference and post-processing behaviour as gtest cases before implementation, which made the async refactor from 5 to 15 FPS safe to attempt.</li>
+  <li style="list-style:square;margin:0 0 1px 0;padding-left:2px">Profiled C++ inference and pre and post-processing hotspots with Intel VTune Profiler, driving targeted performance fixes in the CNN inference path.</li>
+  <li style="list-style:square;margin:0 0 1px 0;padding-left:2px">Deployed quantised vision models using FP16 and INT8 optimisation, structured pruning and layer fusion, halving model size on embedded targets while preserving production accuracy.</li>
+  <li style="list-style:square;margin:0 0 1px 0;padding-left:2px">Evaluated edge versus cloud inference trade-offs to minimise bandwidth, latency and operational cost while holding safety-critical performance targets.</li>
+  <li style="list-style:square;margin:0;padding-left:2px">Led four engineers building a two-stage detector feeding helmet-colour classification for construction safety in Texas, cutting false positives by 33% within latency and power budgets, mentoring junior engineers and coordinating with hardware, software and QA teams to integrate perception modules into deployed systems.</li>
+</ul>
+
+<!-- ============ PROJECTS ============ -->
+<div style="height:2px;background:#201e1d;margin:7px 0 5px 0"></div>
+<div style="font-size:9.2px;font-weight:700;text-transform:uppercase;letter-spacing:0.10em;margin:0 0 6px 0">Projects</div>
+
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:0 0 3px 0">
+  <div style="font-size:11.5px;font-weight:800;letter-spacing:-0.2px">DeepStream RTSP Pipeline <span style="font-weight:500;color:#444141"><a href="https://github.com/Dexter-Fernandes/deepstream-rtsp-pipeline">github.com/Dexter-Fernandes/deepstream-rtsp-pipeline</a></span></div>
+  <div style="font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#ae1800;white-space:nowrap">06/2026</div>
+</div>
+<ul style="margin:0 0 8px 0;padding-left:12px">
+  <li style="list-style:square;margin:0 0 1px 0;padding-left:2px">Built an end-to-end DeepStream 9.0 and GStreamer RTSP pipeline running real-time detection and tracking across 3 concurrent feeds on embedded GPU hardware.</li>
+  <li style="list-style:square;margin:0 0 1px 0;padding-left:2px">Implemented a C++ and CUDA TensorRT decode plugin using IPluginV2DynamicExt, moving post-processing into the inference engine to cut latency.</li>
+  <li style="list-style:square;margin:0 0 1px 0;padding-left:2px">Converted the detection model to a dynamic-batch TensorRT FP16 engine on 6GB VRAM hardware, profiling p99 latency to sustain 29.7 FPS per stream live.</li>
+  <li style="list-style:square;margin:0;padding-left:2px">Benchmarked IoU, NvDCF and NvSORT trackers on MOTA, IDF1, ID switches, fragmentation, FPS and VRAM to guide real-time tracker selection.</li>
+</ul>
+
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:0 0 3px 0">
+  <div style="font-size:11.5px;font-weight:800;letter-spacing:-0.2px">ROS2 SLAM and Nav2 Simulation</div>
+  <div style="font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#ae1800;white-space:nowrap">02/2026</div>
+</div>
+<ul style="margin:0;padding-left:12px">
+  <li style="list-style:square;margin:0 0 1px 0;padding-left:2px">Built a simulation robotics stack in ROS2 Jazzy and Gazebo Harmonic to evaluate LiDAR-centric SLAM, LiDAR-RGB fusion SLAM, and autonomous navigation.</li>
+  <li style="list-style:square;margin:0 0 1px 0;padding-left:2px">Developed ROS2 nodes, launch files and parameterised configurations in C++ and Python, using tf2, message synchronisation and timestamp alignment to debug real-time transform timing issues.</li>
+  <li style="list-style:square;margin:0 0 1px 0;padding-left:2px">Implemented point cloud filtering, segmentation and registration with PCL and Open3D, plus an EKF localisation layer with robot_localization fusing wheel odometry and IMU.</li>
+  <li style="list-style:square;margin:0;padding-left:2px">Benchmarked RTAB-Map, LIO-SAM, Cartographer and GLIM across 2D and 3D LiDAR configurations for mapping accuracy and runtime performance.</li>
+</ul>
+
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:0 0 3px 0">
+  <div style="font-size:11.5px;font-weight:800;letter-spacing:-0.2px">Modern Edge CV Benchmarking <span style="font-weight:500;color:#444141"><a href="https://github.com/Dexter-Fernandes/Modern-Edge-CV-Benchmarking">github.com/Dexter-Fernandes/Modern-Edge-CV-Benchmarking</a></span></div>
+  <div style="font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#ae1800;white-space:nowrap">03/2026</div>
+</div>
+<ul style="margin:0;padding-left:12px">
+  <li style="list-style:square;margin:0 0 1px 0;padding-left:2px">Benchmarked YOLOv8, YOLOv10, YOLO26, RT-DETR and EfficientViT on accuracy, latency, model size and deployment suitability for resource-constrained embedded targets.</li>
+  <li style="list-style:square;margin:0 0 1px 0;padding-left:2px">Assessed Vision Transformer and foundation-model approaches for detection and segmentation against embedded compute and memory budgets.</li>
+  <li style="list-style:square;margin:0;padding-left:2px">Exported models to ONNX and evaluated OpenVINO deployment paths against edge and embedded hardware constraints.</li>
+</ul>
+
+<!-- ============ EDUCATION ============ -->
+<div style="height:2px;background:#201e1d;margin:7px 0 5px 0"></div>
+<div style="font-size:9.2px;font-weight:700;text-transform:uppercase;letter-spacing:0.10em;margin:0 0 6px 0">Education</div>
+
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:0 0 2px 0">
+  <div style="font-size:11.5px;font-weight:800;letter-spacing:-0.2px">University of Bristol <span style="font-weight:500;color:#444141">— MSc Robotics, Merit</span></div>
+  <div style="font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#ae1800;white-space:nowrap">09/2023 – 09/2024 · Bristol, UK</div>
+</div>
+<p style="margin:0 0 3px 0;font-weight:600">Dissertation: Radiological SLAM with LiDAR Odometry</p>
+<ul style="margin:0 0 8px 0;padding-left:12px">
+  <li style="list-style:square;margin:0 0 1px 0;padding-left:2px">Built a real-time SLAM system in C++17 and ROS2 (rclcpp) on a Clearpath Husky, fusing Velodyne VLP-16 LiDAR, Intel RealSense D435i depth and radiological sensing for inspection mapping.</li>
+  <li style="list-style:square;margin:0 0 1px 0;padding-left:2px">Benchmarked RTAB-Map, LIO-SAM and Cartographer across matched rosbag2 sequences under a single evaluation protocol.</li>
+  <li style="list-style:square;margin:0 0 1px 0;padding-left:2px">Configured Ceres, g2o and GTSAM as solver backends and tuned ICP parameters across environments.</li>
+  <li style="list-style:square;margin:0;padding-left:2px">Calibrated LiDAR extrinsics to the robot base and resolved transform timing with tf2 across a PCL point cloud pipeline.</li>
+</ul>
+
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:0 0 3px 0">
+  <div style="font-size:11.5px;font-weight:800;letter-spacing:-0.2px">Visvesvaraya National Institute of Technology <span style="font-weight:500;color:#444141">— BTech Electrical and Electronics Engineering</span></div>
+  <div style="font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#ae1800;white-space:nowrap">07/2016 – 05/2020 · Nagpur, India</div>
+</div>
+<ul style="margin:0;padding-left:12px">
+  <li style="list-style:square;margin:0;padding-left:2px">Core coursework in electronics, circuit design and control systems.</li>
+</ul>
+
+<!-- ============ SKILLS ============ -->
+<div style="height:2px;background:#201e1d;margin:7px 0 5px 0"></div>
+<div style="font-size:9.2px;font-weight:700;text-transform:uppercase;letter-spacing:0.10em;margin:0 0 6px 0">Skills</div>
+<div style="display:grid;grid-template-columns:118px 1fr;gap:4px 10px;align-items:baseline">
+  <div style="font-weight:700">Languages</div><div>C++17, CUDA C++, Python, Bash</div>
+  <div style="font-weight:700">Embedded and Real-Time</div><div>Deterministic real-time inference, asynchronous pipelines, latency and throughput optimisation, resource-constrained embedded deployment, Intel Movidius VPU, NVIDIA Jetson AGX Xavier</div>
+  <div style="font-weight:700">Testing and CI</div><div>Test-driven development, gtest, pytest, unittest, linting, CI/CD, regression testing, Linux, Git, CMake</div>
+  <div style="font-weight:700">Robotics and Autonomy</div><div>ROS2 (Robot Operating System 2, rclcpp, rclpy), Nav2, Gazebo Harmonic, tf2, sensor fusion, robot_localization, LiDAR and IMU integration, autonomous navigation</div>
+  <div style="font-weight:700">SLAM and Perception</div><div>RTAB-Map, LIO-SAM, Cartographer, GTSAM, Ceres, g2o, ICP and scan matching, PCL, Open3D</div>
+  <div style="font-weight:700">Edge Inference</div><div>TensorRT (custom CUDA plugins), OpenVINO, NVIDIA DeepStream, GStreamer, FP16 and INT8 quantisation, ONNX</div>
+  <div style="font-weight:700">Reliability and Operations</div><div>Docker, health checks, watchdog services, structured logging, observability, timeouts and retries</div>
+</div>
+
+<!-- ============ ADDITIONAL EXPERIENCE ============ -->
+<div>
+  <div style="height:2px;background:#201e1d;margin:7px 0 5px 0"></div>
+  <div style="font-size:9.2px;font-weight:700;text-transform:uppercase;letter-spacing:0.10em;margin:0 0 6px 0">Additional Experience</div>
+  <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:0 0 1px 0">
+    <div style="font-size:10.5px;font-weight:800;letter-spacing:-0.2px">GrowthStage <span style="font-weight:500;color:#444141">— Technical Screening Engineer (Contract)</span></div>
+    <div style="font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#ae1800;white-space:nowrap">05/2026 – Present · Remote</div>
+  </div>
+  <p style="margin:0">Assess candidate technical depth across perception, SLAM and deployment, running hands-on robotics and computer vision technical screens, and write and calibrate the evaluation rubrics used across those interviews.</p>
+</div>
+
+</div>
+</div>
+</body>
+</html>

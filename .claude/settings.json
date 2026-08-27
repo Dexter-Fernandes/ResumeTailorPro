@@ -1,0 +1,36 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./html2pdf.sh)",
+      "Bash(pdffonts *Kaizen*.pdf)",
+      "Bash(pdftotext \"CV/Resumes/pdf/Dexter_Fernandes_CV_Kaizen_Resourcing_Senior_Perception_Vision_Systems_Engineer.pdf\" -)",
+      "Bash(./html2pdf.sh CV --dry-run)",
+      "Bash(./html2pdf.sh --dry-run CV)",
+      "Bash(./html2pdf.sh --dry-run \"CV/Resumes\")",
+      "Bash(./html2pdf.sh --dry-run SLAM)",
+      "Bash(./html2pdf.sh --dry-run Nope)",
+      "Bash(exit 1)",
+      "Bash(./html2pdf.sh --force Software/Resumes)",
+      "Bash(chmod 000 \"Software/Resumes/HTML/broken.html\")",
+      "Bash(./html2pdf.sh Software/Resumes)",
+      "Bash(echo \"exit=$? \\(expect 1\\)\")",
+      "Bash(chmod 644 \"Software/Resumes/HTML/broken.html\")",
+      "Bash(:)",
+      "Bash(grep -v '^$')",
+      "Bash(grep -nE '\\(^| \\)\\([A-Z] \\){3,}')",
+      "Edit(/.claude/skills/resume-tailor/**)",
+      "Bash(cat)",
+      "Bash(python3 /tmp/claude-1000/-home-dexter-Documents-Notes-Career-Applications/56644515-6541-411c-b985-e364e0b183db/scratchpad/demo_bold.py Software/Resumes/HTML/Dexter_Fernandes_CV_ALTEN_Software_Engineer.html /tmp/claude-1000/-home-dexter-Documents-Notes-Career-Applications/56644515-6541-411c-b985-e364e0b183db/scratchpad/alten_bold.html)",
+      "Bash(python3 -c ' *)",
+      "Bash(google-chrome --headless --disable-gpu --no-sandbox --no-pdf-header-footer --print-to-pdf=/tmp/claude-1000/-home-dexter-Documents-Notes-Career-Applications/56644515-6541-411c-b985-e364e0b183db/scratchpad/alten_bold.pdf file:///tmp/claude-1000/-home-dexter-Documents-Notes-Career-Applications/56644515-6541-411c-b985-e364e0b183db/scratchpad/alten_bold.html)",
+      "Bash(pdfinfo /tmp/claude-1000/-home-dexter-Documents-Notes-Career-Applications/56644515-6541-411c-b985-e364e0b183db/scratchpad/alten_bold.pdf)",
+      "Bash(git --version)",
+      "Bash(gh --version)",
+      "Bash(gh auth *)",
+      "Bash(git config *)",
+      "Read(//home/dexter/**)",
+      "Read(//home/dexter/.ssh/**)",
+      "Read(//home/dexter/Documents/**)"
+    ]
+  }
+}
