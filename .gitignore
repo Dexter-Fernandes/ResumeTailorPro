@@ -1,3 +1,10 @@
+# Generated outputs -- tailored resumes and cover letters are rebuilt from the
+# per-track master CVs, the shared template, and the job listing. Only the
+# template itself is source.
+*.pdf
+*.html
+!/Dexter_Fernandes_Resume_template.html
+
 # Local, machine-specific Claude Code settings
 .claude/settings.local.json
 
