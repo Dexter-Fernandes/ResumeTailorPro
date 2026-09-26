@@ -13,22 +13,22 @@ or icons.
 ## Files
 
 All paths are relative to the working directory the workflow is invoked from. That is
-always a track directory: `CV/`, `Robotics/`, `LLM/`, `SLAM/`, `Software/`, `PLC/`. Each
-track holds its own master resume, scoped to that track's content. The template is shared
-across all tracks and sits one directory up.
+always a track directory: `CV/`, `Robotics/`, `LLM/`, `SLAM/`, `Software/`, `PLC/`. The
+track only decides where outputs are written. The master resume and the template are
+shared across all tracks and both sit one directory up, at the repo root.
 
 | Path | Use |
 |---|---|
-| `./Dexter_Fernandes_Master_CV.md` | Source of truth for this track. Read at Step 2 |
+| `../Dexter_Fernandes_Master_CV.md` | Single source of truth for every track. Always the copy one directory up. Read at Step 2 |
 | `../Dexter_Fernandes_Resume_template.html` | Only permitted output format. Always the copy one directory up. Read at Step 2 |
 | `Resumes/JD/Dexter_Fernandes_CV_<Company>_<Role>.md` | The job listing, saved at Step 1. Same basename as the CV HTML |
 | `Resumes/HTML/Dexter_Fernandes_CV_<Company>_<Role>.html` | The tailored CV. Created at Step 10 |
 
 Never ask the user to upload these. If either file is missing, unreadable, truncated or
 malformed, identify the problem at Step 2 and stop. Do not substitute another template,
-do not borrow another track's master resume, and do not work from a previously seen CV.
-A missing master resume means the workflow is being run from the wrong directory, or that
-track's master resume does not exist yet. Say which, and stop.
+do not use any other copy of the master resume, and do not work from a previously seen
+CV. A missing file means the workflow is being run from the wrong directory. Say so, and
+stop.
 
 Standing constraints, locked metrics and framing rules come from the project
 instructions already in context. Do not go looking for a separate profile file.
@@ -119,9 +119,9 @@ sponsorship constraint before any drafting begins.
 
 ## Step 2/12 -- Master Resume Intake
 
-Read `./Dexter_Fernandes_Master_CV.md`, this track's master resume, from the working
-directory, and the shared `../Dexter_Fernandes_Resume_template.html` from the directory
-above it. Never take either from anywhere else, and never fall back to a copy found
+Read the shared `../Dexter_Fernandes_Master_CV.md` and
+`../Dexter_Fernandes_Resume_template.html`, both from the directory above the working
+directory. Never take either from anywhere else, and never fall back to a copy found
 elsewhere in the repo. Report briefly:
 
 - Roles, education and projects found, with dates.

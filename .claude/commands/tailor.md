@@ -10,8 +10,8 @@ $ARGUMENTS
 
 If nothing was supplied above, or the listing is partial, ask for the missing Step 1
 inputs only: application channel, seniority assessment, the full listing, and any company
-context the user already has. Do not ask for the master CV or template; at Step 2 read the
-master CV from the working directory and the template from the directory above it.
+context the user already has. Do not ask for the master CV or template; at Step 2 read
+both from the directory above the working directory.
 
 Complete Steps 1 to 4 in one reply, label each step, and stop at the Step 4 confirmation
 gate.
