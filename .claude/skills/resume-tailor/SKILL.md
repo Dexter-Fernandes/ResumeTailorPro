@@ -67,8 +67,12 @@ instructions already in context. Do not go looking for a separate profile file.
 - Step 3 may include one optional factual question. The user may answer it while
   confirming the strategy. If unanswered, proceed with accurate qualitative wording.
 - Outside the fast paths, produce only the current step and wait.
-- If the user says fast mode after approving the strategy, complete Steps 5 to 11 in one
-  reply, ending with the audited HTML and the DONE report, then stop before Step 12.
+- If the user says fast mode after approving the strategy, run it in two replies:
+  1. Complete Steps 5 and 9 in one reply, label each step, show the Professional Summary
+     and Skills in full, and stop at a checkpoint asking the user to approve or adjust them.
+  2. Once approved, apply any adjustments, then complete Steps 6 to 8, 10 and 11 in one
+     reply, reusing the approved Summary and Skills unchanged. End with the audited HTML
+     and the DONE report, then stop before Step 12.
 - If the audit fails, correct the HTML and repeat the audit. If an issue cannot be
   resolved, explain it and do not report DONE.
 

@@ -18,7 +18,8 @@ start. The skill and slash command are discovered from `.claude/`.
 or just paste a listing and ask for a tailored CV. Both route to the same skill.
 
 Steps 1 to 4 run in one pass and stop at the strategy gate. Approve or adjust, then
-continue step by step, or say `fast mode` to batch Steps 5 to 11.
+continue step by step, or say `fast mode` to batch Steps 5 to 11. Fast mode shows the
+Summary and Skills first and waits for approval before writing the rest.
 
 ## Confirming page count
 
