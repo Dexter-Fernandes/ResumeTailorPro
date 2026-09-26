@@ -21,7 +21,8 @@ across all tracks and sits one directory up.
 |---|---|
 | `./Dexter_Fernandes_Master_CV.md` | Source of truth for this track. Read at Step 2 |
 | `../Dexter_Fernandes_Resume_template.html` | Only permitted output format. Always the copy one directory up. Read at Step 2 |
-| `Resumes/HTML/Dexter_Fernandes_CV_<Company>_<Role>.html` | The only file this workflow writes. Created at Step 10 |
+| `Resumes/JD/Dexter_Fernandes_CV_<Company>_<Role>.md` | The job listing, saved at Step 1. Same basename as the CV HTML |
+| `Resumes/HTML/Dexter_Fernandes_CV_<Company>_<Role>.html` | The tailored CV. Created at Step 10 |
 
 Never ask the user to upload these. If either file is missing, unreadable, truncated or
 malformed, identify the problem at Step 2 and stop. Do not substitute another template,
@@ -50,10 +51,11 @@ instructions already in context. Do not go looking for a separate profile file.
 - Optimise for recruiter readability and searchability. Keywords used naturally, never
   stuffed.
 - Treat ATS guidance as conservative practice, not knowledge of any vendor's scoring.
-- **Write exactly one file: the tailored CV HTML at
-  `Resumes/HTML/Dexter_Fernandes_CV_<Company>_<Role>.html`.** No listing copy, no strategy
-  file, no log, no cover letter file, no edits to any existing file in the repo. Every
-  other output of this workflow, including the cover letter, is reply text only.
+- **Write exactly two files: the job listing at
+  `Resumes/JD/Dexter_Fernandes_CV_<Company>_<Role>.md` (Step 1) and the tailored CV HTML at
+  `Resumes/HTML/Dexter_Fernandes_CV_<Company>_<Role>.html` (Step 10).** No strategy file,
+  no log, no cover letter file, no edits to any existing file in the repo. Every other
+  output of this workflow, including the cover letter, is reply text only.
 - Begin every reply with `Step N/12 -- [Step Name]`.
 - Keep replies limited to the active step or steps.
 - Never report DONE until the HTML audit passes.
@@ -91,7 +93,26 @@ Ask only for missing items:
 Read job title and company from the listing. Ask for confirmation only if either is
 ambiguous.
 
-Keep the listing in context for the rest of the workflow. Do not save it to disk.
+Keep the listing in context for the rest of the workflow. Once all required Step 1 inputs
+are in, save it to `Resumes/JD/Dexter_Fernandes_CV_<Company>_<Role>.md`, using the same
+company and role naming as the Step 10 HTML so the two files pair up. If that file
+already exists, say so and ask before overwriting. Format:
+
+```markdown
+# <Company> -- <Role>
+
+- Saved: <YYYY-MM-DD>
+- Channel: <application channel>
+- Seniority: <stretch | match | step down>
+- Source: <URL, only if the user supplied one>
+
+---
+
+<listing exactly as supplied>
+```
+
+The listing is a record, not CV content: copy it verbatim. Do not reformat, summarise,
+correct its spelling or strip its em dashes.
 
 If the employer is unnamed (agency-mediated) or the role is outside the UK, raise the
 sponsorship constraint before any drafting begins.
@@ -208,7 +229,7 @@ A role-aligned list that functions as a recruiter search index.
 
 Populate the fixed template with approved Step 5 to 9 content. Save to
 `Resumes/HTML/Dexter_Fernandes_CV_<Company>_<Role>.html`, relative to the working
-directory. This is the only file the workflow writes.
+directory. Apart from the Step 1 listing, this is the only file the workflow writes.
 
 - Use the company and role from the listing in the filename, underscore-separated, no
   spaces, for example `Resumes/HTML/Dexter_Fernandes_CV_Acme_Robotics_Senior_CV_Engineer.html`.

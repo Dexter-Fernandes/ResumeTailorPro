@@ -13,6 +13,7 @@ directory; paths below are relative to it.
 | `./Dexter_Fernandes_Master_CV.md` | This track's source of truth for all roles, dates, metrics, projects, skills, contact details |
 | `../Dexter_Fernandes_Resume_template.html` | Shared across tracks. The only permitted output format. Structure and CSS are fixed |
 | `Resumes/HTML/` | The only place a tailored CV is written |
+| `Resumes/JD/` | The job listing each tailored CV was written for, same basename as its HTML |
 | `.claude/skills/resume-tailor/SKILL.md` | The 12-step tailoring workflow |
 
 ## Standing rules (apply to every task in this repo)
