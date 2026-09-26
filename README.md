@@ -21,19 +21,33 @@ Steps 1 to 4 run in one pass and stop at the strategy gate. Approve or adjust, t
 continue step by step, or say `fast mode` to batch Steps 5 to 11. Fast mode shows the
 Summary and Skills first and waits for approval before writing the rest.
 
-## Confirming page count
+## Exporting to PDF
 
-There is no PDF export. After Step 11, open the generated file in a browser and print
-to PDF at A4:
+After Step 11, render with `html2pdf.sh` from the repo root:
 
 ```bash
-open applications/<dir>/CV.html      # macOS
-xdg-open applications/<dir>/CV.html  # Linux
+./html2pdf.sh                        # build every missing or stale PDF under */*/HTML/
+./html2pdf.sh CV SLAM/Resumes        # limit the sweep to tracks or directories
+./html2pdf.sh --dry-run              # list what would be built
+./html2pdf.sh --force CV             # rebuild regardless of timestamps
+./html2pdf.sh --open path/to/CV.html # render one file, always, then open it
+./html2pdf.sh -o ~/cv.pdf CV.html    # render one file to a chosen path
 ```
 
-The template already carries `@page { size:A4; margin:0.5in }` and a print media query,
-so browser print output matches the previous WeasyPrint result closely. Check for two
-pages, no stranded headings, and no single orphaned bullet on page 2.
+PDFs from `<Track>/<Section>/HTML/` land in the sibling `pdf/` directory under the same
+basename. Rendering is headless Chrome (set `CHROME_BIN` to override detection), fully
+offline, with Archivo loaded from `assets/fonts/`. Local static fonts matter: the variable
+font Google Fonts serves cannot be embedded properly by Chrome's PDF backend, so it falls
+back to Type 3 glyph drawings (about 4x the file size, weaker ATS text layer). If the
+fonts are missing they are fetched automatically; `./html2pdf.sh --refresh-fonts` re-fetches
+them.
+
+Each PDF is checked after rendering, and problems are flagged with `!` on its line:
+a resume that is not two pages, Type 3 fonts or Archivo missing, and too little extractable
+text for an ATS. Warnings do not change the exit status; a failed render does.
+
+The script only counts pages, so still open the PDF and check for stranded headings or a
+single orphaned bullet on page 2.
 
 ## Keeping memory current
 

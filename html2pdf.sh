@@ -1,52 +1,80 @@
 #!/usr/bin/env bash
-# Render a CV HTML file to a print-quality A4 PDF with headless Chrome.
 #
-#   ./html2pdf.sh Dexter_Fernandes_Sky_Principal_MLE.html
-#   ./html2pdf.sh -o ~/Desktop/cv.pdf some_cv.html
-#   ./html2pdf.sh --refresh-fonts        # re-download Archivo from Google Fonts
-#   ./html2pdf.sh --sync                 # fill in missing PDFs under */*/HTML/*.html
+# html2pdf.sh -- export tailored CVs and cover letters to PDF.
 #
-# Why not print from the browser: Ctrl+P needs "Background graphics" ticked by
-# hand, silently drops the coloured rules if you forget, and re-fetches webfonts
-# every time. This is deterministic and offline.
+# With no file arguments, sweeps every */*/HTML/ directory and renders each
+# .html to the sibling pdf/ directory under the same basename. A PDF is built
+# when it is missing or older than its HTML source; otherwise it is left alone.
+# Given .html files, renders exactly those, always.
+#
+# Rendering is headless Chrome, fully offline, with Archivo served from
+# assets/fonts. The template carries its own @page A4 rules, so no geometry is
+# imposed here -- only Chrome's header/footer furniture is suppressed.
+#
+# Why local fonts: Google Fonts serves Archivo as a variable font to modern
+# browsers, and Chrome's PDF backend cannot subset-embed those. It emits Type 3
+# fonts instead: glyphs drawn as vector procedures, ~4x the file size and a
+# weaker text layer for ATS parsers. --refresh-fonts fetches static per-weight
+# instances, which embed as TrueType subsets. Rendering offline also removes
+# the font-loading race, so pagination is the same on every run.
 
 set -euo pipefail
 
-SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-FONT_DIR="$SCRIPT_DIR/assets/fonts"
+ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+FONT_DIR="$ROOT/assets/fonts"
 WEIGHTS=(400 500 600 700 800)
 
-OUT=""
-ONLINE=0
-OPEN=0
-SYNC=0
-INPUT=""
+NAME_WIDTH=44
+MIN_TEXT_CHARS=1000
+
+force=0
+dry_run=0
+open=0
+out=""
+filters=()
+files=()
 
 die() { printf 'error: %s\n' "$1" >&2; exit 1; }
-note() { printf '  %s\n' "$1"; }
 
-# --- Chrome ------------------------------------------------------------------
-find_chrome() {
-  local c
-  for c in google-chrome google-chrome-stable chromium chromium-browser \
-           brave-browser microsoft-edge-stable; do
-    command -v "$c" >/dev/null 2>&1 && { printf '%s' "$c"; return 0; }
-  done
-  command -v flatpak >/dev/null 2>&1 &&
-    flatpak info org.chromium.Chromium >/dev/null 2>&1 &&
-    { printf '%s' "flatpak run org.chromium.Chromium"; return 0; }
-  return 1
+usage() {
+  cat <<'EOF'
+Usage: html2pdf.sh [OPTIONS] [PATH ...]
+       html2pdf.sh [OPTIONS] FILE.html ...
+
+With no FILE arguments, renders every */*/HTML/*.html into the sibling pdf/
+directory, keeping the basename. Builds a PDF when it is missing or older than
+its HTML source.
+
+Given FILE.html arguments, renders exactly those files regardless of
+timestamps. A file inside an HTML/ directory goes to the sibling pdf/;
+anything else goes next to its source.
+
+Options:
+  --force          Rebuild every PDF, ignoring timestamps
+  --dry-run        Report what would be built without rendering
+  -o, --output F   Output path (single FILE.html only)
+  --open           Open each PDF built with xdg-open
+  --refresh-fonts  Re-download Archivo into assets/fonts and exit
+  -h, --help       Show this message
+
+Arguments:
+  PATH ...         Limit the sweep to matching tracks or directories,
+                   e.g. `html2pdf.sh CV Software` or `html2pdf.sh SLAM/Resumes`
+
+Exit status is 0 when every render succeeded, 1 if any failed. Warnings (page
+count, fonts, text layer) do not affect exit status.
+
+Environment:
+  CHROME_BIN       Chrome executable to use (default: first of google-chrome,
+                   chromium, brave-browser, microsoft-edge-stable found)
+EOF
 }
 
-# --- Fonts -------------------------------------------------------------------
-# Google Fonts serves Archivo as a *variable* font to modern browsers. Chrome's
-# PDF backend cannot subset-embed those, so it emits Type 3 fonts: glyphs drawn
-# as vector procedures, ~4x the file size and no real typeface in the PDF.
-# A legacy user-agent gets you static per-weight instances, which embed properly
-# as CID TrueType subsets.
+# Google serves static per-weight files only to old user agents; a modern one
+# gets the variable font this whole script exists to avoid.
 refresh_fonts() {
   command -v python3 >/dev/null 2>&1 || die "--refresh-fonts needs python3"
-  mkdir -p "$FONT_DIR"
+  mkdir -p -- "$FONT_DIR"
   FONT_DIR="$FONT_DIR" python3 - "${WEIGHTS[@]}" <<'PY'
 import os, re, sys, urllib.request
 weights = sys.argv[1:]
@@ -86,159 +114,289 @@ fonts_present() {
   done
 }
 
-# file:// URL, with the few characters that actually bite in paths escaped.
-to_file_url() {
-  printf 'file://%s' "$(printf '%s' "$1" | sed -e 's/%/%25/g' -e 's/ /%20/g' -e 's/#/%23/g' -e 's/?/%3F/g')"
+add_arg() {
+  if [[ "$1" == *.html ]]; then
+    [[ -f "$1" ]] || die "no such file: $1"
+    files+=("$(realpath -- "$1")")
+  else
+    filters+=("$1")
+  fi
 }
 
-# --- Render one HTML file to a PDF -------------------------------------------
-# Builds a local-fonts render copy beside the source, runs headless Chrome,
-# then verifies the result. $1 = source .html, $2 = destination .pdf.
-render_pdf() {
-  local RENDER_IN="$1" RENDER_OUT="$2"
-  local BUILD PROFILE
-
-  # Written beside the source so relative paths in the HTML still resolve.
-  # The injected block goes last in <head>, so its @font-face rules override
-  # any Google Fonts ones already declared for the same family/weight/style.
-  BUILD="$(dirname "$RENDER_IN")/.$(basename "${RENDER_IN%.*}").render.html"
-  trap 'rm -f "$BUILD"' EXIT
-
-  {
-    local face_css="" w inject
-    for w in "${WEIGHTS[@]}"; do
-      face_css+="@font-face{font-family:'Archivo';font-style:normal;font-weight:$w;font-display:block;src:url($(to_file_url "$FONT_DIR/Archivo-$w.woff2")) format('woff2');}"
-    done
-    # print-color-adjust keeps the coloured rules and section bars from being
-    # stripped by any print path that decides backgrounds are decoration.
-    inject="<style>${face_css}@media print{*{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}</style>"
-    awk -v inject="$inject" '
-      !done && /<\/head>/ { sub(/<\/head>/, inject "</head>"); done = 1 }
-      { print }
-      END { if (!done) exit 3 }
-    ' "$RENDER_IN"
-  } > "$BUILD" || die "no </head> in $RENDER_IN; cannot inject fonts"
-
-  PROFILE="$(mktemp -d)"                 # never touch the user's live Chrome profile
-  trap 'rm -f "$BUILD"; rm -rf "$PROFILE"' EXIT
-
-  local net_flags=(--host-resolver-rules="MAP * ~NOTFOUND")   # fully offline, no font race
-  (( ONLINE )) && net_flags=()
-
-  # shellcheck disable=SC2086
-  $CHROME \
-    --headless \
-    --disable-gpu \
-    --user-data-dir="$PROFILE" \
-    --no-first-run --no-default-browser-check \
-    --run-all-compositor-stages-before-draw \
-    --virtual-time-budget=20000 \
-    "${net_flags[@]}" \
-    --no-pdf-header-footer \
-    --print-to-pdf="$RENDER_OUT" \
-    "$(to_file_url "$BUILD")" 2>/dev/null \
-    || die "Chrome failed to render"
-
-  [[ -s "$RENDER_OUT" ]] || die "no PDF produced"
-
-  echo "Wrote $RENDER_OUT ($(du -h "$RENDER_OUT" | cut -f1))"
-
-  if command -v pdfinfo >/dev/null 2>&1; then
-    note "$(pdfinfo "$RENDER_OUT" | awk '/^Pages:/{p=$2} /^Page size:/{sub(/^Page size: */,""); s=$0} END{print p " page(s), " s}')"
-  fi
-
-  if command -v pdffonts >/dev/null 2>&1; then
-    if pdffonts "$RENDER_OUT" | grep -q 'Type 3'; then
-      note "WARNING: Type 3 fonts present - the webfont did not load, run --refresh-fonts"
-    elif pdffonts "$RENDER_OUT" | grep -qi archivo; then
-      note "fonts: Archivo embedded as TrueType subsets"
-    else
-      note "WARNING: Archivo not in the PDF, it fell back to a system font"
-    fi
-  fi
-
-  if command -v pdftotext >/dev/null 2>&1; then
-    local chars
-    chars=$(pdftotext "$RENDER_OUT" - | tr -d '[:space:]' | wc -c)
-    if (( chars < 1000 )); then
-      note "WARNING: only $chars extractable characters - ATS parsers may see nothing"
-    else
-      note "text layer: $chars characters extractable"
-    fi
-  fi
-
-  rm -f "$BUILD"; rm -rf "$PROFILE"
-  trap - EXIT
-}
-
-# --- Args --------------------------------------------------------------------
-while (( $# )); do
+while [[ $# -gt 0 ]]; do
   case "$1" in
-    -o|--output)     OUT="${2:-}"; [[ -n "$OUT" ]] || die "-o needs a path"; shift 2 ;;
-    --online)        ONLINE=1; shift ;;          # allow network (remote images etc.)
-    --open)          OPEN=1; shift ;;
-    --sync)          SYNC=1; shift ;;             # fill in missing PDFs under */*/HTML/*.html
+    --force)         force=1 ;;
+    --dry-run)       dry_run=1 ;;
+    --open)          open=1 ;;
+    -o|--output)     [[ $# -ge 2 && -n "$2" ]] || die "$1 needs a path"; out="$2"; shift ;;
     --refresh-fonts) refresh_fonts; exit 0 ;;
-    -h|--help)       awk 'NR>1 { if (!/^#/) exit; sub(/^# ?/, ""); print }' "${BASH_SOURCE[0]}"; exit 0 ;;
-    -*)              die "unknown option: $1" ;;
-    *)               [[ -z "$INPUT" ]] || die "only one input file"; INPUT="$1"; shift ;;
+    -h|--help)       usage; exit 0 ;;
+    --)              shift; for a in "$@"; do add_arg "$a"; done; break ;;
+    -*)              printf 'error: unknown option: %s\n\n' "$1" >&2; usage >&2; exit 2 ;;
+    *)               add_arg "$1" ;;
   esac
+  shift
 done
 
-if (( SYNC )); then
-  [[ -z "$INPUT" ]] || die "--sync does not take a file argument"
-  [[ -z "$OUT" ]] || die "--sync does not support -o"
+(( ${#files[@]} && ${#filters[@]} )) && die "give either .html files or sweep filters, not both"
+[[ -z "$out" || ${#files[@]} -eq 1 ]] || die "-o needs exactly one .html file"
+(( ${#files[@]} )) && force=1
+
+if [[ -n "${CHROME_BIN:-}" ]]; then
+  command -v "$CHROME_BIN" >/dev/null 2>&1 || die "CHROME_BIN=$CHROME_BIN not found"
+  CHROME=("$CHROME_BIN")
 else
-  # No argument and exactly one HTML file next to the script: use it.
-  if [[ -z "$INPUT" ]]; then
-    shopt -s nullglob
-    candidates=("$SCRIPT_DIR"/*.html)
-    shopt -u nullglob
-    (( ${#candidates[@]} == 1 )) || die "usage: $(basename "$0") [-o out.pdf] file.html"
-    INPUT="${candidates[0]}"
+  CHROME=()
+  for c in google-chrome google-chrome-stable chromium chromium-browser \
+           brave-browser microsoft-edge-stable; do
+    command -v "$c" >/dev/null 2>&1 && { CHROME=("$c"); break; }
+  done
+  if (( ! ${#CHROME[@]} )) && command -v flatpak >/dev/null 2>&1 &&
+     flatpak info org.chromium.Chromium >/dev/null 2>&1; then
+    CHROME=(flatpak run org.chromium.Chromium)
   fi
-
-  [[ -f "$INPUT" ]] || die "no such file: $INPUT"
-  INPUT="$(cd -- "$(dirname -- "$INPUT")" && pwd)/$(basename -- "$INPUT")"
-  [[ -n "$OUT" ]] || OUT="${INPUT%.*}.pdf"
+  (( ${#CHROME[@]} )) || die "no Chrome/Chromium found. Set CHROME_BIN to your Chrome executable."
 fi
-
-CHROME="$(find_chrome)" || die "no Chrome/Chromium found"
 
 if ! fonts_present; then
   echo "Archivo not fully installed in assets/fonts, fetching..."
   refresh_fonts
 fi
 
-if (( SYNC )); then
-  # --- Sync: fill in any PDF missing from its own HTML directory's sibling
-  # pdf/ directory. Each file is checked against dirname(dirname(html))/pdf,
-  # never against another track's pdf/ that the glob also happens to match.
-  shopt -s nullglob
-  html_files=("$SCRIPT_DIR"/*/*/HTML/*.html)
-  shopt -u nullglob
-  (( ${#html_files[@]} )) || die "no HTML files found matching */*/HTML/*.html"
+TMPDIR_RUN="$(mktemp -d)"
+cleanup() { rm -rf -- "$TMPDIR_RUN"; }
+trap cleanup EXIT
 
-  made=0
-  skipped=0
-  for html in "${html_files[@]}"; do
-    html_dir="$(dirname "$html")"
-    pdf_dir="$(dirname "$html_dir")/pdf"
-    pdf="$pdf_dir/$(basename "${html%.*}").pdf"
-    if [[ -s "$pdf" ]]; then
-      (( ++skipped ))
-      continue
-    fi
-    mkdir -p "$pdf_dir"
-    echo "-> ${html#"$SCRIPT_DIR"/}"
-    render_pdf "$html" "$pdf"
-    (( ++made ))
+# Percent-encode a path into a file:// URI. Filenames here contain spaces and
+# parentheses, which Chrome will not reliably parse unencoded. The C locale
+# makes this walk bytes, so non-ASCII characters encode as their UTF-8 bytes.
+file_uri() {
+  local LC_ALL=C path="$1" out="" i char
+  for (( i = 0; i < ${#path}; i++ )); do
+    char="${path:i:1}"
+    case "$char" in
+      [a-zA-Z0-9._~/-]) out+="$char" ;;
+      *)                printf -v char '%%%02X' "'$char"; out+="$char" ;;
+    esac
   done
-  echo "sync done: $made generated, $skipped already present"
+  printf 'file://%s' "$out"
+}
+
+# Appended last in <head>, so these @font-face rules win over the Google Fonts
+# ones for the same family/weight/style. print-color-adjust keeps the coloured
+# rules and section bars from being stripped as background decoration.
+FONT_CSS=""
+for w in "${WEIGHTS[@]}"; do
+  FONT_CSS+="@font-face{font-family:'Archivo';font-style:normal;font-weight:$w;font-display:block;src:url($(file_uri "$FONT_DIR/Archivo-$w.woff2")) format('woff2');}"
+done
+HEAD_INJECT="<style>${FONT_CSS}@media print{*{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}</style>"
+
+# A PDF in an HTML/ directory goes to the sibling pdf/; anything else sits
+# next to its source.
+dest_for() {
+  local src="$1" dir base
+  dir="$(dirname -- "$src")"
+  base="$(basename -- "${src%.html}")"
+  if [[ "$(basename -- "$dir")" == HTML ]]; then
+    printf '%s/pdf/%s.pdf' "$(dirname -- "$dir")" "$base"
+  else
+    printf '%s.pdf' "${src%.html}"
+  fi
+}
+
+# The directory shown in the report and matched by filters, e.g. CV/Resumes.
+section_of() {
+  local dir rel
+  dir="$(dirname -- "$1")"
+  [[ "$(basename -- "$dir")" == HTML ]] && dir="$(dirname -- "$dir")"
+  case "$dir" in
+    "$ROOT")   rel="." ;;
+    "$ROOT"/*) rel="${dir#"$ROOT"/}" ;;
+    *)         rel="$dir" ;;
+  esac
+  printf '%s' "$rel"
+}
+
+# True when the path matches any user-supplied filter, or when none were given.
+matches_filter() {
+  local rel="$1" f
+  (( ${#filters[@]} == 0 )) && return 0
+  for f in "${filters[@]}"; do
+    f="${f#./}"; f="${f%/}"
+    [[ "$rel" == "$f" || "$rel" == "$f"/* ]] && return 0
+  done
+  return 1
+}
+
+# Keep the report in aligned columns. Tailored CV basenames routinely run past
+# 70 characters, so elide the middle rather than let the status column drift.
+elide() {
+  local s="$1" keep_tail=18 head_len
+  (( ${#s} <= NAME_WIDTH )) && { printf '%s' "$s"; return; }
+  head_len=$(( NAME_WIDTH - keep_tail - 3 ))
+  printf '%s...%s' "${s:0:head_len}" "${s: -keep_tail}"
+}
+
+page_count() {
+  command -v pdfinfo >/dev/null 2>&1 || return 0
+  pdfinfo "$1" 2>/dev/null | awk '/^Pages:/ { print $2 }'
+}
+
+fail_reason=""
+
+render() {
+  local src="$1" dest="$2" build="$TMPDIR_RUN/page.html" tmp_out="$TMPDIR_RUN/out.pdf" base_tag
+  rm -f -- "$tmp_out"
+
+  # Chrome renders its own error page rather than failing when it cannot read a
+  # file, which would yield a plausible-looking but wrong PDF. Catch that here.
+  [[ -r "$src" && -s "$src" ]] || { fail_reason="unreadable or empty"; return 1; }
+
+  # The render copy lives in the temp dir; <base> keeps the source's relative
+  # URLs resolving against its real directory.
+  base_tag="<base href=\"$(file_uri "$(dirname -- "$src")")/\">"
+  if ! awk -v base="$base_tag" -v inject="$HEAD_INJECT" '
+      !b && /<head[^>]*>/ { sub(/<head[^>]*>/, "&" base); b = 1 }
+      !d && /<\/head>/    { sub(/<\/head>/, inject "</head>"); d = 1 }
+      { print }
+      END { if (!b || !d) exit 3 }
+    ' "$src" > "$build"; then
+    fail_reason="no <head>...</head> to inject fonts into"
+    return 1
+  fi
+
+  # Every hostname fails to resolve, so the Google Fonts stylesheet never
+  # competes with the local faces and nothing waits on the network.
+  "${CHROME[@]}" \
+    --headless=new \
+    --disable-gpu \
+    --user-data-dir="$TMPDIR_RUN/profile" \
+    --no-first-run \
+    --no-default-browser-check \
+    --disable-extensions \
+    --host-resolver-rules="MAP * ~NOTFOUND" \
+    --no-pdf-header-footer \
+    --run-all-compositor-stages-before-draw \
+    --virtual-time-budget=10000 \
+    --print-to-pdf="$tmp_out" \
+    "$(file_uri "$build")" >/dev/null 2>&1 || { fail_reason="Chrome failed"; return 1; }
+
+  # Chrome exits 0 on some failures, so the magic bytes are the real gate.
+  [[ -s "$tmp_out" && "$(head -c4 -- "$tmp_out")" == "%PDF" ]] ||
+    { fail_reason="no valid PDF produced"; return 1; }
+
+  mkdir -p -- "$(dirname -- "$dest")"
+  mv -f -- "$tmp_out" "$dest"
+}
+
+# Post-render checks. Prints one "; "-joined line of problems, or nothing.
+check_pdf() {
+  local pdf="$1" section="$2" pages="$3" fonts chars issues=()
+
+  if [[ "$section" == */Resumes && -n "$pages" && "$pages" != "2" ]]; then
+    issues+=("expected 2 pages")
+  fi
+
+  if command -v pdffonts >/dev/null 2>&1; then
+    fonts="$(pdffonts "$pdf" 2>/dev/null)"
+    if grep -q 'Type 3' <<<"$fonts"; then
+      issues+=("Type 3 fonts, run --refresh-fonts")
+    elif ! grep -qi archivo <<<"$fonts"; then
+      issues+=("Archivo not embedded")
+    fi
+  fi
+
+  if command -v pdftotext >/dev/null 2>&1; then
+    chars="$(pdftotext "$pdf" - 2>/dev/null | tr -d '[:space:]' | wc -c)"
+    (( chars < MIN_TEXT_CHARS )) && issues+=("only $chars text chars, ATS may see nothing")
+  fi
+
+  local joined
+  printf -v joined '%s; ' "${issues[@]}"
+  (( ${#issues[@]} )) && printf '%s' "${joined%; }"
+  return 0
+}
+
+if (( ${#files[@]} )); then
+  srcs=("${files[@]}")
+else
+  mapfile -d '' srcs < <(
+    cd -- "$ROOT" &&
+      find . -mindepth 4 -maxdepth 4 -type f -path './*/*/HTML/*.html' -print0 | sort -z |
+      while IFS= read -r -d '' f; do printf '%s\0' "$ROOT/${f#./}"; done
+  )
+fi
+
+built=0
+current=0
+warnings=0
+errors=0
+found=0
+opened=()
+
+for src in "${srcs[@]}"; do
+  section="$(section_of "$src")"
+  matches_filter "$section" || continue
+
+  found=1
+  base="$(basename -- "$src")"
+  dest="${out:-$(dest_for "$src")}"
+  label="$(elide "${base%.html}")"
+  row="$(printf '  %-24s %-*s' "$section" "$NAME_WIDTH" "$label")"
+
+  if (( ! force )) && [[ -f "$dest" && ! "$src" -nt "$dest" ]]; then
+    (( ++current ))
+    continue
+  fi
+
+  if (( dry_run )); then
+    if [[ -f "$dest" ]]; then echo "$row would rebuild"; else echo "$row would build"; fi
+    (( ++built ))
+    continue
+  fi
+
+  if ! render "$src" "$dest"; then
+    echo "$row ERROR    $fail_reason"
+    (( ++errors ))
+    continue
+  fi
+
+  (( ++built ))
+  opened+=("$dest")
+  pages="$(page_count "$dest")"
+  size="$(du -h -- "$dest" | cut -f1)"
+  info="$size"
+  [[ -n "$pages" ]] && info="$pages page$( [[ "$pages" == 1 ]] || printf s ), $size"
+
+  issues="$(check_pdf "$dest" "$section" "$pages")"
+  if [[ -n "$issues" ]]; then
+    echo "$row built    $info  ! $issues"
+    (( ++warnings ))
+  else
+    echo "$row built    $info"
+  fi
+done
+
+if (( ! found )); then
+  if (( ${#filters[@]} )); then
+    printf 'No HTML files matched: %s\n' "${filters[*]}"
+  else
+    printf 'No HTML files found under */*/HTML/\n'
+  fi
   exit 0
 fi
 
-render_pdf "$INPUT" "$OUT"
+verb="built"
+(( dry_run )) && verb="to build"
 
-(( OPEN )) && command -v xdg-open >/dev/null 2>&1 && xdg-open "$OUT" >/dev/null 2>&1 &
-exit 0
+printf '\n%d %s, %d up to date, %d warning%s, %d error%s\n' \
+  "$built" "$verb" \
+  "$current" \
+  "$warnings" "$( (( warnings == 1 )) || printf s )" \
+  "$errors" "$( (( errors == 1 )) || printf s )"
+
+if (( open && ${#opened[@]} )) && command -v xdg-open >/dev/null 2>&1; then
+  for pdf in "${opened[@]}"; do xdg-open "$pdf" >/dev/null 2>&1 & done
+fi
+
+(( errors == 0 ))
