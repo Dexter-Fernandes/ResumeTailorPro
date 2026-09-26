@@ -44,8 +44,9 @@ desktop.ini
 .idea/
 .vscode/
 
-# --- Claude Code ------------------------------------------------------
-# Project skill, slash command and CLAUDE.md are shared and stay tracked.
+# --- Claude Code / Codex ----------------------------------------------
+# AGENTS.md, the CLAUDE.md symlink, .agents/skills and .claude/ (commands,
+# skill symlink) are shared and stay tracked.
 # Machine-local settings and session state are not.
 .claude/settings.local.json
 .claude/*.local.json

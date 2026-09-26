@@ -3,26 +3,31 @@
 ```bash
 git init
 git add . && git commit -m "CV tailoring workspace"
-claude
+claude    # or: codex
 ```
 
-Claude Code reads `CLAUDE.md` automatically at session start. The skill and slash command
-are discovered from `.claude/`.
+Claude Code and Codex are interchangeable here. `AGENTS.md` holds the standing rules;
+`CLAUDE.md` is a symlink to it, so both tools read the same file. The `resume-tailor` skill
+lives in `.agents/skills/` (where Codex looks) and `.claude/skills/resume-tailor` is a
+symlink to it. Edit the real files, not the symlinks.
 
 ## Layout
 
 - `Dexter_Fernandes_Master_CV.md` -- the single master resume, shared by every track.
 - `Dexter_Fernandes_Resume_template.html` -- the shared output template.
 - `CV/`, `Robotics/`, `LLM/`, `SLAM/`, `Software/`, `PLC/` -- one directory per track.
-  Run `/tailor` from inside a track; outputs land in its `Resumes/JD/` and `Resumes/HTML/`.
+  Start the workflow from inside a track; outputs land in its `Resumes/JD/` and `Resumes/HTML/`.
 
 ## Running an application
 
 ```
-/tailor <paste the job listing>
+/tailor <paste the job listing>          # Claude Code
+$resume-tailor <paste the job listing>   # Codex
 ```
 
-or just paste a listing and ask for a tailored CV. Both route to the same skill.
+or just paste a listing and ask for a tailored CV. Every route runs the same skill.
+`/tailor` (`.claude/commands/tailor.md`) is Claude-only: Codex has no per-repo slash
+commands.
 
 Steps 1 to 4 run in one pass and stop at the strategy gate. Approve or adjust, then
 continue step by step, or say `fast mode` to batch Steps 5 to 11. Fast mode shows the
@@ -58,7 +63,7 @@ single orphaned bullet on page 2.
 
 ## Keeping the master CV current
 
-`Dexter_Fernandes_Master_CV.md` is the only source of truth; `/tailor` never edits it. Add
-new roles, projects, metrics and skills there by hand (or ask Claude to, explicitly), and
+`Dexter_Fernandes_Master_CV.md` is the only source of truth; the workflow never edits it. Add
+new roles, projects, metrics and skills there by hand (or ask the agent to, explicitly), and
 commit the change. Do not create per-track copies: every track reads the root file.
 PLC content stays out of the master; `PLC/` tailors from transferable experience only.
