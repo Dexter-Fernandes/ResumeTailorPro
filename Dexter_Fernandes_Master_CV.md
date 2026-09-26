@@ -23,7 +23,7 @@ Machine learning engineer with 3+ years delivering computer vision models into 2
 Software engineer with 3+ years building and operating production systems, from C++17 edge inference to containerised Python services on Azure. Comfortable owning a service end to end: design, tests, deployment, monitoring, and the 2am failure. MSc Robotics, University of Bristol. Based in Bristol.
 
 **E. Backend and platform**
-Backend engineer with 3+ years shipping Python and C++ services in production. Built containerised inference microservices on Azure with REST endpoints and queue-based async processing, owned the PostgreSQL schema behind operational reporting, and cut live pipeline crashes by 67% through health checks, retries and structured observability. MSc Robotics, University of Bristol.
+Backend engineer with 3+ years shipping Python and C++ services in production. Built containerised inference microservices on Azure with queue-based async processing, owned the PostgreSQL schema behind operational reporting, and cut live pipeline crashes by 67% through health checks, retries and structured observability. MSc Robotics, University of Bristol.
 
 ---
 
@@ -38,8 +38,8 @@ Backend engineer with 3+ years shipping Python and C++ services in production. B
 - Designed and wrote the watchdog's REST API, exposing service health and restart control so operators and other services could act on failures remotely.
 - Used multiprocessing to isolate capture from inference on shared edge hardware, keeping one stalled stream from blocking the rest of the pipeline.
 - Added observability with structured logs, metrics, timeouts, retries and message validation, cutting root-cause analysis time on live deployments.
-- Introduced pytest, unittest and linting into CI for edge inference modules, improving release consistency across hardware targets.
-- Wrote a regression test reproducing each production failure before fixing it, turning field incidents into a permanent suite and stopping repeat crashes across deployments.
+- Developed Python inference services test-first, writing tests before implementation and running them locally and through GitHub Actions to verify behaviour before release.
+- Used pytest, unittest and linting in CI for edge inference modules to check changes before deployment.
 
 **Modelling and optimisation**
 - Owned the end-to-end ML lifecycle for real-time perception on BP rigs, from data curation and training through deployment and on-site validation, improving F1 by 15% under 24/7 operation.
@@ -69,16 +69,16 @@ Backend engineer with 3+ years shipping Python and C++ services in production. B
 ### LivNSense Technologies -- Lead Software Engineer, AI (05/2020 - 12/2022, Bengaluru, India)
 
 **Leadership and ownership**
-- Led four engineers building a two-stage detector feeding helmet-colour classification for construction safety in Texas, cutting false positives by 33% within latency and power budgets.
+- Led four engineers delivering a two-stage detection and helmet-colour classification system for construction safety in Texas, cutting false positives by 33% within latency and power budgets.
+- Coordinated task allocation, code reviews, releases and production support for the four-engineer team.
 - Set experimentation standards, reviewed model performance and mentored junior engineers, guiding optimisation strategy for production deployments.
-- Established test-first practice across the four-engineer team, requiring a failing test with each ticket and reviewing test coverage in code review.
 - Owned production ML pipelines end to end, from ingestion and labelling through training, optimisation, deployment, monitoring and field validation for industrial safety systems.
 
 **C++ and edge inference**
-- Built asynchronous C++17 perception pipelines on OpenVINO across Intel Movidius VPUs and Core i7 industrial edge boxes (VTC7252-7C4IP), raising throughput from 5 to 15 FPS under real-time constraints.
-- Overlapped preprocessing, inference and post-processing in the C++ inference path to cut end-to-end latency and raise pipeline utilisation.
+- Raised C++17 video pipeline throughput from 5 to 15 FPS on the same hardware and model, using threading, buffering and async OpenVINO inference on Intel Movidius VPUs.
 - Profiled C++ inference and pre/post-processing hotspots with Intel VTune, targeting fixes in the CNN inference pipeline.
-- Wrote gtest unit tests and documented interfaces for the C++ inference path, catching regressions before deployment.
+- Developed Python and C++ inference components test-first, writing tests before implementation and running them locally and through GitHub Actions before release.
+- Wrote gtest unit tests and documented interfaces for the C++ inference path to support regression checks before deployment.
 - Integrated Boost C++ libraries into production pipelines, resolving dependency and build issues to keep deployments reproducible.
 
 **Model optimisation**
@@ -86,8 +86,8 @@ Backend engineer with 3+ years shipping Python and C++ services in production. B
 - Deployed quantised models with FP16/INT8, benchmarking accuracy, latency and memory trade-offs against real-time constraints on Intel edge targets.
 
 **Vision systems**
-- Built a real-time multi-camera perception pipeline on a moving construction vehicle, synchronising streams and running incident detection under edge compute constraints.
-- Added ByteTrack multi-object tracking over detections to hold worker and vehicle identities across frames, cutting duplicate incident alerts from the moving-vehicle feeds.
+- Built and maintained edge perception pipelines across three cameras on a roller and loader at multiple construction sites around Austin, Texas, supporting 24/7 monitoring.
+- Used ByteTrack tracking to require persistent PPE violations across successive frames before recording incidents, filtering transient detection errors.
 - Implemented optical flow based ego-motion estimation feeding CNN classifiers in PyTorch to infer vehicle state, supporting collision avoidance on moving vehicles.
 - Built YOLOv5 visual quality inspection for John Deere engine paintjobs on a conveyor line, detecting paint defects, contamination and colour inconsistency.
 - Tuned camera and ISP settings to keep models reliable on RGB and IR streams across 24/7 operation, cutting false positives on IR and reducing manual recalibration.
@@ -100,11 +100,11 @@ Backend engineer with 3+ years shipping Python and C++ services in production. B
 - Built synthetic-data tooling to improve edge-case coverage, reducing manual labelling time by 60%.
 
 **Cloud and backend**
-- Deployed containerised ML inference microservices on Azure with REST endpoints and queue-based async processing, owning autoscaling, monitoring and cost-per-inference.
+- Built the complete Keras inference code for an Azure microservice, using queue-based processing to classify edge-detected helmets by colour for construction-site heatmaps.
+- Improved PPE detection F1 by approximately 11% by splitting a combined PPE and helmet-colour model into a six-class edge detector and an Azure-hosted colour classifier.
 - Built a watchdog application for the edge deployments with a REST API for service health and restart control, so failed inference services recovered without an engineer on site.
 - Used multiprocessing to parallelise capture, inference and post-processing across cores on edge devices, keeping camera streams from blocking each other.
-- Evaluated edge against cloud inference to minimise bandwidth, latency and operational cost while holding safety-critical performance targets.
-- Designed the PostgreSQL schema routing real-time incidents into downstream analytics, writing the joins and CTEs behind operational reporting.
+- Designed PostgreSQL tables and relationships for image-level person, vehicle and helmet counts and PPE incidents, and wrote reporting queries for operational analysis.
 - Designed data handling and retention practices aligned with GDPR principles, including data minimisation and controlled access.
 
 **Additional delivery**
@@ -191,7 +191,7 @@ Dissertation: Radiological SLAM with LiDAR Odometry
 
 **Languages:** Python, C++17, CUDA C++, Bash, SQL
 
-**Computer vision and deep learning:** object detection, image classification, semantic and instance segmentation (Mask R-CNN, DeepLabv3+, U-Net, SegFormer), object tracking, optical flow, anomaly detection, defect detection, data augmentation, convolutional neural networks (CNNs), YOLO (v5/v8/v10/v26), RT-DETR, EfficientDet, EfficientViT, Grounding DINO, MobileSAM, Depth Anything v2, PyTorch, TensorFlow, Keras, OpenCV, scikit-image, torchvision, Pillow, NumPy, HuggingFace
+**Computer vision and deep learning:** object detection, image classification, semantic and instance segmentation (Mask R-CNN, DeepLabv3+, U-Net, SegFormer), object tracking (ByteTrack, NvDCF, NvSORT), optical flow, anomaly detection, defect detection, data augmentation, convolutional neural networks (CNNs), YOLO (v5/v8/v10/v26), RT-DETR, EfficientDet, EfficientViT, Grounding DINO, MobileSAM, Depth Anything v2, PyTorch, TensorFlow, Keras, OpenCV, scikit-image, torchvision, Pillow, NumPy, HuggingFace
 
 **Edge inference and optimisation:** TensorRT (custom plugins, dynamic batching), OpenVINO, ONNX, quantisation-aware training, post-training quantisation, FP16/INT8, structured pruning, layer fusion, latency and throughput profiling, VRAM profiling, Intel VTune, Intel Movidius Myriad VPU, Intel Core i7 industrial edge (VTC7252-7C4IP), NVIDIA Jetson AGX Xavier, JetPack
 
@@ -203,7 +203,7 @@ Dissertation: Radiological SLAM with LiDAR Odometry
 
 **MLOps and experimentation:** MLflow, DVC (Data Version Control), Apache Airflow, Apache Kafka, Optuna, Weights & Biases, Jupyter, CVAT (Computer Vision Annotation Tool), automated labelling, dataset versioning, synthetic data generation, benchmarking harnesses, ablation studies, hypothesis testing, Bayesian optimisation, failure-mode analysis, drift tracking, Grad-CAM, TIDE (Toolbox for Identifying Detection Errors), COCO annotation format, model-promotion gates
 
-**Production and cloud:** Docker, CI/CD, GitHub Actions, Git, CMake, test-driven development, pytest, unittest, gtest, linting, regression testing, Microsoft Azure (Container Apps, Blob Storage, queues), REST API design, FastAPI, containerised microservices, queue-based async processing, multiprocessing, autoscaling, cost-per-inference, PostgreSQL, Django (views, templates, forms), Bootstrap, structured logging, timeouts and retries, health monitoring, health checks, observability, production monitoring, Linux
+**Production and cloud:** Docker, CI/CD, GitHub Actions, Git, CMake, test-driven development, pytest, unittest, gtest, linting, regression checks, Microsoft Azure, REST API design, FastAPI, containerised microservices, queue-based async processing, multiprocessing, PostgreSQL, Django (views, templates, forms), Bootstrap, structured logging, timeouts and retries, health monitoring, health checks, observability, production monitoring, Linux
 
 **Time series and classical ML:** MultiRocket, gradient boosting, random forests, scikit-learn, Pandas, multivariate time-series classification
 
@@ -219,4 +219,6 @@ Nothing below may be claimed. Use it at Step 3 to mark requirements as Missing r
 - **Infrastructure as code:** no Terraform, CDK, CloudFormation or Ansible.
 - **Backend breadth:** no evidence of auth, API versioning, schema migrations, rate limiting or high request load.
 - **Frontend:** Django templates and Bootstrap are server-rendered UI. Enough for "built internal tooling", not for a full-stack or frontend role (React or Vue, TypeScript, client-side state).
+- **Test-first scope:** confirmed only that tests were written before implementation and run locally and through GitHub Actions, at Esbaar and LivNSense. Never claim a failing test per ticket, a test per production failure, or that tests enabled the 5 to 15 FPS refactor. Specific test scenarios are unverified.
+- **LivNSense unverified details:** the ~11% F1 gain may be relative or percentage points; do not state which. Specific Azure services and database performance or integrity mechanisms are not recalled; add none. The six edge classes were person, vehicle, vest_on, vest_off, helmet_on and helmet_off.
 - **Framing for generalist backend roles:** the evidence reads as CV-specialist. Lead with LivNSense Azure, PostgreSQL and C++ work, and Esbaar Kafka and reliability work, not YOLO.
