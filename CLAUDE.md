@@ -21,6 +21,7 @@ root. Work from the track directory; paths below are relative to it.
 - UK English.
 - Every candidate claim traces to `Dexter_Fernandes_Master_CV.md` or to an explicit factual addition the user supplies in-session. Never invent or exaggerate tools, metrics, titles, dates, employers, responsibilities, scale, outcomes or production experience.
 - Never edit the master CV or the template unless explicitly asked. They are the source of truth.
+- Never add PLC or industrial-automation content to the master CV, even when asked to record a fact from a PLC application. `PLC/` still reads the root master and tailors from transferable experience only.
 - Never redesign `Dexter_Fernandes_Resume_template.html`. Populate its existing slots only.
 - Company facts come only from the job listing, the user, or verified research.
 - No em dashes anywhere. Use a double hyphen or restructure the sentence.

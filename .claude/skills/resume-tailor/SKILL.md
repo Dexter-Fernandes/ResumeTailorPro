@@ -30,8 +30,8 @@ do not use any other copy of the master resume, and do not work from a previousl
 CV. A missing file means the workflow is being run from the wrong directory. Say so, and
 stop.
 
-Standing constraints, locked metrics and framing rules come from the project
-instructions already in context. Do not go looking for a separate profile file.
+Standing constraints come from the project instructions already in context. Metrics come
+only from the master CV. Do not go looking for a separate profile file.
 
 ## Global rules
 
@@ -299,7 +299,7 @@ Read back the generated HTML's rendered text and verify:
 Fix every issue and repeat until clean. Then report:
 
 `DONE -- [word count] words, saved to Resumes/HTML/<filename>.html. Page count
-unverified; open it in a browser and print to PDF to confirm.`
+unverified; run ./html2pdf.sh from the repo root to render and check it.`
 
 Then summarise in the reply, not in a file: channel, seniority framing, GrowthStage and
 Taco Bell inclusion decisions, sponsorship status, and any new factual additions the user
@@ -372,8 +372,8 @@ Outcome.
   evidence supports every element.
 - Action + Scope + Outcome, or Action + Method + Outcome, for supporting bullets.
 - Flagship bullets roughly 1.5 to 2 rendered lines. Supporting bullets roughly one line.
-- Only numbers present in the master CV or explicitly supplied by the user. The locked
-  metrics in the project instructions are authoritative; do not offer variants.
+- Only numbers present in the master CV or explicitly supplied by the user. The master
+  CV's metrics are authoritative; do not offer variants.
 - With no reliable metric, use a precise qualitative outcome: reduced manual tuning,
   improved low-light robustness, removed a recurring failure mode.
 - Never invent a metric to complete the framework.

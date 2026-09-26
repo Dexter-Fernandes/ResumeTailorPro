@@ -61,3 +61,4 @@ single orphaned bullet on page 2.
 `Dexter_Fernandes_Master_CV.md` is the only source of truth; `/tailor` never edits it. Add
 new roles, projects, metrics and skills there by hand (or ask Claude to, explicitly), and
 commit the change. Do not create per-track copies: every track reads the root file.
+PLC content stays out of the master; `PLC/` tailors from transferable experience only.
