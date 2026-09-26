@@ -156,12 +156,13 @@ Backend engineer with 3+ years shipping Python and C++ services in production. B
 
 ### University of Bristol -- MSc Robotics, Merit (09/2023 - 09/2024, Bristol, England)
 Dissertation: Radiological SLAM with LiDAR Odometry
-- Built a real-time SLAM system in C++17 and ROS2 (rclcpp) on a Clearpath Husky, fusing Velodyne VLP-16 LiDAR, RealSense D435i depth and radiological sensing for inspection mapping.
+- Built real-time SLAM in C++17 and ROS2 Humble (rclcpp) on a Clearpath Husky, fusing Velodyne VLP-16 LiDAR, RealSense D435i depth and Symetrica VeriFinder gamma-ray detection for inspection mapping.
 - Benchmarked RTAB-Map, LIO-SAM and Cartographer across matched rosbag2 sequences under a single evaluation protocol to compare mapping and localisation behaviour.
-- Configured Ceres, g2o and GTSAM as solver backends and tuned ICP parameters across environments.
+- Configured Ceres, g2o and GTSAM as solver backends and tuned RTAB-Map and ICP parameters across indoor high-detail and outdoor feature-scarce environments.
 - Calibrated LiDAR extrinsics to the robot base and resolved transform timing with tf2 across a PCL point cloud pipeline, validating sensor placement for coverage.
 - Ran the full SLAM and perception stack on an NVIDIA Jetson AGX Xavier under JetPack, working within the platform's compute and memory limits for on-robot operation.
-- Configured Nav2 in simulation for autonomous waypoint traversal over the generated map, testing survey routes before running them on the Husky.
+- Simulated 2D and 3D SLAM and Nav2 waypoint traversal for the Husky in Gazebo, testing survey routes before running them on the robot.
+- Ran the Husky in real industrial environments, navigating obstacles and locating radioactive sources in real time on the fused gamma-ray map.
 
 ### Visvesvaraya National Institute of Technology -- BTech Electrical and Electronics Engineering (07/2016 - 05/2020, Nagpur, India)
 - Foundation in signals, systems, embedded hardware and control, which later supported work in real-time AI, sensor systems and robotics software.
@@ -196,7 +197,7 @@ Dissertation: Radiological SLAM with LiDAR Odometry
 
 **Video pipelines:** NVIDIA DeepStream 6.x/9.0, GStreamer, FFmpeg, RTSP, nvinfer, nvstreammux, nvtracker, nvdsosd, NvDCF, NvSORT, ByteTrack, multi-stream video analytics, multi-camera synchronisation, multi-target multi-camera (MTMC) tracking, homography calibration, ground-plane projection, union-find clustering, ISP and camera tuning (RGB and IR)
 
-**Robotics and SLAM:** ROS2 (Robot Operating System 2), rclcpp, rclpy, tf2, rosbag2, Gazebo Harmonic, RTAB-Map, LIO-SAM, Cartographer, GLIM, Nav2, LiDAR SLAM, pose graph optimisation, ICP (Iterative Closest Point), scan matching, LiDAR extrinsics calibration, sensor fusion, PCL (Point Cloud Library), Open3D, Eigen, Ceres, g2o, GTSAM, robot_localization, EKF
+**Robotics and SLAM:** ROS2 (Robot Operating System 2) Humble and Jazzy, rclcpp, rclpy, tf2, rosbag2, Gazebo Harmonic, RTAB-Map, LIO-SAM, Cartographer, GLIM, Nav2, LiDAR SLAM, pose graph optimisation, ICP (Iterative Closest Point), scan matching, LiDAR extrinsics calibration, sensor fusion, PCL (Point Cloud Library), Open3D, Eigen, Ceres, g2o, GTSAM, robot_localization, EKF
 
 **LLMs and retrieval:** RAG pipelines, dense and hybrid retrieval, FAISS, ChromaDB, BM25, cross-encoder reranking, reciprocal rank fusion, LangChain, LangGraph, LangSmith, LLM-as-judge, hallucination detection, structured outputs, Pydantic, MCP, fine-tuning, LoRA
 
