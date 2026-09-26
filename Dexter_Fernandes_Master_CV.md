@@ -137,7 +137,7 @@ Backend engineer with 3+ years shipping Python and C++ services in production. B
 - Added LLM-as-judge scoring, evidence matching, citation checks, numeric matching and hallucination labels.
 - Produced reproducible runs with automated tests, config-driven experiments, structured prediction outputs and Markdown reports, enabling regression checks between runs.
 
-### ROS2 SLAM and Nav2 Simulation (02/2026)
+### ROS2 SLAM and Nav2 Simulation (02/2026) -- github.com/Dexter-Fernandes/ClutterBot-SLAM
 - Built a simulation-based robotics stack in ROS2 Jazzy and Gazebo Harmonic to evaluate LiDAR-centric SLAM, LiDAR and RGB fusion SLAM, and autonomous navigation in structured scenarios.
 - Benchmarked RTAB-Map, LIO-SAM, Cartographer and GLIM across 2D and 3D LiDAR configurations, comparing mapping and localisation behaviour to support system selection.
 - Developed ROS2 nodes, launch files and parameterised configs in C++ and Python, using tf2, message synchronisation and timestamp alignment to debug transform timing issues.

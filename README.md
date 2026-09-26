@@ -6,8 +6,15 @@ git add . && git commit -m "CV tailoring workspace"
 claude
 ```
 
-Claude Code reads `CLAUDE.md` (and its `@PROFILE.md` import) automatically at session
-start. The skill and slash command are discovered from `.claude/`.
+Claude Code reads `CLAUDE.md` automatically at session start. The skill and slash command
+are discovered from `.claude/`.
+
+## Layout
+
+- `Dexter_Fernandes_Master_CV.md` -- the single master resume, shared by every track.
+- `Dexter_Fernandes_Resume_template.html` -- the shared output template.
+- `CV/`, `Robotics/`, `LLM/`, `SLAM/`, `Software/`, `PLC/` -- one directory per track.
+  Run `/tailor` from inside a track; outputs land in its `Resumes/JD/` and `Resumes/HTML/`.
 
 ## Running an application
 
@@ -49,10 +56,8 @@ text for an ATS. Warnings do not change the exit status; a failed render does.
 The script only counts pages, so still open the PDF and check for stranded headings or a
 single orphaned bullet on page 2.
 
-## Keeping memory current
+## Keeping the master CV current
 
-Claude Code has no automatic memory. `PROFILE.md` is it. Step 11 instructs Claude to
-append to the application log and record new durable facts there. In-session, `#` prefixes
-a message to append it to memory, and `/memory` opens the files for editing. Review
-`PROFILE.md` occasionally: stale locked metrics or a resolved framing question left in
-place will quietly steer future applications wrong.
+`Dexter_Fernandes_Master_CV.md` is the only source of truth; `/tailor` never edits it. Add
+new roles, projects, metrics and skills there by hand (or ask Claude to, explicitly), and
+commit the change. Do not create per-track copies: every track reads the root file.
