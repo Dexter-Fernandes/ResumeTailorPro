@@ -14,14 +14,14 @@ or icons.
 
 All paths are relative to the working directory the workflow is invoked from. That is
 always a track directory: `CV/`, `Robotics/`, `LLM/`, `SLAM/`, `Software/`, `PLC/`. The
-track only decides where outputs are written. The master resume and the template are
-shared across all tracks and both sit one directory up, at the repo root.
+track only decides where the CV HTML is written. The master resume, the template and
+`JDs/` are shared across all tracks and sit one directory up, at the repo root.
 
 | Path | Use |
 |---|---|
 | `../Dexter_Fernandes_Master_CV.md` | Single source of truth for every track. Always the copy one directory up. Read at Step 2 |
 | `../Dexter_Fernandes_Resume_template.html` | Only permitted output format. Always the copy one directory up. Read at Step 2 |
-| `Resumes/JD/Dexter_Fernandes_CV_<Company>_<Role>.md` | The job listing, saved at Step 1. Same basename as the CV HTML |
+| `../JDs/<Position>_<Company>_<Location>.md` | The job listing, saved at Step 1. Shared across tracks |
 | `Resumes/HTML/Dexter_Fernandes_CV_<Company>_<Role>.html` | The tailored CV. Created at Step 10 |
 
 Never ask the user to upload these. If either file is missing, unreadable, truncated or
@@ -52,7 +52,7 @@ only from the master CV. Do not go looking for a separate profile file.
   stuffed.
 - Treat ATS guidance as conservative practice, not knowledge of any vendor's scoring.
 - **Write exactly two files: the job listing at
-  `Resumes/JD/Dexter_Fernandes_CV_<Company>_<Role>.md` (Step 1) and the tailored CV HTML at
+  `../JDs/<Position>_<Company>_<Location>.md` (Step 1) and the tailored CV HTML at
   `Resumes/HTML/Dexter_Fernandes_CV_<Company>_<Role>.html` (Step 10).** No strategy file,
   no log, no cover letter file, no edits to any existing file in the repo. Every other
   output of this workflow, including the cover letter, is reply text only.
@@ -90,13 +90,16 @@ Ask only for missing items:
 3. The full job listing, including responsibilities and qualifications.
 4. Optional company context the user already knows. May support the Step 12 opening.
 
-Read job title and company from the listing. Ask for confirmation only if either is
-ambiguous.
+Read job title, company and location from the listing. Ask for confirmation only if one
+is ambiguous. If the listing gives no location, ask for it.
 
 Keep the listing in context for the rest of the workflow. Once all required Step 1 inputs
-are in, save it to `Resumes/JD/Dexter_Fernandes_CV_<Company>_<Role>.md`, using the same
-company and role naming as the Step 10 HTML so the two files pair up. If that file
-already exists, say so and ask before overwriting. Format:
+are in, save it to `../JDs/<Position>_<Company>_<Location>.md`, for example
+`../JDs/Computer_Vision_ML_Engineer_Undisclosed_London.md`. Words are joined by
+underscores in the listing's capitalisation, with no spaces, `/`, `|` or other characters
+unsafe in filenames. Location is the city, or `Remote`. Use the same position and company
+strings as the Step 10 HTML filename. If that file already exists, say so and ask before
+overwriting. Format:
 
 ```markdown
 # <Company> -- <Role>
@@ -104,6 +107,7 @@ already exists, say so and ask before overwriting. Format:
 - Saved: <YYYY-MM-DD>
 - Channel: <application channel>
 - Seniority: <stretch | match | step down>
+- CV: <Track>/Resumes/HTML/Dexter_Fernandes_CV_<Company>_<Role>.html
 - Source: <URL, only if the user supplied one>
 
 ---

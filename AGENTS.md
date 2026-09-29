@@ -5,15 +5,15 @@ Working repo for tailoring CVs to computer vision, robotics, perception and edge
 ## File map
 
 One directory per application track: `CV/`, `Robotics/`, `LLM/`, `SLAM/`, `Software/`,
-`PLC/`. A track holds its outputs; the master resume and template are shared at the repo
-root. Work from the track directory; paths below are relative to it.
+`PLC/`. A track holds its CV outputs; the master resume, template and `JDs/` are shared at
+the repo root. Work from the track directory; paths below are relative to it.
 
 | Path | Role |
 |---|---|
 | `../Dexter_Fernandes_Master_CV.md` | Single source of truth for all roles, dates, metrics, projects, skills, contact details. Shared across tracks |
 | `../Dexter_Fernandes_Resume_template.html` | Shared across tracks. The only permitted output format. Structure and CSS are fixed |
 | `Resumes/HTML/` | The only place a tailored CV is written |
-| `Resumes/JD/` | The job listing each tailored CV was written for, same basename as its HTML |
+| `../JDs/` | Every job listing, all tracks, as `<Position>_<Company>_<Location>.md`. Written at Step 1 |
 | `../.agents/skills/resume-tailor/SKILL.md` | The 12-step tailoring workflow. `../.claude/skills/resume-tailor` is a symlink to it |
 
 ## Standing rules (apply to every task in this repo)

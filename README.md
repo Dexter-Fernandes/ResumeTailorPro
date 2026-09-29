@@ -16,7 +16,8 @@ symlink to it. Edit the real files, not the symlinks.
 - `Dexter_Fernandes_Master_CV.md` -- the single master resume, shared by every track.
 - `Dexter_Fernandes_Resume_template.html` -- the shared output template.
 - `CV/`, `Robotics/`, `LLM/`, `SLAM/`, `Software/`, `PLC/` -- one directory per track.
-  Start the workflow from inside a track; outputs land in its `Resumes/JD/` and `Resumes/HTML/`.
+  Start the workflow from inside a track; the CV lands in its `Resumes/HTML/`.
+- `JDs/` -- every saved job listing, all tracks, as `<Position>_<Company>_<Location>.md`.
 
 ## Running an application
 
