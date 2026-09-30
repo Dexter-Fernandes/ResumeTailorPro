@@ -341,11 +341,11 @@ PDF to confirm two pages and check for stranded headings or an orphaned bullet o
 
 If the builder agent assembled the file, it has run the mechanical checks. Run the
 `guard.py audit` command above yourself anyway, then do every check below that needs
-judgement: traceability, tense, bold set, naturalness. Read back the generated HTML's
+judgement: traceability, tense, bold set, naturalness. `guard.py audit` already covers
+em dashes, template placeholders and `<strong>` balance. Read back the generated HTML's
 rendered text and verify:
 
-- No placeholders, tokens or lorem text remain. Grep for `Full Name`, `Company Name`,
-  `Job Title`, `MM/YYYY`, `Category`, `Comma-separated`, `example.com`, `href="#"`.
+- No tokens or lorem text remain.
 - Contact details, links, employers, titles and dates match approved factual sources.
 - Every claim is traceable to the master CV or an in-session factual addition.
 - Current and previous-role tenses are correct.
@@ -354,14 +354,14 @@ rendered text and verify:
 - Count the bullets under every role. 6 to 8, never more than 8. Flag any role below 6
   and confirm it is either strategy-compressed or genuinely short of relevant evidence.
 - Flagship and supporting bullet lengths are reasonably consistent within their tiers.
-- No banned phrases, no banned patterns, no em dashes. Grep for the em dash character.
+- No banned phrases or banned patterns.
 - Keyword repetition reads naturally rather than conspicuously.
 - Every term in the approved bold set is bolded at least once.
 - No bolded term sits outside the approved bold set.
 - No `<strong>` in the Skills grid, entry header rows, date columns or the education
   `Dissertation:` line.
 - No bullet carries more than 3 bolded spans, and most carry 2 or fewer.
-- `<strong>` and `</strong>` counts match, and no tag opens or closes mid-word.
+- No `<strong>` tag opens or closes mid-word.
 - Bold reads as emphasis rather than a highlighter pass. If a section is mostly bold,
   cut back.
 - Markup is valid, with no unclosed tags or broken entities.

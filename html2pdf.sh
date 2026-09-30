@@ -29,7 +29,6 @@ MIN_TEXT_CHARS=1000
 
 force=0
 dry_run=0
-open=0
 out=""
 filters=()
 files=()
@@ -53,7 +52,6 @@ Options:
   --force          Rebuild every PDF, ignoring timestamps
   --dry-run        Report what would be built without rendering
   -o, --output F   Output path (single FILE.html only)
-  --open           Open each PDF built with xdg-open
   --refresh-fonts  Re-download Archivo into assets/fonts and exit
   -h, --help       Show this message
 
@@ -127,7 +125,6 @@ while [[ $# -gt 0 ]]; do
   case "$1" in
     --force)         force=1 ;;
     --dry-run)       dry_run=1 ;;
-    --open)          open=1 ;;
     -o|--output)     [[ $# -ge 2 && -n "$2" ]] || die "$1 needs a path"; out="$2"; shift ;;
     --refresh-fonts) refresh_fonts; exit 0 ;;
     -h|--help)       usage; exit 0 ;;
@@ -141,6 +138,7 @@ done
 (( ${#files[@]} && ${#filters[@]} )) && die "give either .html files or sweep filters, not both"
 [[ -z "$out" || ${#files[@]} -eq 1 ]] || die "-o needs exactly one .html file"
 (( ${#files[@]} )) && force=1
+command -v python3 >/dev/null 2>&1 || die "python3 is required"
 
 if [[ -n "${CHROME_BIN:-}" ]]; then
   command -v "$CHROME_BIN" >/dev/null 2>&1 || die "CHROME_BIN=$CHROME_BIN not found"
@@ -167,19 +165,10 @@ TMPDIR_RUN="$(mktemp -d)"
 cleanup() { rm -rf -- "$TMPDIR_RUN"; }
 trap cleanup EXIT
 
-# Percent-encode a path into a file:// URI. Filenames here contain spaces and
-# parentheses, which Chrome will not reliably parse unencoded. The C locale
-# makes this walk bytes, so non-ASCII characters encode as their UTF-8 bytes.
+# Percent-encoded file:// URI. Filenames here contain spaces and parentheses,
+# which Chrome will not reliably parse unencoded.
 file_uri() {
-  local LC_ALL=C path="$1" out="" i char
-  for (( i = 0; i < ${#path}; i++ )); do
-    char="${path:i:1}"
-    case "$char" in
-      [a-zA-Z0-9._~/-]) out+="$char" ;;
-      *)                printf -v char '%%%02X' "'$char"; out+="$char" ;;
-    esac
-  done
-  printf 'file://%s' "$out"
+  python3 -c 'import pathlib,sys; print(pathlib.Path(sys.argv[1]).as_uri(), end="")' "$1"
 }
 
 # Appended last in <head>, so these @font-face rules win over the Google Fonts
@@ -335,7 +324,6 @@ current=0
 warnings=0
 errors=0
 found=0
-opened=()
 
 for src in "${srcs[@]}"; do
   section="$(section_of "$src")"
@@ -365,7 +353,6 @@ for src in "${srcs[@]}"; do
   fi
 
   (( ++built ))
-  opened+=("$dest")
   pages="$(page_count "$dest")"
   size="$(du -h -- "$dest" | cut -f1)"
   info="$size"
@@ -397,9 +384,5 @@ printf '\n%d %s, %d up to date, %d warning%s, %d error%s\n' \
   "$current" \
   "$warnings" "$( (( warnings == 1 )) || printf s )" \
   "$errors" "$( (( errors == 1 )) || printf s )"
-
-if (( open && ${#opened[@]} )) && command -v xdg-open >/dev/null 2>&1; then
-  for pdf in "${opened[@]}"; do xdg-open "$pdf" >/dev/null 2>&1 & done
-fi
 
 (( errors == 0 ))

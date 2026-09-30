@@ -57,7 +57,7 @@ After Step 11, render with `html2pdf.sh` from the repo root:
 ./html2pdf.sh CV SLAM/Resumes        # limit the sweep to tracks or directories
 ./html2pdf.sh --dry-run              # list what would be built
 ./html2pdf.sh --force CV             # rebuild regardless of timestamps
-./html2pdf.sh --open path/to/CV.html # render one file, always, then open it
+./html2pdf.sh path/to/CV.html        # render one file, always
 ./html2pdf.sh -o ~/cv.pdf CV.html    # render one file to a chosen path
 ```
 
