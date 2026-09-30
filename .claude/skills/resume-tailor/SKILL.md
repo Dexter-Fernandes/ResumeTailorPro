@@ -27,23 +27,27 @@ or icons.
 
 ## Files
 
-All paths are relative to the working directory the workflow is invoked from. That is
-always a track directory: `CV/`, `Robotics/`, `LLM/`, `SLAM/`, `Software/`, `PLC/`. The
-track only decides where the CV HTML is written. The master resume, the template and
-`JDs/` are shared across all tracks and sit one directory up, at the repo root.
+The workflow runs from the repo root, and all paths are relative to it. Outputs go in a
+track directory, `<Track>`, which you choose at Step 1: `CV/`, `Robotics/`, `LLM/`,
+`SLAM/`, `Software/` or `PLC/`. Everything else is shared across tracks.
 
 | Path | Use |
 |---|---|
-| `../Dexter_Fernandes_Master_CV.md` | Single source of truth for every track. Always the copy one directory up. Read at Step 2 |
-| `../Dexter_Fernandes_Resume_template.html` | Only permitted output format. Always the copy one directory up. Read at Step 2 |
-| `../JDs/<Position>_<Company>_<Location>.md` | The job listing, saved at Step 1. Shared across tracks |
-| `Resumes/HTML/Dexter_Fernandes_CV_<Company>_<Role>.html` | The tailored CV. Created at Step 10 |
+| `Dexter_Fernandes_Master_CV.md` | Single source of truth for every track. Read at Step 2 |
+| `Dexter_Fernandes_Resume_template.html` | Only permitted CV format. Read at Step 2 |
+| `Dexter_Fernandes_Cover_Letter_template.html` | Only permitted cover letter format. Read at Step 12 |
+| `JDs/<Position>_<Company>_<Location>.md` | The job listing. Saved at Step 1 |
+| `<Track>/Resumes/HTML/Dexter_Fernandes_CV_<Company>_<Role>.html` | The tailored CV. Created at Step 10 |
+| `<Track>/Cover Letters/HTML/Dexter_Fernandes_Cover_Letter_<Company>_<Role>.html` | The cover letter. Created at Step 12, only if run and approved |
+| `.claude/skills/resume-tailor/guard.py` | Claude Code hooks, and the `audit FILE` check used at Steps 10 to 12 |
+| `.claude/agents/cv-html-builder.md` | Claude Code only. The Step 10 assembly agent |
 
-Never ask the user to upload these. If either file is missing, unreadable, truncated or
-malformed, identify the problem at Step 2 and stop. Do not substitute another template,
-do not use any other copy of the master resume, and do not work from a previously seen
-CV. A missing file means the workflow is being run from the wrong directory. Say so, and
-stop.
+Never ask the user to upload these. If the master CV or CV template is missing,
+unreadable, truncated or malformed, identify the problem at Step 2 and stop; check the
+cover letter template the same way at Step 12. Do not substitute another template, do
+not use any other copy of the master resume, and do not work from a previously seen CV.
+A missing file usually means the workflow is not running from the repo root. Say so,
+and stop.
 
 Standing constraints come from the project instructions already in context. Metrics come
 only from the master CV. Do not go looking for a separate profile file.
@@ -67,8 +71,8 @@ only from the master CV. Do not go looking for a separate profile file.
   stuffed.
 - Treat ATS guidance as conservative practice, not knowledge of any vendor's scoring.
 - **Write exactly two files: the job listing at
-  `../JDs/<Position>_<Company>_<Location>.md` (Step 1) and the tailored CV HTML at
-  `Resumes/HTML/Dexter_Fernandes_CV_<Company>_<Role>.html` (Step 10).** A third file,
+  `JDs/<Position>_<Company>_<Location>.md` (Step 1) and the tailored CV HTML at
+  `<Track>/Resumes/HTML/Dexter_Fernandes_CV_<Company>_<Role>.html` (Step 10).** A third file,
   the cover letter HTML, is written only if the user runs the optional Step 12 and
   approves the letter's text. No strategy file, no log, no edits to any existing file in
   the repo except a master CV addition under Flow control. Every other output of this
@@ -88,7 +92,7 @@ only from the master CV. Do not go looking for a separate profile file.
   confirming the strategy. If unanswered, proceed with accurate qualitative wording.
 - **Master CV additions.** If, before approving the strategy, the user supplies an
   experience bullet that is not in the master CV, confirm with them, then add it to
-  `../Dexter_Fernandes_Master_CV.md` under the matching role, worded as supplied. Never
+  `Dexter_Fernandes_Master_CV.md` under the matching role, worded as supplied. Never
   in ultrafast mode, and never PLC or industrial-automation content. Once the strategy is
   approved the master CV is frozen: later facts stay in-session factual additions. In
   Claude Code, `guard.py` enforces this and blocks all template edits.
@@ -130,9 +134,23 @@ Ask only for missing items:
 Read job title, company and location from the listing. Ask for confirmation only if one
 is ambiguous. If the listing gives no location, ask for it.
 
+Choose the track, `<Track>`, from the listing's core responsibility. It decides where the
+CV and cover letter are saved:
+
+- `CV`: computer vision and perception ML.
+- `Robotics`: robotics software and autonomy.
+- `SLAM`: localisation and mapping.
+- `LLM`: LLMs and generative AI.
+- `Software`: general software engineering.
+- `PLC`: industrial automation. Tailor from transferable experience only.
+
+If two fit equally, take the one matching the listing's first responsibility. State the
+track with a one-line reason. The user can change it at the Step 4 gate; in ultrafast
+mode, state it and proceed.
+
 Keep the listing in context for the rest of the workflow. Once all required Step 1 inputs
-are in, save it to `../JDs/<Position>_<Company>_<Location>.md`, for example
-`../JDs/Computer_Vision_ML_Engineer_Undisclosed_London.md`. Words are joined by
+are in, save it to `JDs/<Position>_<Company>_<Location>.md`, for example
+`JDs/Computer_Vision_ML_Engineer_Undisclosed_London.md`. Words are joined by
 underscores in the listing's capitalisation, with no spaces, `/`, `|` or other characters
 unsafe in filenames. Location is the city, or `Remote`. Use the same position and company
 strings as the Step 10 HTML filename. If that file already exists, say so and ask before
@@ -160,9 +178,9 @@ sponsorship constraint before any drafting begins.
 
 ## Step 2/12 -- Master Resume Intake
 
-Read the shared `../Dexter_Fernandes_Master_CV.md` and
-`../Dexter_Fernandes_Resume_template.html`, both from the directory above the working
-directory. Never take either from anywhere else, and never fall back to a copy found
+Read the shared `Dexter_Fernandes_Master_CV.md` and
+`Dexter_Fernandes_Resume_template.html`, both from the repo root. Never take either from
+anywhere else, and never fall back to a copy found
 elsewhere in the repo. Report briefly:
 
 - Roles, education and projects found, with dates.
@@ -179,6 +197,7 @@ Produce the Match Analysis Rubric below. Do not rewrite CV content yet.
 
 Cover:
 
+- **Track.** The Step 1 track and where the CV will be saved.
 - **Priority mapping.** The three most important responsibilities. Listing order is a
   useful signal, not certainty.
 - **Expand.** Roles, projects, achievements and skills that best support those.
@@ -269,8 +288,9 @@ A role-aligned list that functions as a recruiter search index.
 ## Step 10/12 -- HTML Assembly
 
 Populate the fixed template with approved Step 5 to 9 content. Save to
-`Resumes/HTML/Dexter_Fernandes_CV_<Company>_<Role>.html`, relative to the working
-directory. Apart from the Step 1 listing, this is the only file the workflow writes.
+`<Track>/Resumes/HTML/Dexter_Fernandes_CV_<Company>_<Role>.html`, where `<Track>` is
+the track chosen at Step 1. Apart from the Step 1 listing and the optional Step 12 cover
+letter, this is the only file the workflow writes.
 
 **Delegation.** In Claude Code, check the output filename is free (ask before
 overwriting), then dispatch the `cv-html-builder` agent with: the absolute output path,
@@ -281,7 +301,7 @@ not available (Codex), do Steps 10 and 11 yourself. Either way, length control a
 judgement checks in Step 11 stay with you.
 
 - Use the company and role from the listing in the filename, underscore-separated, no
-  spaces, for example `Resumes/HTML/Dexter_Fernandes_CV_Acme_Robotics_Senior_CV_Engineer.html`.
+  spaces, for example `CV/Resumes/HTML/Dexter_Fernandes_CV_Acme_Robotics_Senior_CV_Engineer.html`.
 - If a file of that name already exists, say so and ask before overwriting.
 - Fill existing content slots only.
 - Do not alter structure, CSS, classes, fonts, colours, margins or layout.
@@ -304,7 +324,7 @@ judgement checks in Step 11 stay with you.
 advisory one. Count the CV's words (this also runs the mechanical audit):
 
 ```bash
-python3 "$(git rev-parse --show-toplevel)/.claude/skills/resume-tailor/guard.py" audit Resumes/HTML/<filename>.html
+python3 "$(git rev-parse --show-toplevel)/.claude/skills/resume-tailor/guard.py" audit <Track>/Resumes/HTML/<filename>.html
 ```
 
 If the builder agent returns a count outside the target, decide the cuts or restorations
@@ -348,7 +368,7 @@ rendered text and verify:
 
 Fix every issue and repeat until clean. Then report:
 
-`DONE -- [word count] words, saved to Resumes/HTML/<filename>.html. Page count
+`DONE -- [word count] words, saved to <Track>/Resumes/HTML/<filename>.html. Page count
 unverified; run ./html2pdf.sh from the repo root to render and check it.`
 
 Then summarise in the reply, not in a file: channel, seniority framing, GrowthStage and
@@ -385,8 +405,8 @@ Where the skill is not available (Codex), apply the Banned language rules yourse
 **3. Approval gate.** Show the full letter in the reply and stop. Write nothing until the
 user approves or adjusts it.
 
-**4. Assembly.** Populate the shared `../Dexter_Fernandes_Cover_Letter_template.html`
-and save it to `Cover Letters/HTML/Dexter_Fernandes_Cover_Letter_<Company>_<Role>.html`,
+**4. Assembly.** Populate the shared `Dexter_Fernandes_Cover_Letter_template.html`
+and save it to `<Track>/Cover Letters/HTML/Dexter_Fernandes_Cover_Letter_<Company>_<Role>.html`,
 using the same company and role strings as the CV. If that file exists, ask before
 overwriting. Fill the existing slots only; repeat the paragraph slot, one `<p>` per
 paragraph. Delete the optional parent-company span if the listing names none. The date
@@ -396,7 +416,7 @@ entities escaped.
 **5. Cover letter audit.** Run:
 
 ```bash
-python3 "$(git rev-parse --show-toplevel)/.claude/skills/resume-tailor/guard.py" audit "Cover Letters/HTML/<filename>.html"
+python3 "$(git rev-parse --show-toplevel)/.claude/skills/resume-tailor/guard.py" audit "<Track>/Cover Letters/HTML/<filename>.html"
 ```
 
 It checks em dashes, leftover placeholders, list markup, numbered paragraphs and word
@@ -410,7 +430,7 @@ count. Then verify:
 
 Fix every issue and repeat until clean. Then report:
 
-`DONE -- [word count] words, saved to Cover Letters/HTML/<filename>.html. Page count
+`DONE -- [word count] words, saved to <Track>/Cover Letters/HTML/<filename>.html. Page count
 unverified; run ./html2pdf.sh from the repo root to render and check it is one page.`
 
 ---

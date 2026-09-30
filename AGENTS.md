@@ -5,19 +5,20 @@ Working repo for tailoring CVs to computer vision, robotics, perception and edge
 ## File map
 
 One directory per application track: `CV/`, `Robotics/`, `LLM/`, `SLAM/`, `Software/`,
-`PLC/`. A track holds its CV outputs; the master resume, template and `JDs/` are shared at
-the repo root. Work from the track directory; paths below are relative to it.
+`PLC/`. A track holds its CV and cover letter outputs; the workflow picks the track from
+the listing. Everything else is shared at the repo root. Work from the repo root; paths
+below are relative to it.
 
 | Path | Role |
 |---|---|
-| `../Dexter_Fernandes_Master_CV.md` | Single source of truth for all roles, dates, metrics, projects, skills, contact details. Shared across tracks |
-| `../Dexter_Fernandes_Resume_template.html` | Shared across tracks. The only permitted output format. Structure and CSS are fixed |
-| `../Dexter_Fernandes_Cover_Letter_template.html` | Shared across tracks. The only permitted cover letter format. Structure and CSS are fixed |
-| `Resumes/HTML/` | The only place a tailored CV is written |
-| `Cover Letters/HTML/` | The only place a cover letter is written (optional Step 12, after the user approves the text) |
-| `../JDs/` | Every job listing, all tracks, as `<Position>_<Company>_<Location>.md`. Written at Step 1 |
-| `../.claude/skills/resume-tailor/SKILL.md` | The 12-step tailoring workflow. `../.agents/skills/resume-tailor` is a symlink to it for Codex |
-| `../.claude/agents/cv-html-builder.md` | Claude Code only. Assembles the HTML at Step 10 from approved content; only the skill may dispatch it |
+| `Dexter_Fernandes_Master_CV.md` | Single source of truth for all roles, dates, metrics, projects, skills, contact details. Shared across tracks |
+| `Dexter_Fernandes_Resume_template.html` | Shared across tracks. The only permitted output format. Structure and CSS are fixed |
+| `Dexter_Fernandes_Cover_Letter_template.html` | Shared across tracks. The only permitted cover letter format. Structure and CSS are fixed |
+| `<Track>/Resumes/HTML/` | The only place a tailored CV is written |
+| `<Track>/Cover Letters/HTML/` | The only place a cover letter is written (optional Step 12, after the user approves the text) |
+| `JDs/` | Every job listing, all tracks, as `<Position>_<Company>_<Location>.md`. Written at Step 1 |
+| `.claude/skills/resume-tailor/SKILL.md` | The 12-step tailoring workflow. `.agents/skills/resume-tailor` is a symlink to it for Codex |
+| `.claude/agents/cv-html-builder.md` | Claude Code only. Assembles the HTML at Step 10 from approved content; only the skill may dispatch it |
 
 ## Standing rules (apply to every task in this repo)
 
