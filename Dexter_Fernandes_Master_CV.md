@@ -88,6 +88,8 @@ Backend engineer with 3+ years shipping Python and C++ services in production. B
 **Vision systems**
 - Built and maintained edge perception pipelines across three cameras on a roller and loader at multiple construction sites around Austin, Texas, supporting 24/7 monitoring.
 - Used ByteTrack tracking to require persistent PPE violations across successive frames before recording incidents, filtering transient detection errors.
+- Built fall detection software for construction-site safety, recognising worker falls from body keypoints produced by a pose estimation model.
+- Built a driver alertness and liveness-check pilot with MediaPipe, designed to work reliably across varying lighting conditions.
 - Implemented optical flow based ego-motion estimation feeding CNN classifiers in PyTorch to infer vehicle state, supporting collision avoidance on moving vehicles.
 - Built YOLOv5 visual quality inspection for John Deere engine paintjobs on a conveyor line, detecting paint defects, contamination and colour inconsistency.
 - Tuned camera and ISP settings to keep models reliable on RGB and IR streams across 24/7 operation, cutting false positives on IR and reducing manual recalibration.
