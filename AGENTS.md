@@ -15,6 +15,7 @@ the repo root. Work from the track directory; paths below are relative to it.
 | `Resumes/HTML/` | The only place a tailored CV is written |
 | `../JDs/` | Every job listing, all tracks, as `<Position>_<Company>_<Location>.md`. Written at Step 1 |
 | `../.claude/skills/resume-tailor/SKILL.md` | The 12-step tailoring workflow. `../.agents/skills/resume-tailor` is a symlink to it for Codex |
+| `../.claude/agents/cv-html-builder.md` | Claude Code only. Assembles the HTML at Step 10 from approved content; only the skill may dispatch it |
 
 ## Standing rules (apply to every task in this repo)
 

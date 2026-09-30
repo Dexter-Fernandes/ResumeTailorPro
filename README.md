@@ -12,6 +12,11 @@ is written for Claude Code and lives in `.claude/skills/`; `.agents/skills/resum
 is a symlink to it so Codex finds it too. Codex ignores the Claude-only parts (tool
 pre-approval, the `guard.py` hooks). Edit the real files, not the symlinks.
 
+In Claude Code, Steps 1 to 9 run on Opus at high effort (`model`/`effort` in the skill
+header). Step 10 assembly goes to the `cv-html-builder` agent on Sonnet at medium effort
+(`.claude/agents/cv-html-builder.md`), which only the skill may dispatch, enforced by a
+hook in `.claude/settings.json`. Codex does every step itself.
+
 ## Layout
 
 - `Dexter_Fernandes_Master_CV.md` -- the single master resume, shared by every track.

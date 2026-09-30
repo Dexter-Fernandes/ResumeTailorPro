@@ -2,7 +2,9 @@
 name: resume-tailor
 description: Tailor Dexter Fernandes' CV to a specific job listing and draft a matching cover letter, using a gated 12-step ATS-first workflow. Use whenever a job listing, job description or job advert is supplied, or when asked to tailor, optimise, rewrite or target a CV or resume for a computer vision, robotics, perception, SLAM, edge ML or AI engineering role.
 argument-hint: "[ultrafast mode] <job listing>"
-allowed-tools: Read, Glob, Grep, Edit(/JDs/**), Edit(/*/Resumes/HTML/**), Bash(python3 -c:*)
+model: opus
+effort: high
+allowed-tools: Read, Glob, Grep, Edit(/JDs/**), Edit(/*/Resumes/HTML/**), Bash(python3:*), Agent(cv-html-builder)
 hooks:
   PreToolUse:
     - matcher: "Edit|Write|MultiEdit"
@@ -269,6 +271,14 @@ Populate the fixed template with approved Step 5 to 9 content. Save to
 `Resumes/HTML/Dexter_Fernandes_CV_<Company>_<Role>.html`, relative to the working
 directory. Apart from the Step 1 listing, this is the only file the workflow writes.
 
+**Delegation.** In Claude Code, check the output filename is free (ask before
+overwriting), then dispatch the `cv-html-builder` agent with: the absolute output path,
+the approved Summary, Experience (per role), Education, Projects and Skills text exactly
+as approved, the approved bold set, and the roles the strategy compressed. It assembles
+the file and runs the mechanical checks; it never changes wording. Where that agent is
+not available (Codex), do Steps 10 and 11 yourself. Either way, length control and the
+judgement checks in Step 11 stay with you.
+
 - Use the company and role from the listing in the filename, underscore-separated, no
   spaces, for example `Resumes/HTML/Dexter_Fernandes_CV_Acme_Robotics_Senior_CV_Engineer.html`.
 - If a file of that name already exists, say so and ask before overwriting.
@@ -290,16 +300,14 @@ directory. Apart from the Step 1 listing, this is the only file the workflow wri
 - Do not paste the full HTML into the reply. Report what was populated.
 
 **Length control.** With no PDF render, the word budget is the primary control, not an
-advisory one. Count the CV's words:
+advisory one. Count the CV's words (this also runs the mechanical audit):
 
 ```bash
-python3 -c "
-import re,sys,html
-t=open('Resumes/HTML/<filename>.html').read()
-t=re.sub(r'<(script|style).*?</\1>','',t,flags=re.S)
-print(len(html.unescape(re.sub(r'<[^>]+>',' ',t)).split()))
-"
+python3 "$(git rev-parse --show-toplevel)/.claude/skills/resume-tailor/guard.py" audit Resumes/HTML/<filename>.html
 ```
+
+If the builder agent returns a count outside the target, decide the cuts or restorations
+yourself and edit the HTML directly.
 
 Target 1,100 to 1,400 words for two pages. Over budget, remove lower-value content:
 trim roles from 8 bullets toward 6 before cutting anything else, and tighten wording.
@@ -310,7 +318,10 @@ PDF to confirm two pages and check for stranded headings or an orphaned bullet o
 
 ## Step 11/12 -- HTML Audit
 
-Read back the generated HTML's rendered text and verify:
+If the builder agent assembled the file, it has run the mechanical checks. Run the
+`guard.py audit` command above yourself anyway, then do every check below that needs
+judgement: traceability, tense, bold set, naturalness. Read back the generated HTML's
+rendered text and verify:
 
 - No placeholders, tokens or lorem text remain. Grep for `Full Name`, `Company Name`,
   `Job Title`, `MM/YYYY`, `Category`, `Comma-separated`, `example.com`, `href="#"`.
