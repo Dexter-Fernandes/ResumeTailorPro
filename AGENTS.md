@@ -12,7 +12,9 @@ the repo root. Work from the track directory; paths below are relative to it.
 |---|---|
 | `../Dexter_Fernandes_Master_CV.md` | Single source of truth for all roles, dates, metrics, projects, skills, contact details. Shared across tracks |
 | `../Dexter_Fernandes_Resume_template.html` | Shared across tracks. The only permitted output format. Structure and CSS are fixed |
+| `../Dexter_Fernandes_Cover_Letter_template.html` | Shared across tracks. The only permitted cover letter format. Structure and CSS are fixed |
 | `Resumes/HTML/` | The only place a tailored CV is written |
+| `Cover Letters/HTML/` | The only place a cover letter is written (optional Step 12, after the user approves the text) |
 | `../JDs/` | Every job listing, all tracks, as `<Position>_<Company>_<Location>.md`. Written at Step 1 |
 | `../.claude/skills/resume-tailor/SKILL.md` | The 12-step tailoring workflow. `../.agents/skills/resume-tailor` is a symlink to it for Codex |
 | `../.claude/agents/cv-html-builder.md` | Claude Code only. Assembles the HTML at Step 10 from approved content; only the skill may dispatch it |
@@ -23,7 +25,7 @@ the repo root. Work from the track directory; paths below are relative to it.
 - Every candidate claim traces to `Dexter_Fernandes_Master_CV.md` or to an explicit factual addition the user supplies in-session. Never invent or exaggerate tools, metrics, titles, dates, employers, responsibilities, scale, outcomes or production experience.
 - Never edit the master CV or the template unless explicitly asked. They are the source of truth. The one workflow exception: before the strategy is approved, a user-supplied experience bullet may be added to the master CV (see the skill's Flow control).
 - Never add PLC or industrial-automation content to the master CV, even when asked to record a fact from a PLC application. `PLC/` still reads the root master and tailors from transferable experience only.
-- Never redesign `Dexter_Fernandes_Resume_template.html`. Populate its existing slots only.
+- Never redesign `Dexter_Fernandes_Resume_template.html` or `Dexter_Fernandes_Cover_Letter_template.html`. Populate their existing slots only.
 - Company facts come only from the job listing, the user, or verified research.
 - No em dashes anywhere. Use a double hyphen or restructure the sentence.
 - Keep explanations brief. Explain from first principles when a concept needs explaining.

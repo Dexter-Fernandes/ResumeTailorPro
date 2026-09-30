@@ -42,6 +42,11 @@ reply, Summary and Skills not printed), or `step mode` to go one step at a time.
 `/resume-tailor ultrafast mode <listing>` asks nothing: Steps 1 to 11 run in one reply with
 defaults for any missing inputs, stopping only before overwriting an existing file.
 
+Step 12, the cover letter, is optional and runs only when asked. The draft is passed
+through the `humanizer` skill and shown for approval; once approved it is saved to the
+track's `Cover Letters/HTML/` from `Dexter_Fernandes_Cover_Letter_template.html` and
+audited.
+
 ## Exporting to PDF
 
 After Step 11, render with `html2pdf.sh` from the repo root:

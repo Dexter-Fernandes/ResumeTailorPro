@@ -296,6 +296,9 @@ check_pdf() {
   if [[ "$section" == */Resumes && -n "$pages" && "$pages" != "2" ]]; then
     issues+=("expected 2 pages")
   fi
+  if [[ "$section" == */"Cover Letters" && -n "$pages" && "$pages" != "1" ]]; then
+    issues+=("expected 1 page")
+  fi
 
   if command -v pdffonts >/dev/null 2>&1; then
     fonts="$(pdffonts "$pdf" 2>/dev/null)"

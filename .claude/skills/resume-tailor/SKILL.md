@@ -4,7 +4,7 @@ description: Tailor Dexter Fernandes' CV to a specific job listing and draft a m
 argument-hint: "[ultrafast mode] <job listing>"
 model: opus
 effort: high
-allowed-tools: Read, Glob, Grep, Edit(/JDs/**), Edit(/*/Resumes/HTML/**), Bash(python3:*), Agent(cv-html-builder)
+allowed-tools: Read, Glob, Grep, Edit(/JDs/**), Edit(/*/Resumes/HTML/**), Edit(/*/Cover Letters/HTML/**), Bash(python3:*), Agent(cv-html-builder), Skill(anthropic-skills:humanizer)
 hooks:
   PreToolUse:
     - matcher: "Edit|Write|MultiEdit"
@@ -68,10 +68,11 @@ only from the master CV. Do not go looking for a separate profile file.
 - Treat ATS guidance as conservative practice, not knowledge of any vendor's scoring.
 - **Write exactly two files: the job listing at
   `../JDs/<Position>_<Company>_<Location>.md` (Step 1) and the tailored CV HTML at
-  `Resumes/HTML/Dexter_Fernandes_CV_<Company>_<Role>.html` (Step 10).** No strategy file,
-  no log, no cover letter file, no edits to any existing file in the repo except a master
-  CV addition under Flow control. Every other output of this workflow, including the
-  cover letter, is reply text only.
+  `Resumes/HTML/Dexter_Fernandes_CV_<Company>_<Role>.html` (Step 10).** A third file,
+  the cover letter HTML, is written only if the user runs the optional Step 12 and
+  approves the letter's text. No strategy file, no log, no edits to any existing file in
+  the repo except a master CV addition under Flow control. Every other output of this
+  workflow is reply text only.
 - Begin every reply with `Step N/12 -- [Step Name]`. The hooks read these labels to tell
   whether the strategy has been approved.
 - Keep replies limited to the active step or steps.
@@ -354,21 +355,63 @@ Then summarise in the reply, not in a file: channel, seniority framing, GrowthSt
 Taco Bell inclusion decisions, sponsorship status, and any new factual additions the user
 supplied. Write no log file and edit no existing file.
 
-## Step 12/12 -- Cover Letter
+End with one line offering the cover letter (Step 12).
 
-Text only in the reply. No file, no HTML.
+## Step 12/12 -- Cover Letter [optional]
 
-1. **Opening paragraph.** A specific connection between candidate and role. Company facts
-   only from the listing, the user, or verified research. With none available, build the
-   hook from the role's stated problems, stack or domain.
-2. **Three or four numbered strengths.** Each mapped to a priority responsibility and
-   supported by a specific example from the candidate's background.
-3. **Short closing paragraph.** Reiterate fit, express genuine interest, clear call to
-   action.
+Run only if the user asks for it. No mode runs it automatically, ultrafast included.
+
+**1. Draft.** Natural paragraphs of prose. No numbering, no lists, no bold, no headings.
+
+- Opening: a specific connection between candidate and role. Company facts only from the
+  listing, the user, or verified research. With none available, build the hook from the
+  role's stated problems, stack or domain.
+- Two or three body paragraphs, each built around one priority responsibility and a
+  concrete example from the candidate's background. Let the paragraphs flow into each
+  other rather than reading as a list of strengths.
+- A short close: fit, genuine interest, a clear call to action.
+- Target 250 to 450 words including the header, one page.
 
 Channel: ATS portal, clear and slightly formal. Referral, emphasise credible fit and
 trajectory so the recommendation is easy to defend. Warm introduction or direct email,
 concise, specific and conversational.
+
+**2. Humanise.** Invoke the `humanizer` skill on the draft. It edits style only: reject
+any change that adds, drops or alters a fact. Then re-check the result against the
+global rules: every claim traces to the master CV or an in-session addition, company
+facts to the listing, user or research, UK English, no banned language, no em dashes.
+Where the skill is not available (Codex), apply the Banned language rules yourself.
+
+**3. Approval gate.** Show the full letter in the reply and stop. Write nothing until the
+user approves or adjusts it.
+
+**4. Assembly.** Populate the shared `../Dexter_Fernandes_Cover_Letter_template.html`
+and save it to `Cover Letters/HTML/Dexter_Fernandes_Cover_Letter_<Company>_<Role>.html`,
+using the same company and role strings as the CV. If that file exists, ask before
+overwriting. Fill the existing slots only; repeat the paragraph slot, one `<p>` per
+paragraph. Delete the optional parent-company span if the listing names none. The date
+is today's, as `D Month YYYY`. Same markup rules as Step 10: no structure or CSS changes,
+entities escaped.
+
+**5. Cover letter audit.** Run:
+
+```bash
+python3 "$(git rev-parse --show-toplevel)/.claude/skills/resume-tailor/guard.py" audit "Cover Letters/HTML/<filename>.html"
+```
+
+It checks em dashes, leftover placeholders, list markup, numbered paragraphs and word
+count. Then verify:
+
+- The text matches the approved letter exactly.
+- Header contact details match the master CV; company, role and location match the
+  listing.
+- Every claim is traceable; no banned phrases or patterns.
+- Markup is valid, with no unclosed tags or broken entities.
+
+Fix every issue and repeat until clean. Then report:
+
+`DONE -- [word count] words, saved to Cover Letters/HTML/<filename>.html. Page count
+unverified; run ./html2pdf.sh from the repo root to render and check it is one page.`
 
 ---
 
