@@ -45,7 +45,7 @@ desktop.ini
 .vscode/
 
 # --- Claude Code / Codex ----------------------------------------------
-# AGENTS.md, the CLAUDE.md symlink, .agents/skills and .claude/ (commands,
+# AGENTS.md, the CLAUDE.md symlink, .claude/skills and the .agents/ (Codex
 # skill symlink) are shared and stay tracked.
 # Machine-local settings and session state are not.
 .claude/settings.local.json

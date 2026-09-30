@@ -8,8 +8,9 @@ claude    # or: codex
 
 Claude Code and Codex are interchangeable here. `AGENTS.md` holds the standing rules;
 `CLAUDE.md` is a symlink to it, so both tools read the same file. The `resume-tailor` skill
-lives in `.agents/skills/` (where Codex looks) and `.claude/skills/resume-tailor` is a
-symlink to it. Edit the real files, not the symlinks.
+is written for Claude Code and lives in `.claude/skills/`; `.agents/skills/resume-tailor`
+is a symlink to it so Codex finds it too. Codex ignores the Claude-only parts (tool
+pre-approval, the `guard.py` hooks). Edit the real files, not the symlinks.
 
 ## Layout
 
@@ -22,17 +23,19 @@ symlink to it. Edit the real files, not the symlinks.
 ## Running an application
 
 ```
-/tailor <paste the job listing>          # Claude Code
+/resume-tailor <paste the job listing>   # Claude Code
 $resume-tailor <paste the job listing>   # Codex
 ```
 
 or just paste a listing and ask for a tailored CV. Every route runs the same skill.
-`/tailor` (`.claude/commands/tailor.md`) is Claude-only: Codex has no per-repo slash
-commands.
 
 Steps 1 to 4 run in one pass and stop at the strategy gate. Approve or adjust, then
-continue step by step, or say `fast mode` to batch Steps 5 to 11. Fast mode shows the
-Summary and Skills first and waits for approval before writing the rest.
+plan mode runs by default: it shows the Summary and Skills first and waits for approval
+before writing the rest. Say `fast mode` to skip that checkpoint (Steps 5 to 11 in one
+reply, Summary and Skills not printed), or `step mode` to go one step at a time.
+
+`/resume-tailor ultrafast mode <listing>` asks nothing: Steps 1 to 11 run in one reply with
+defaults for any missing inputs, stopping only before overwriting an existing file.
 
 ## Exporting to PDF
 

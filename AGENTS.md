@@ -14,13 +14,13 @@ the repo root. Work from the track directory; paths below are relative to it.
 | `../Dexter_Fernandes_Resume_template.html` | Shared across tracks. The only permitted output format. Structure and CSS are fixed |
 | `Resumes/HTML/` | The only place a tailored CV is written |
 | `../JDs/` | Every job listing, all tracks, as `<Position>_<Company>_<Location>.md`. Written at Step 1 |
-| `../.agents/skills/resume-tailor/SKILL.md` | The 12-step tailoring workflow. `../.claude/skills/resume-tailor` is a symlink to it |
+| `../.claude/skills/resume-tailor/SKILL.md` | The 12-step tailoring workflow. `../.agents/skills/resume-tailor` is a symlink to it for Codex |
 
 ## Standing rules (apply to every task in this repo)
 
 - UK English.
 - Every candidate claim traces to `Dexter_Fernandes_Master_CV.md` or to an explicit factual addition the user supplies in-session. Never invent or exaggerate tools, metrics, titles, dates, employers, responsibilities, scale, outcomes or production experience.
-- Never edit the master CV or the template unless explicitly asked. They are the source of truth.
+- Never edit the master CV or the template unless explicitly asked. They are the source of truth. The one workflow exception: before the strategy is approved, a user-supplied experience bullet may be added to the master CV (see the skill's Flow control).
 - Never add PLC or industrial-automation content to the master CV, even when asked to record a fact from a PLC application. `PLC/` still reads the root master and tailors from transferable experience only.
 - Never redesign `Dexter_Fernandes_Resume_template.html`. Populate its existing slots only.
 - Company facts come only from the job listing, the user, or verified research.
@@ -30,7 +30,7 @@ the repo root. Work from the track directory; paths below are relative to it.
 
 ## Workflow entry
 
-To tailor a CV, supply the job listing, or ask directly. In Claude Code, `/tailor <listing>`
+To tailor a CV, supply the job listing, or ask directly. In Claude Code, `/resume-tailor <listing>`
 also works; in Codex, `$resume-tailor <listing>`. Every route invokes the `resume-tailor`
 skill. Do not improvise a shorter path: the step gates exist to stop
 fabrication and premature drafting.

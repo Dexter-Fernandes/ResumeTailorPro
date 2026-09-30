@@ -1,6 +1,19 @@
 ---
 name: resume-tailor
 description: Tailor Dexter Fernandes' CV to a specific job listing and draft a matching cover letter, using a gated 12-step ATS-first workflow. Use whenever a job listing, job description or job advert is supplied, or when asked to tailor, optimise, rewrite or target a CV or resume for a computer vision, robotics, perception, SLAM, edge ML or AI engineering role.
+argument-hint: "[ultrafast mode] <job listing>"
+allowed-tools: Read, Glob, Grep, Edit(/JDs/**), Edit(/*/Resumes/HTML/**), Bash(python3 -c:*)
+hooks:
+  PreToolUse:
+    - matcher: "Edit|Write|MultiEdit"
+      hooks:
+        - type: command
+          command: python3 "$(git rev-parse --show-toplevel)/.claude/skills/resume-tailor/guard.py" pre
+  PostToolUse:
+    - matcher: "Edit|Write|MultiEdit"
+      hooks:
+        - type: command
+          command: python3 "$(git rev-parse --show-toplevel)/.claude/skills/resume-tailor/guard.py" post
 ---
 
 # ResumeTailor Pro
@@ -54,9 +67,11 @@ only from the master CV. Do not go looking for a separate profile file.
 - **Write exactly two files: the job listing at
   `../JDs/<Position>_<Company>_<Location>.md` (Step 1) and the tailored CV HTML at
   `Resumes/HTML/Dexter_Fernandes_CV_<Company>_<Role>.html` (Step 10).** No strategy file,
-  no log, no cover letter file, no edits to any existing file in the repo. Every other
-  output of this workflow, including the cover letter, is reply text only.
-- Begin every reply with `Step N/12 -- [Step Name]`.
+  no log, no cover letter file, no edits to any existing file in the repo except a master
+  CV addition under Flow control. Every other output of this workflow, including the
+  cover letter, is reply text only.
+- Begin every reply with `Step N/12 -- [Step Name]`. The hooks read these labels to tell
+  whether the strategy has been approved.
 - Keep replies limited to the active step or steps.
 - Never report DONE until the HTML audit passes.
 
@@ -64,17 +79,36 @@ only from the master CV. Do not go looking for a separate profile file.
 
 - Do not advance until the current step's required input exists.
 - Once Step 1 inputs are available, complete Steps 1 to 4 in one reply, label each step,
-  and stop at the Step 4 confirmation gate.
+  and stop at the Step 4 confirmation gate, unless in ultrafast mode.
 - Do not rewrite CV content until the user explicitly approves or adjusts the strategy.
 - Step 3 may include one optional factual question. The user may answer it while
   confirming the strategy. If unanswered, proceed with accurate qualitative wording.
-- Outside the fast paths, produce only the current step and wait.
-- If the user says fast mode after approving the strategy, run it in two replies:
+- **Master CV additions.** If, before approving the strategy, the user supplies an
+  experience bullet that is not in the master CV, confirm with them, then add it to
+  `../Dexter_Fernandes_Master_CV.md` under the matching role, worded as supplied. Never
+  in ultrafast mode, and never PLC or industrial-automation content. Once the strategy is
+  approved the master CV is frozen: later facts stay in-session factual additions. In
+  Claude Code, `guard.py` enforces this and blocks all template edits.
+- Once the strategy is approved, run plan mode unless the user asks for fast mode or step
+  mode.
+- **Plan mode** (default) runs in two replies:
   1. Complete Steps 5 and 9 in one reply, label each step, show the Professional Summary
      and Skills in full, and stop at a checkpoint asking the user to approve or adjust them.
   2. Once approved, apply any adjustments, then complete Steps 6 to 8, 10 and 11 in one
      reply, reusing the approved Summary and Skills unchanged. End with the audited HTML
      and the DONE report, then stop before Step 12.
+- **Fast mode** completes Steps 5 to 11 in one reply with no Summary and Skills
+  checkpoint. Do not print the Summary or Skills; label each step with a one-line note of
+  what was done. End with the audited HTML and the DONE report, then stop before Step 12.
+- **Step mode** produces only the current step and waits.
+- **Ultrafast mode**, requested alongside the listing, needs no user input. Complete Steps
+  1 to 11 in one reply with no gates or questions:
+  - Do not ask for missing Step 1 inputs. Default the channel to cold ATS portal, use your
+    own seniority assessment, and use `Unknown` for a missing location. State each default.
+  - Omit the Step 3 follow-up question. Show the Step 4 strategy briefly and proceed
+    without waiting. Report any sponsorship flag rather than stopping on it.
+  - Run Steps 5 to 11 as in fast mode, then stop before Step 12.
+  - Still stop and ask before overwriting an existing listing or CV file.
 - If the audit fails, correct the HTML and repeat the audit. If an issue cannot be
   resolved, explain it and do not report DONE.
 
