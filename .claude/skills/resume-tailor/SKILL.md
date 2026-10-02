@@ -98,6 +98,16 @@ only from the master CV. Do not go looking for a separate profile file.
   Claude Code, `guard.py` enforces this and blocks all template edits.
 - Once the strategy is approved, run plan mode unless the user asks for fast mode or step
   mode.
+- **Defaults (fast and ultrafast).** Never ask a question a default can answer. State
+  each default in one line and proceed:
+  - Missing Step 1 inputs: channel is cold ATS portal, seniority is your own assessment,
+    location is `Unknown`. For an ambiguous track, take the listing's first responsibility.
+  - Omit the Step 3 follow-up question and use accurate qualitative wording.
+  - Decide project count, bullet selection and compress or cut choices yourself, and
+    report what was kept and dropped.
+  - At Step 10, drop content that has no suitable slot and report it. Never invent markup.
+  - Defaults never cover facts: no invented claims and no master CV additions.
+  - Still stop and ask before overwriting an existing listing or CV file.
 - **Plan mode** (default) runs in two replies:
   1. Complete Steps 5 and 9 in one reply, label each step, show the Professional Summary
      and Skills in full, and stop at a checkpoint asking the user to approve or adjust them.
@@ -107,15 +117,14 @@ only from the master CV. Do not go looking for a separate profile file.
 - **Fast mode** completes Steps 5 to 11 in one reply with no Summary and Skills
   checkpoint. Do not print the Summary or Skills; label each step with a one-line note of
   what was done. End with the audited HTML and the DONE report, then stop before Step 12.
+  Applies the Defaults above; if requested with the listing, Steps 1 to 4 still stop at
+  the Step 4 gate.
 - **Step mode** produces only the current step and waits.
 - **Ultrafast mode**, requested alongside the listing, needs no user input. Complete Steps
-  1 to 11 in one reply with no gates or questions:
-  - Do not ask for missing Step 1 inputs. Default the channel to cold ATS portal, use your
-    own seniority assessment, and use `Unknown` for a missing location. State each default.
-  - Omit the Step 3 follow-up question. Show the Step 4 strategy briefly and proceed
-    without waiting. Report any sponsorship flag rather than stopping on it.
+  1 to 11 in one reply with no gates or questions, applying the Defaults above:
+  - Show the Step 4 strategy briefly and proceed without waiting. Report any sponsorship
+    flag rather than stopping on it.
   - Run Steps 5 to 11 as in fast mode, then stop before Step 12.
-  - Still stop and ask before overwriting an existing listing or CV file.
 - If the audit fails, correct the HTML and repeat the audit. If an issue cannot be
   resolved, explain it and do not report DONE.
 
@@ -123,7 +132,7 @@ only from the master CV. Do not go looking for a separate profile file.
 
 ## Step 1/12 -- Setup
 
-Ask only for missing items:
+Ask only for missing items, unless in fast or ultrafast mode (see Defaults):
 
 1. Application channel: cold ATS portal, recruiter referral, warm introduction, direct
    email to a hiring manager, or other.
@@ -132,7 +141,8 @@ Ask only for missing items:
 4. Optional company context the user already knows. May support the Step 12 opening.
 
 Read job title, company and location from the listing. Ask for confirmation only if one
-is ambiguous. If the listing gives no location, ask for it.
+is ambiguous. If the listing gives no location, ask for it. In fast or ultrafast mode,
+apply the Defaults instead.
 
 Choose the track, `<Track>`, from the listing's core responsibility. It decides where the
 CV and cover letter are saved:
@@ -317,7 +327,7 @@ judgement checks in Step 11 stay with you.
 - The tags do not change the word count. The script below replaces every tag with a
   space, so the budget is measured exactly as it was before.
 - If required content has no suitable slot, explain the conflict and ask before
-  inventing markup.
+  inventing markup. In fast or ultrafast mode, apply the Defaults instead.
 - Do not paste the full HTML into the reply. Report what was populated.
 
 **Length control.** With no PDF render, the word budget is the primary control, not an
