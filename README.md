@@ -1,11 +1,5 @@
 # Setup
 
-```bash
-git init
-git add . && git commit -m "CV tailoring workspace"
-claude    # or: codex
-```
-
 Claude Code and Codex are interchangeable here. `AGENTS.md` holds the standing rules;
 `CLAUDE.md` is a symlink to it, so both tools read the same file. The `resume-tailor` skill
 is written for Claude Code and lives in `.claude/skills/`; `.agents/skills/resume-tailor`
@@ -35,13 +29,8 @@ $resume-tailor <paste the job listing>   # Codex
 
 or just paste a listing and ask for a tailored CV. Every route runs the same skill.
 
-Steps 1 to 4 run in one pass and stop at the strategy gate. Approve or adjust, then
-plan mode runs by default: it shows the Summary and Skills first and waits for approval
-before writing the rest. Say `fast mode` to skip that checkpoint (Steps 5 to 11 in one
-reply, Summary and Skills not printed), or `step mode` to go one step at a time.
-
-`/resume-tailor ultrafast mode <listing>` asks nothing: Steps 1 to 11 run in one reply with
-defaults for any missing inputs, stopping only before overwriting an existing file.
+Modes (plan, fast, step, ultrafast) are defined under Flow control in
+`.claude/skills/resume-tailor/SKILL.md`.
 
 Step 12, the cover letter, is optional and runs only when asked. The draft is passed
 through the `humanizer` skill and shown for approval; once approved it is saved to the
@@ -55,7 +44,6 @@ After Step 11, render with `html2pdf.sh` from the repo root:
 ```bash
 ./html2pdf.sh                        # build every missing or stale PDF under */*/HTML/
 ./html2pdf.sh CV SLAM/Resumes        # limit the sweep to tracks or directories
-./html2pdf.sh --dry-run              # list what would be built
 ./html2pdf.sh --force CV             # rebuild regardless of timestamps
 ./html2pdf.sh path/to/CV.html        # render one file, always
 ./html2pdf.sh -o ~/cv.pdf CV.html    # render one file to a chosen path

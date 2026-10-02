@@ -16,12 +16,6 @@
 # A reference document, not a generated CV. Uncomment to track it.
 # !CV/Cover Letters/Masters-degree-calculator.pdf
 
-# --- html2pdf.sh intermediates -----------------------------------------
-# The render copy written beside the source with fonts inlined. Normally
-# removed on exit, but survives a crash or a killed run -- and a leading
-# dot does not make git ignore it.
-.*.render.html
-
 # --- Office / LibreOffice lock and owner files -------------------------
 ~$*
 .~lock.*#

@@ -24,11 +24,9 @@ ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 FONT_DIR="$ROOT/assets/fonts"
 WEIGHTS=(400 500 600 700 800)
 
-NAME_WIDTH=44
 MIN_TEXT_CHARS=1000
 
 force=0
-dry_run=0
 out=""
 filters=()
 files=()
@@ -50,7 +48,6 @@ anything else goes next to its source.
 
 Options:
   --force          Rebuild every PDF, ignoring timestamps
-  --dry-run        Report what would be built without rendering
   -o, --output F   Output path (single FILE.html only)
   --refresh-fonts  Re-download Archivo into assets/fonts and exit
   -h, --help       Show this message
@@ -124,7 +121,6 @@ add_arg() {
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --force)         force=1 ;;
-    --dry-run)       dry_run=1 ;;
     -o|--output)     [[ $# -ge 2 && -n "$2" ]] || die "$1 needs a path"; out="$2"; shift ;;
     --refresh-fonts) refresh_fonts; exit 0 ;;
     -h|--help)       usage; exit 0 ;;
@@ -149,10 +145,6 @@ else
            brave-browser microsoft-edge-stable; do
     command -v "$c" >/dev/null 2>&1 && { CHROME=("$c"); break; }
   done
-  if (( ! ${#CHROME[@]} )) && command -v flatpak >/dev/null 2>&1 &&
-     flatpak info org.chromium.Chromium >/dev/null 2>&1; then
-    CHROME=(flatpak run org.chromium.Chromium)
-  fi
   (( ${#CHROME[@]} )) || die "no Chrome/Chromium found. Set CHROME_BIN to your Chrome executable."
 fi
 
@@ -215,15 +207,6 @@ matches_filter() {
     [[ "$rel" == "$f" || "$rel" == "$f"/* ]] && return 0
   done
   return 1
-}
-
-# Keep the report in aligned columns. Tailored CV basenames routinely run past
-# 70 characters, so elide the middle rather than let the status column drift.
-elide() {
-  local s="$1" keep_tail=18 head_len
-  (( ${#s} <= NAME_WIDTH )) && { printf '%s' "$s"; return; }
-  head_len=$(( NAME_WIDTH - keep_tail - 3 ))
-  printf '%s...%s' "${s:0:head_len}" "${s: -keep_tail}"
 }
 
 page_count() {
@@ -332,17 +315,10 @@ for src in "${srcs[@]}"; do
   found=1
   base="$(basename -- "$src")"
   dest="${out:-$(dest_for "$src")}"
-  label="$(elide "${base%.html}")"
-  row="$(printf '  %-24s %-*s' "$section" "$NAME_WIDTH" "$label")"
+  row="$(printf '  %-24s %s' "$section" "${base%.html}")"
 
   if (( ! force )) && [[ -f "$dest" && ! "$src" -nt "$dest" ]]; then
     (( ++current ))
-    continue
-  fi
-
-  if (( dry_run )); then
-    if [[ -f "$dest" ]]; then echo "$row would rebuild"; else echo "$row would build"; fi
-    (( ++built ))
     continue
   fi
 
@@ -376,11 +352,8 @@ if (( ! found )); then
   exit 0
 fi
 
-verb="built"
-(( dry_run )) && verb="to build"
-
-printf '\n%d %s, %d up to date, %d warning%s, %d error%s\n' \
-  "$built" "$verb" \
+printf '\n%d built, %d up to date, %d warning%s, %d error%s\n' \
+  "$built" \
   "$current" \
   "$warnings" "$( (( warnings == 1 )) || printf s )" \
   "$errors" "$( (( errors == 1 )) || printf s )"
