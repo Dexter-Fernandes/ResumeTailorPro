@@ -1,7 +1,7 @@
 ---
 name: resume-tailor
 description: Tailor Dexter Fernandes' CV to a specific job listing and draft a matching cover letter, using a gated 12-step ATS-first workflow. Use whenever a job listing, job description or job advert is supplied, or when asked to tailor, optimise, rewrite or target a CV or resume for a computer vision, robotics, perception, SLAM, edge ML or AI engineering role.
-argument-hint: "[ultrafast mode] <job listing>"
+argument-hint: "[fast mode | ultrafast mode] <job listing>"
 model: opus
 effort: high
 allowed-tools: Read, Glob, Grep, Edit(/JDs/**), Edit(/*/Resumes/HTML/**), Edit(/*/Cover Letters/HTML/**), Bash(python3:*), Agent(cv-html-builder), Skill(anthropic-skills:humanizer)
@@ -86,53 +86,61 @@ only from the master CV. Do not go looking for a separate profile file.
 
 - Do not advance until the current step's required input exists.
 - Once Step 1 inputs are available, complete Steps 1 to 4 in one reply, label each step,
-  and stop at the Step 4 confirmation gate, unless in ultrafast mode.
-- Do not rewrite CV content until the user explicitly approves or adjusts the strategy.
+  and end at the Step 4 confirmation gate.
+- Do not rewrite CV content until the user explicitly approves or adjusts the strategy,
+  except in ultrafast mode.
 - Step 3 may include one optional factual question. The user may answer it while
   confirming the strategy. If unanswered, proceed with accurate qualitative wording.
 - **Master CV additions.** If, before approving the strategy, the user supplies an
   experience bullet that is not in the master CV, confirm with them, then add it to
   `Dexter_Fernandes_Master_CV.md` under the matching role, worded as supplied. Never
-  in ultrafast mode, and never PLC or industrial-automation content. Once the strategy is
-  approved the master CV is frozen: later facts stay in-session factual additions. In
-  Claude Code, `guard.py` enforces this and blocks all template edits.
-- Once the strategy is approved, run plan mode unless the user asks for fast mode or step
-  mode.
-- **Defaults (fast and ultrafast).** Never ask a question a default can answer. State
-  each default in one line and proceed:
-  - Missing Step 1 inputs: channel is cold ATS portal, seniority is your own assessment,
-    location is `Unknown`. For an ambiguous track, take the listing's first responsibility.
-  - Omit the Step 3 follow-up question and use accurate qualitative wording.
-  - Decide project count, bullet selection and compress or cut choices yourself, and
-    report what was kept and dropped.
-  - At Step 10, drop content that has no suitable slot and report it. Never invent markup.
-  - Defaults never cover facts: no invented claims and no master CV additions.
-  - Still stop and ask before overwriting an existing listing or CV file.
-- **Plan mode** (default) runs in two replies:
-  1. Complete Steps 5 and 9 in one reply, label each step, show the Professional Summary
-     and Skills in full, and stop at a checkpoint asking the user to approve or adjust them.
-  2. Once approved, apply any adjustments, then complete Steps 6 to 8, 10 and 11 in one
-     reply, reusing the approved Summary and Skills unchanged. End with the audited HTML
-     and the DONE report, then stop before Step 12.
-- **Fast mode** completes Steps 5 to 11 in one reply with no Summary and Skills
-  checkpoint. Do not print the Summary or Skills; label each step with a one-line note of
-  what was done. End with the audited HTML and the DONE report, then stop before Step 12.
-  Applies the Defaults above; if requested with the listing, Steps 1 to 4 still stop at
-  the Step 4 gate.
-- **Step mode** produces only the current step and waits.
-- **Ultrafast mode**, requested alongside the listing, needs no user input. Complete Steps
-  1 to 11 in one reply with no gates or questions, applying the Defaults above:
-  - Show the Step 4 strategy briefly and proceed without waiting. Report any sponsorship
-    flag rather than stopping on it.
-  - Run Steps 5 to 11 as in fast mode, then stop before Step 12.
+  PLC or industrial-automation content. Once the strategy is approved the master CV is
+  frozen: later facts stay in-session factual additions. In Claude Code, `guard.py`
+  enforces this and blocks all template edits.
 - If the audit fails, correct the HTML and repeat the audit. If an issue cannot be
   resolved, explain it and do not report DONE.
+
+## Modes
+
+The single source of truth for what each mode asks and where it stops. Read the mode
+from the invocation: fast and ultrafast are accepted only alongside the listing, and a
+later request for either is declined. "Step mode" is another name for plan mode.
+
+| | Plan (default) | Fast | Ultrafast |
+|---|---|---|---|
+| Requested | Nothing, or "step mode" | "fast mode" with the listing | "ultrafast mode" with the listing |
+| Missing Step 1 inputs | Ask | Defaults | Defaults |
+| Step 3 follow-up question | Ask if needed | Ask if needed | Omit |
+| Step 4 gate | Stop | Stop | Show briefly, report any sponsorship flag, proceed |
+| Master CV additions | Allowed before approval | Allowed before approval | Never |
+| Steps 5 to 11 | Checkpoint after Steps 5 and 9 | No checkpoint | No checkpoint |
+| Bullet, project, compress or cut picks | Per approved strategy | Defaults | Defaults |
+| Step 10 content with no slot | Ask | Defaults | Defaults |
+| Overwrite an existing file | Ask | Ask | Ask |
+| Step 12 | Only on request | Only on request | Only on request |
+
+**Defaults.** Where the table says Defaults, decide without asking, state each choice in
+one line and proceed:
+
+- Channel is cold ATS portal, seniority is your own assessment, location is `Unknown`.
+- Choose the project count, bullets and compress or cut yourself, and report what was
+  kept and dropped.
+- At Step 10, drop content that has no suitable slot and report it. Never invent markup.
+
+**Steps 5 to 11.**
+
+- Plan: reply 1 completes Steps 5 and 9, shows the Professional Summary and Skills in
+  full, and stops for approval. Reply 2 applies any adjustments and completes Steps 6 to
+  8, 10 and 11, reusing the approved Summary and Skills unchanged.
+- Fast and ultrafast: one reply. Label each step with a one-line note of what was done;
+  do not print the Summary or Skills.
+- Every mode ends with the audited HTML and the DONE report, then stops before Step 12.
 
 ---
 
 ## Step 1/12 -- Setup
 
-Ask only for missing items, unless in fast or ultrafast mode (see Defaults):
+Ask only for missing items, unless the mode applies Defaults (see Modes):
 
 1. Application channel: cold ATS portal, recruiter referral, warm introduction, direct
    email to a hiring manager, or other.
@@ -141,8 +149,7 @@ Ask only for missing items, unless in fast or ultrafast mode (see Defaults):
 4. Optional company context the user already knows. May support the Step 12 opening.
 
 Read job title, company and location from the listing. Ask for confirmation only if one
-is ambiguous. If the listing gives no location, ask for it. In fast or ultrafast mode,
-apply the Defaults instead.
+is ambiguous. If the listing gives no location, ask for it.
 
 Choose the track, `<Track>`, from the listing's core responsibility. It decides where the
 CV and cover letter are saved:
@@ -155,8 +162,7 @@ CV and cover letter are saved:
 - `PLC`: industrial automation. Tailor from transferable experience only.
 
 If two fit equally, take the one matching the listing's first responsibility. State the
-track with a one-line reason. The user can change it at the Step 4 gate; in ultrafast
-mode, state it and proceed.
+track with a one-line reason. The user can change it at the Step 4 gate.
 
 Keep the listing in context for the rest of the workflow. Once all required Step 1 inputs
 are in, save it to `JDs/<Position>_<Company>_<Location>.md`, for example
@@ -327,7 +333,7 @@ judgement checks in Step 11 stay with you.
 - The tags do not change the word count. The script below replaces every tag with a
   space, so the budget is measured exactly as it was before.
 - If required content has no suitable slot, explain the conflict and ask before
-  inventing markup. In fast or ultrafast mode, apply the Defaults instead.
+  inventing markup, unless the mode applies Defaults (see Modes).
 - Do not paste the full HTML into the reply. Report what was populated.
 
 **Length control.** With no PDF render, the word budget is the primary control, not an
@@ -389,7 +395,7 @@ End with one line offering the cover letter (Step 12).
 
 ## Step 12/12 -- Cover Letter [optional]
 
-Run only if the user asks for it. No mode runs it automatically, ultrafast included.
+Run only if the user asks for it.
 
 **1. Draft.** Natural paragraphs of prose. No numbering, no lists, no bold, no headings.
 
