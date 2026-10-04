@@ -20,7 +20,7 @@ PLACEHOLDERS = ["Full Name", "Company Name", "Job Title", "MM/YYYY", "Category",
                 "Comma-separated", "example.com", 'href="#"']
 LETTER_PLACEHOLDERS = ["Company Name", "Job Title", "Parent Company", "City, Region",
                        "DD Month YYYY", "Salutation", "Paragraph text"]
-TARGETS = {"cv": "1,100 to 1,400", "letter": "250 to 450"}
+TARGETS = {"cv": "900 to 1,050", "letter": "250 to 450"}
 
 
 def last_step(transcript):

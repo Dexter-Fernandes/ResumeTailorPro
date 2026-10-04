@@ -340,7 +340,7 @@ python3 "$(git rev-parse --show-toplevel)/.claude/skills/resume-tailor/guard.py"
 If the builder agent returns a count outside the target, decide the cuts or restorations
 yourself and edit the HTML directly.
 
-Target 1,100 to 1,400 words for two pages. Over budget, remove lower-value content:
+Target 900 to 1,050 words for two pages. Over budget, remove lower-value content:
 trim roles from 8 bullets toward 6 before cutting anything else, and tighten wording.
 Substantially under, restore unused relevant evidence up to the 8-bullet cap, but never
 pad. The 8-bullet cap outranks the word target; never exceed it to fill space. Flag to the user

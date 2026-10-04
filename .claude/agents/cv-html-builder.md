@@ -27,7 +27,7 @@ Read before starting, all from the repo root (`git rev-parse --show-toplevel`):
   add a claim. If text does not fit a slot, stop and report the conflict.
 - Bold only the approved bold set, within the Bold emphasis caps.
 - If the output file already exists, stop and report it. Do not overwrite.
-- Do not change word count to hit the 1,100 to 1,400 target. Report it; the caller
+- Do not change word count to hit the 900 to 1,050 target. Report it; the caller
   decides cuts.
 - No em dashes. UK English is already in the approved text; do not "correct" it.
 
