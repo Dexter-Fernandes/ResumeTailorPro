@@ -45,5 +45,8 @@ desktop.ini
 .claude/settings.local.json
 .claude/*.local.json
 
+# --- Python ------------------------------------------------------------
+__pycache__/
+
 **/*.woff2
 **/*.css

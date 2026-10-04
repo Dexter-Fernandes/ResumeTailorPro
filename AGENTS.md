@@ -31,6 +31,7 @@ below are relative to it.
 - No em dashes anywhere. Use a double hyphen or restructure the sentence.
 - Keep explanations brief. Explain from first principles when a concept needs explaining.
 - One clarifying question at a time. Never re-ask a fact already confirmed in-session.
+- When trimming or editing `SKILL.md` or the builder agent, including for an over-engineering audit, keep every sentence that links two rules: in a prose spec, a cross-reference carries meaning. Before committing, check the Modes table against the step sections and report any contradiction.
 
 ## Workflow entry
 
