@@ -3,7 +3,7 @@
 
 pre:   template edits are denied. Master CV edits need the user's approval, and are
        denied once the workflow has reached Step 5 (strategy approved). The
-       cv-html-builder agent may only be dispatched after that point.
+       cv-html-builder agent may only be dispatched once a saved reply shows Step 4.
 post:  after a write to */Resumes/HTML/*.html or */Cover Letters/HTML/*.html, run the
        Step 11 (CV) or Step 12 (cover letter) mechanical checks.
 audit: the same checks on a named file, for use outside a hook.
@@ -49,10 +49,14 @@ def pre(event):
     tool_input = event.get("tool_input", {})
     path = Path(tool_input.get("file_path", "")).resolve()
     if tool_input.get("subagent_type") == BUILDER:
-        if last_step(event.get("transcript_path", "")) >= 5:
+        # Step 4, not 5: the transcript holds only finished messages, and fast and
+        # ultrafast mode print Step 5 in the same message that dispatches the builder.
+        if last_step(event.get("transcript_path", "")) >= 4:
             return None
         decision, reason = "deny", (f"{BUILDER} is dispatched only by the resume-tailor "
-                                    "skill, after the strategy is approved.")
+                                    "skill, after Step 4. The hook reads saved messages "
+                                    "only: if Step 4 is in this reply, run the Step 10 "
+                                    "filename check first, then dispatch again.")
     elif path in (TEMPLATE, LETTER_TEMPLATE):
         decision, reason = "deny", "Templates are fixed. Populate a copy in the track's HTML/ directory."
     elif path == MASTER:
@@ -129,6 +133,11 @@ def selftest():
     assert pre(agent) is None
     assert pre({**agent, "transcript_path": "/nonexistent"})["hookSpecificOutput"]["permissionDecision"] == "deny"
     assert pre({"tool_input": {"subagent_type": "Explore"}, "transcript_path": "/nonexistent"}) is None
+    with tempfile.NamedTemporaryFile("w", suffix=".jsonl", delete=False) as t4:
+        t4.write(json.dumps({"type": "assistant", "message": {"content": [
+            {"type": "text", "text": "Step 4/12 -- x"}]}}) + "\n")
+    assert pre({**agent, "transcript_path": t4.name}) is None
+    assert pre({**ev(MASTER), "transcript_path": t4.name})["hookSpecificOutput"]["permissionDecision"] == "ask"
     assert audit("<p>a <strong>b</strong> c</p>") == ([], 3)
     problems, _ = audit("<p>Full Name — <strong>x</p>")
     assert len(problems) == 3, problems
