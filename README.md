@@ -29,8 +29,12 @@ $resume-tailor <paste the job listing>   # Codex
 
 or just paste a listing and ask for a tailored CV. Every route runs the same skill.
 
-Modes (plan, fast, step, ultrafast) are defined under Flow control in
-`.claude/skills/resume-tailor/SKILL.md`.
+Modes (plan, fast, ultrafast; "step mode" is an alias for plan) are defined in the Modes
+table in `.claude/skills/resume-tailor/SKILL.md`. Fast and ultrafast are accepted only
+alongside the listing. The diagram below summarises the table; if they disagree, the
+table wins.
+
+![What each resume-tailor mode accepts, stage by stage](resume-tailor-modes.svg)
 
 Step 12, the cover letter, is optional and runs only when asked. The draft is passed
 through the `humanizer` skill and shown for approval; once approved it is saved to the
