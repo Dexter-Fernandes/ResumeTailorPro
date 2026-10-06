@@ -92,8 +92,11 @@ def audit(text, kind="cv"):
             problems.append("list markup; the letter must be plain paragraphs")
         if re.search(r"<p[^>]*>\s*(\d+[.)]|\(\d+\))", text):
             problems.append("numbered paragraph")
-    if text.count("<strong>") != text.count("</strong>"):
-        problems.append("unbalanced <strong> tags")
+    # ponytail: counts opens vs closes per tag, not nesting order; a real parser if misnesting slips through
+    markup = re.sub(r"<!--.*?-->", "", text, flags=re.S)
+    for tag in ("div", "p", "ul", "li", "span", "a", "strong"):
+        if len(re.findall(rf"<{tag}\b", markup)) != markup.count(f"</{tag}>"):
+            problems.append(f"unbalanced <{tag}> tags")
     body = re.sub(r"<(script|style).*?</\1>", "", text, flags=re.S)
     words = len(html.unescape(re.sub(r"<[^>]+>", " ", body)).split())
     return problems, words
@@ -141,6 +144,8 @@ def selftest():
     assert audit("<p>a <strong>b</strong> c</p>") == ([], 3)
     problems, _ = audit("<p>Full Name — <strong>x</p>")
     assert len(problems) == 3, problems
+    assert audit('<div class="page"><div class="page"><p>x</p></div>') == (["unbalanced <div> tags"], 1)
+    assert audit("<!-- One <p> per paragraph --><p>x</p>")[0] == []
     assert kind_of("/r/CV/Cover Letters/HTML/x.html") == "letter"
     assert kind_of("/r/CV/Resumes/HTML/x.html") == "cv"
     assert kind_of("/r/JDs/x.md") is None

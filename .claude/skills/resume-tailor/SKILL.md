@@ -358,7 +358,7 @@ PDF to confirm two pages and check for stranded headings or an orphaned bullet o
 If the builder agent assembled the file, it has run the mechanical checks. Run the
 `guard.py audit` command above yourself anyway, then do every check below that needs
 judgement: traceability, tense, bold set, naturalness. `guard.py audit` already covers
-em dashes, template placeholders and `<strong>` balance. Read back the generated HTML's
+em dashes, template placeholders and tag balance. Read back the generated HTML's
 rendered text and verify:
 
 - No tokens or lorem text remain.
@@ -435,7 +435,7 @@ entities escaped.
 python3 "$(git rev-parse --show-toplevel)/.claude/skills/resume-tailor/guard.py" audit "<Track>/Cover Letters/HTML/<filename>.html"
 ```
 
-It checks em dashes, leftover placeholders, list markup, numbered paragraphs and word
+It checks em dashes, leftover placeholders, tag balance, list markup, numbered paragraphs and word
 count. Then verify:
 
 - The text matches the approved letter exactly.
