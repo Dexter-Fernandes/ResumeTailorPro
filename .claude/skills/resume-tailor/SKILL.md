@@ -114,7 +114,7 @@ later request for either is declined. "Step mode" is another name for plan mode.
 | Step 4 gate | Stop | Stop | Show briefly, report any sponsorship flag, proceed |
 | Master CV additions | Allowed before approval | Allowed before approval | Never |
 | Steps 5 to 11 | Checkpoint after Steps 5 and 9 | No checkpoint | No checkpoint |
-| Bullet, project, compress or cut picks | Per approved strategy | Defaults | Defaults |
+| Bullet, project, section order, compress or cut picks | Per approved strategy | Defaults | Defaults |
 | Step 10 content with no slot | Ask | Defaults | Defaults |
 | Overwrite an existing file | Ask | Ask | Ask |
 | Step 12 | Only on request | Only on request | Only on request |
@@ -123,8 +123,8 @@ later request for either is declined. "Step mode" is another name for plan mode.
 one line and proceed:
 
 - Channel is cold ATS portal, seniority is your own assessment, location is `Unknown`.
-- Choose the project count, bullets and compress or cut yourself, and report what was
-  kept and dropped.
+- Choose the project count, bullets, section order (by the Step 4 rule) and compress or
+  cut yourself, and report what was kept, dropped and the order chosen.
 - At Step 10, drop content that has no suitable slot and report it. Never invent markup.
 
 **Steps 5 to 11.**
@@ -222,6 +222,20 @@ Cover:
   example several CV or robotics-flavoured projects on a generalist backend application.
   Name the count explicitly so the user can adjust it at this gate, rather than it being
   decided during Step 10 assembly.
+- **Section order.** The order of Relevant Experience, Projects and Education, decided in
+  two parts:
+  1. First slot. Education for graduate or degree-gated roles, and for research roles
+     judged by their responsibilities, not their title. Projects when no role carries
+     evidence for the top priority responsibility, as on a career-change application.
+     Otherwise Experience.
+  2. The other two. Compare their evidence against the three priority responsibilities in
+     priority order; the first responsibility where one is stronger decides. Evidence from
+     real systems outranks simulation. A full tie keeps the template order, Projects
+     before Education.
+
+  State the order with a one-line reason so the user can adjust it at this gate. Entries
+  inside each section keep their own order (Steps 6 to 8). Summary stays first; Skills,
+  Additional Experience and Certifications keep their template positions.
 - **Compress or cut.** Weak-fit content to shorten, reduce to one line, or remove.
   Include an explicit GrowthStage and Taco Bell inclusion recommendation for this role.
 - **Seniority framing.** Senior: ownership, technical decisions, scope, strategic
@@ -311,7 +325,8 @@ letter, this is the only file the workflow writes.
 **Delegation.** In Claude Code, check the output filename is free (ask before
 overwriting), then dispatch the `cv-html-builder` agent with: the absolute output path,
 the approved Summary, Experience (per role), Education, Projects and Skills text exactly
-as approved, the approved bold set, and the roles the strategy compressed. It assembles
+as approved, the approved bold set, the approved section order, and the roles the
+strategy compressed. It assembles
 the file and runs the mechanical checks; it never changes wording. Where that agent is
 not available (Codex), do Steps 10 and 11 yourself. Either way, length control and the
 judgement checks in Step 11 stay with you.
@@ -322,7 +337,9 @@ judgement checks in Step 11 stay with you.
 - Fill existing content slots only.
 - Do not alter structure, CSS, classes, fonts, colours, margins or layout.
 - No columns, tables, text boxes, images, icons or background-layer text.
-- Preserve the template's DOM reading order.
+- Preserve the template's DOM reading order, except that the Relevant Experience,
+  Projects and Education blocks follow the approved Step 4 section order, each moved
+  whole with its divider and heading.
 - Escape HTML entities correctly.
 - Bold the approved Step 4 bold set with `<strong>...</strong>`, following the bold
   emphasis rules in the Keyword strategy section. No `<b>`, no `<em>`, no `style`
