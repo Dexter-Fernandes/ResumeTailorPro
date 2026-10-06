@@ -10,9 +10,9 @@ You assemble a CV that has already been written and approved. You do not write C
 
 ## Inputs
 
-The dispatch gives you: the absolute output path, the approved Summary, Experience (per
-role), Education, Projects and Skills text, the approved bold set, the approved section
-order, and any roles the strategy compressed. If any of these is missing, stop and say which.
+The dispatch gives you: the absolute output path, the approved Assembled preview (every
+section in final order, bold marked `**...**`), the approved bold set, and any roles the
+strategy compressed. If any of these is missing, stop and say which.
 
 Read before starting, all from the repo root (`git rev-parse --show-toplevel`):
 
@@ -23,11 +23,12 @@ Read before starting, all from the repo root (`git rev-parse --show-toplevel`):
 
 ## Rules
 
-- Place the approved text verbatim. Never reword, add, drop or reorder content, and never
-  add a claim. If text does not fit a slot, stop and report the conflict. The one
-  exception: place the Relevant Experience, Projects and Education blocks in the given
-  section order, each moved whole with its divider and heading.
-- Bold only the approved bold set, within the Bold emphasis caps.
+- Place the approved text verbatim, in the order given. Never reword, add, drop or
+  reorder content, and never add a claim. If text does not fit a slot, stop and report
+  the conflict. Where the preview orders Relevant Experience, Projects and Education
+  differently from the template, move each block whole with its divider and heading.
+- Convert each `**...**` mark to `<strong>...</strong>`. Add no other bold. If a mark
+  falls outside the approved bold set, stop and report it.
 - If the output file already exists, stop and report it. Do not overwrite.
 - Do not change word count to hit the 900 to 1,050 target. Report it; the caller
   decides cuts.

@@ -113,7 +113,7 @@ later request for either is declined. "Step mode" is another name for plan mode.
 | Step 3 follow-up question | Ask if needed | Ask if needed | Omit |
 | Step 4 gate | Stop | Stop | Show briefly, report any sponsorship flag, proceed |
 | Master CV additions | Allowed before approval | Allowed before approval | Never |
-| Steps 5 to 11 | Checkpoint after Steps 5 and 9 | No checkpoint | No checkpoint |
+| Steps 5 to 11 | Preview after Step 9 | Preview after Step 9 | No checkpoint |
 | Bullet, project, section order, compress or cut picks | Per approved strategy | Defaults | Defaults |
 | Step 10 content with no slot | Ask | Defaults | Defaults |
 | Overwrite an existing file | Ask | Ask | Ask |
@@ -129,11 +129,12 @@ one line and proceed:
 
 **Steps 5 to 11.**
 
-- Plan: reply 1 completes Steps 5 and 9, shows the Professional Summary and Skills in
-  full, and stops for approval. Reply 2 applies any adjustments and completes Steps 6 to
-  8, 10 and 11, reusing the approved Summary and Skills unchanged.
-- Fast and ultrafast: one reply. Label each step with a one-line note of what was done;
-  do not print the Summary or Skills.
+- Plan and fast: reply 1 completes Steps 5 to 9, applies length control (Step 10) to
+  the text, shows the Assembled preview (after Step 9) and stops for approval. Reply 2
+  applies any adjustments to the preview, then completes Steps 10 and 11 from the
+  approved preview unchanged.
+- Ultrafast: one reply. Assemble the preview text but do not print it. Label each step
+  with a one-line note of what was done.
 - Every mode ends with the audited HTML and the DONE report, then stops before Step 12.
 
 ---
@@ -315,18 +316,37 @@ A role-aligned list that functions as a recruiter search index.
 - Never insert missing requirements. Report them outside the CV as:
   `Consider adding if you have exposure to: [skill]`.
 
+### Assembled preview
+
+The full CV text, assembled from Steps 5 to 9, exactly as it will appear in the HTML.
+Step 10 places it unchanged.
+
+- Sections in the HTML's order: Header (name and contact details from the master CV),
+  Summary, then Relevant Experience, Projects and Education in the approved Step 4
+  section order, then Skills, and Additional Experience and Certifications and Awards if
+  kept.
+- Entries in the Step 6 to 8 formats. Mark the bold set as `**term**` exactly where it
+  will be bolded, following the Bold emphasis rules.
+- Under each of Relevant Experience, Projects and Education, end with an `Excluded:`
+  list: master CV entries left out (for example `FinanceBench RAG Evaluation Harness`),
+  then each kept entry's unused master bullets as 2 to 6 word labels (for example
+  `Esbaar: Django dashboard; PostgreSQL schema`). Write `Excluded: none` if nothing was
+  left out.
+- Other sections show their content only.
+- End with the approximate word count against the 900 to 1,050 target.
+
 ## Step 10/12 -- HTML Assembly
 
-Populate the fixed template with approved Step 5 to 9 content. Save to
+Populate the fixed template with the approved Assembled preview. Save to
 `<Track>/Resumes/HTML/Dexter_Fernandes_CV_<Company>_<Role>.html`, where `<Track>` is
 the track chosen at Step 1. Apart from the Step 1 listing and the optional Step 12 cover
 letter, this is the only file the workflow writes.
 
 **Delegation.** In Claude Code, check the output filename is free (ask before
 overwriting), then dispatch the `cv-html-builder` agent with: the absolute output path,
-the approved Summary, Experience (per role), Education, Projects and Skills text exactly
-as approved, the approved bold set, the approved section order, and the roles the
-strategy compressed. It assembles
+the approved Assembled preview without its `Excluded:` lists and word count, the approved
+bold set, and the roles the strategy compressed. The preview carries the section order
+and bold placements. It assembles
 the file and runs the mechanical checks; it never changes wording. Where that agent is
 not available (Codex), do Steps 10 and 11 yourself. Either way, length control and the
 judgement checks in Step 11 stay with you.
@@ -338,11 +358,12 @@ judgement checks in Step 11 stay with you.
 - Do not alter structure, CSS, classes, fonts, colours, margins or layout.
 - No columns, tables, text boxes, images, icons or background-layer text.
 - Preserve the template's DOM reading order, except that the Relevant Experience,
-  Projects and Education blocks follow the approved Step 4 section order, each moved
-  whole with its divider and heading.
+  Projects and Education blocks follow the preview's order, each moved whole with its
+  divider and heading.
 - Escape HTML entities correctly.
-- Bold the approved Step 4 bold set with `<strong>...</strong>`, following the bold
-  emphasis rules in the Keyword strategy section. No `<b>`, no `<em>`, no `style`
+- Convert each `**term**` in the approved preview to `<strong>term</strong>` and add
+  no other bold; placement was settled under the Bold emphasis rules in the Keyword
+  strategy section. No `<b>`, no `<em>`, no `style`
   attribute on the tag, no new CSS rule, no template change. `<strong>` inherits
   font-weight 700, which the template's font already loads.
 - `<strong>` goes inside `<p>` and `<li>` body text only. Never wrap or nest it around a
@@ -360,8 +381,10 @@ advisory one. Count the CV's words (this also runs the mechanical audit):
 python3 "$(git rev-parse --show-toplevel)/.claude/skills/resume-tailor/guard.py" audit <Track>/Resumes/HTML/<filename>.html
 ```
 
-If the builder agent returns a count outside the target, decide the cuts or restorations
-yourself and edit the HTML directly.
+In plan and fast, cuts and restorations are made in the text before the Assembled
+preview. If the HTML count is still outside the target, report it and ask before changing
+approved text. In ultrafast, decide the cuts or restorations yourself and edit the HTML
+directly.
 
 Target 900 to 1,050 words for two pages. Over budget, remove lower-value content:
 trim roles from 8 bullets toward 6 before cutting anything else, and tighten wording.
@@ -542,7 +565,8 @@ Bold is a recruiter skim aid, not an ATS one. Parsers strip inline markup, so it
 helps nor hurts keyword matching. Over-bolding reads as keyword stuffing to a human, so
 these caps are part of the feature.
 
-- Bold only the Step 4 approved bold set, using `<strong>`.
+- Bold only the Step 4 approved bold set. Apply these rules when marking the Assembled
+  preview; Step 10 converts the marks to `<strong>`.
 - Bold each term on its first occurrence within a section, not every occurrence.
 - **Maximum 2 bolded spans per bullet, hard cap 3.** A bullet needing more is doing too
   much. Spread the emphasis across bullets instead.
