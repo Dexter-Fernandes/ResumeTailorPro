@@ -52,6 +52,7 @@ Backend engineer with 3+ years shipping Python and C++ services in production. B
 - Generated synthetic images and augmentation routines with OpenCV and scikit-image to cover edge cases in harsh industrial conditions, improving robustness on contaminated feeds.
 - Debugged training dynamics and convergence, balancing model complexity, augmentation and validation strategy to improve generalisation under lighting variation, occlusion and motion blur.
 - Applied Bayesian optimisation, ablation studies, hypothesis testing and confidence intervals in Jupyter to support model selection, threshold tuning and failure analysis.
+- Built Matplotlib charts in Jupyter of training curves, confusion matrices, per-class metrics, production drift and activity classification results for model selection and leadership reviews.
 
 **Data and pipelines**
 - Built ingestion and validation pipelines across image, video and sensor data with Airflow, MLflow, DVC and CVAT, processing 3.6 million records and cutting rollout from 72h to under 24h.
@@ -96,6 +97,7 @@ Backend engineer with 3+ years shipping Python and C++ services in production. B
 - Ran adversarial-condition training and validation simulating occlusion, lighting variation and motion artefacts, cutting performance variance by 25%.
 - Used confusion-matrix failure clustering and TIDE error analysis on COCO-format production data to diagnose recurring detector failures and prioritise dataset fixes across camera feeds.
 - Evaluated DeepLabv3+, Mask R-CNN, U-Net and SegFormer for annotation review, foreground separation and failure analysis on industrial camera feeds.
+- Built Matplotlib charts in Jupyter of training curves, confusion matrices, per-class metrics and production false-positive trends to guide model selection, retraining and failure debugging.
 
 **Data and labelling**
 - Automated labelling by repurposing existing detection models and added dataset versioning with DVC, cutting manual labelling effort by 80% on large real-world datasets.
@@ -116,6 +118,12 @@ Backend engineer with 3+ years shipping Python and C++ services in production. B
 ---
 
 ## PROJECTS
+
+### ResumeTailorPro (08/2026 - Present) -- github.com/Dexter-Fernandes/ResumeTailorPro
+- Built a 12-step agentic workflow in Claude Code and Codex that tailors a CV to a job listing. HTML assembly goes to a separate subagent, and both tools read one shared rules file.
+- Wrote a Python guard script that runs as Claude Code hooks. It reads the session transcript to enforce the workflow's stages: it blocks template edits, locks the source CV once the plan is approved, and stops the subagent from running early.
+- After every write, the script also checks each generated CV and cover letter for leftover placeholders, em dashes, unbalanced tags and word count. It blocks the agent until the file is fixed, and has an assert-based self-test.
+- Built with Claude Code as the main development workflow: 34 commits in seven weeks, 30 co-authored with Claude. Added a headless-Chrome PDF renderer that checks page count and machine-readable text.
 
 ### DeepStream RTSP Pipeline (06/2026) -- github.com/Dexter-Fernandes/deepstream-rtsp-pipeline
 - Built an end-to-end DeepStream 9.0 and GStreamer RTSP pipeline running YOLO detection and NvDCF tracking across 3 concurrent feeds, with metadata extraction, anonymisation and re-streamed output.
