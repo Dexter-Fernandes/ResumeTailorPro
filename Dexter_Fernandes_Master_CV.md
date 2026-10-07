@@ -141,11 +141,19 @@ Backend engineer with 3+ years shipping Python and C++ services in production. B
 - Ran an O(1)-inference confidence-threshold sweep against WildTrack ground truth, lifting operating-point F1 from 0.218 to 0.591 and logging results to Weights & Biases.
 - Hardened the RTSP source path with TCP transport and NTP-synced clocks, cutting batched-push timeout from 4s to about one frame interval so one stalled source can't stall the shared batch.
 
-### FinanceBench RAG Evaluation Harness (06/2026)
+### FinanceBench RAG Evaluation Harness (06/2026) -- github.com/Dexter-Fernandes/financebench-eval-harness
 - Built an evaluation framework for FinanceBench measuring how well RAG and document-grounded QA systems answer using the right source evidence.
 - Designed experiments across closed-book, oracle-context and dense RAG workflows to isolate whether failures came from retrieval, source selection or generation.
 - Added LLM-as-judge scoring, evidence matching, citation checks, numeric matching and hallucination labels.
 - Produced reproducible runs with automated tests, config-driven experiments, structured prediction outputs and Markdown reports, enabling regression checks between runs.
+- Structured the harness as a 7-stage Python pipeline with 24 CLI subcommands: PDF ingestion, chunking, FAISS indexing, dense retrieval, generation with local Ollama models, scoring and reporting.
+- Scored retrieval with doc, page and evidence-text hit@k plus MRR, and joined it with answer correctness in a 2x2 matrix to separate retrieval failures from reasoning failures.
+- Wrote unit-aware numeric matching so equivalent answers such as $1.577B and 1,577M score as correct, which plain string matching marks wrong.
+- Ran two independent LLM judges, one for answer correctness and one for grounding, so a right answer with a wrong citation or a faithfully cited wrong answer is not masked.
+- Built a 7-label grounding taxonomy, 5 rule-based hallucination flags and a deterministic root-cause classifier, with a drill-down command for single failed questions.
+- Compared 5 local embedding models under identical chunking, validating a SHA-256 corpus hash so hit-rate differences reflect the model, not the input data.
+- Decoupled scoring from generation so a new judge config re-scores a run in seconds, and snapshotted the full YAML config per run for auditability.
+- Wrote 887 tests that run offline using a mock LLM and SHA-256 deterministic mock embeddings, exercising real FAISS indexing with no external services.
 
 ### ROS2 SLAM and Nav2 Simulation (02/2026) -- github.com/Dexter-Fernandes/ClutterBot-SLAM
 - Built a simulation-based robotics stack in ROS2 Jazzy and Gazebo Harmonic to evaluate LiDAR-centric SLAM, LiDAR and RGB fusion SLAM, and autonomous navigation in structured scenarios.
@@ -209,7 +217,7 @@ Dissertation: Radiological SLAM with LiDAR Odometry
 
 **Robotics and SLAM:** ROS2 (Robot Operating System 2) Humble and Jazzy, rclcpp, rclpy, tf2, rosbag2, Gazebo Harmonic, RTAB-Map, LIO-SAM, Cartographer, GLIM, Nav2, LiDAR SLAM, pose graph optimisation, ICP (Iterative Closest Point), scan matching, LiDAR extrinsics calibration, sensor fusion, PCL (Point Cloud Library), Open3D, Eigen, Ceres, g2o, GTSAM, robot_localization, EKF
 
-**LLMs and retrieval:** RAG pipelines, dense and hybrid retrieval, FAISS, ChromaDB, BM25, cross-encoder reranking, reciprocal rank fusion, LangChain, LangGraph, LangSmith, LLM-as-judge, hallucination detection, structured outputs, Pydantic, MCP, fine-tuning, LoRA
+**LLMs and retrieval:** RAG pipelines, dense and hybrid retrieval, FAISS, ChromaDB, BM25, cross-encoder reranking, reciprocal rank fusion, LangChain, LangGraph, LangSmith, LLM-as-judge, hallucination detection, embedding model evaluation, Ollama, structured outputs, Pydantic, MCP, fine-tuning, LoRA
 
 **MLOps and experimentation:** MLflow, DVC (Data Version Control), Apache Airflow, Apache Kafka, Optuna, Weights & Biases, Jupyter, CVAT (Computer Vision Annotation Tool), automated labelling, dataset versioning, synthetic data generation, benchmarking harnesses, ablation studies, hypothesis testing, Bayesian optimisation, failure-mode analysis, drift tracking, Grad-CAM, TIDE (Toolbox for Identifying Detection Errors), COCO annotation format, model-promotion gates
 
