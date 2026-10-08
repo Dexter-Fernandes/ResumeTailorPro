@@ -63,6 +63,7 @@ Backend engineer with 3+ years shipping Python and C++ services in production. B
 - Owned post-deployment monitoring and drift tracking for fielded vision systems, catching regressions early and feeding failure analysis back into retraining.
 - Built an internal Django and Bootstrap dashboard surfacing inference outputs, system health and performance metrics, cutting debugging time on deployed systems.
 - Built the dashboard's Django views, templates and forms and responsive Bootstrap layout, letting operators inspect live feeds and inference results without an engineer.
+- Built the Django dashboard's front-end interface in JavaScript and Bootstrap.
 - Documented failure modes, recovery procedures and deployment guardrails for engineers supporting fielded systems.
 - Presented performance findings to leadership, project managers and rig operators, turning production signals into rollout and optimisation decisions.
 - Ran formal peer code reviews and QA activities inside each Agile sprint, improving maintainability and reducing defects.
