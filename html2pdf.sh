@@ -263,7 +263,7 @@ render() {
 
 # Post-render checks. Prints one "; "-joined line of problems, or nothing.
 check_pdf() {
-  local pdf="$1" section="$2" pages="$3" fonts chars issues=()
+  local pdf="$1" section="$2" pages="$3" fonts txt chars issues=()
 
   if [[ "$section" == */Resumes && -n "$pages" && "$pages" != "2" ]]; then
     issues+=("expected 2 pages")
@@ -282,8 +282,14 @@ check_pdf() {
   fi
 
   if command -v pdftotext >/dev/null 2>&1; then
-    chars="$(pdftotext "$pdf" - 2>/dev/null | tr -d '[:space:]' | wc -c)"
+    txt="$(pdftotext "$pdf" - 2>/dev/null)"
+    chars="$(tr -d '[:space:]' <<<"$txt" | wc -c)"
     (( chars < MIN_TEXT_CHARS )) && issues+=("only $chars text chars, ATS may see nothing")
+    # Wide letter-spacing makes extractors emit "E X P E R I E N C E", which
+    # hides section headings from parsers that split on them.
+    if [[ "$section" == */Resumes ]] && ! grep -q 'EDUCATION' <<<"$txt"; then
+      issues+=("section headings split in text layer, ATS may miss them")
+    fi
   fi
 
   local joined
