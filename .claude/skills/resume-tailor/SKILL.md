@@ -321,7 +321,8 @@ A role-aligned list that functions as a recruiter search index.
 The full CV text, assembled from Steps 5 to 9, exactly as it will appear in the HTML.
 Step 10 places it unchanged.
 
-- Sections in the HTML's order: Header (name and contact details from the master CV),
+- Sections in the HTML's order: Header (the listing's job title, verbatim from Step 1, in
+  the target title slot; name and contact details from the master CV),
   Summary, then Relevant Experience, Projects and Education in the approved Step 4
   section order, then Skills, and Additional Experience and Certifications and Awards if
   kept.
@@ -403,6 +404,7 @@ rendered text and verify:
 
 - No tokens or lorem text remain.
 - Contact details, links, employers, titles and dates match approved factual sources.
+- The header title matches the listing's job title from Step 1 exactly.
 - Every claim is traceable to the master CV or an in-session factual addition.
 - Current and previous-role tenses are correct.
 - Spelling follows the approved keyword plan.
