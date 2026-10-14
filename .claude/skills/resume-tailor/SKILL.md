@@ -1,7 +1,7 @@
 ---
 name: resume-tailor
 description: Tailor Dexter Fernandes' CV to a specific job listing and draft a matching cover letter, using a gated 12-step ATS-first workflow. Use whenever a job listing, job description or job advert is supplied, or when asked to tailor, optimise, rewrite or target a CV or resume for a computer vision, robotics, perception, SLAM, edge ML or AI engineering role.
-argument-hint: "[fast mode | ultrafast mode] <job listing>"
+argument-hint: "[fast mode | ultrafast mode] [template 1] <job listing>"
 model: opus
 effort: high
 allowed-tools: Read, Glob, Grep, Edit(/JDs/**), Edit(/*/Resumes/HTML/**), Edit(/*/Cover Letters/HTML/**), Bash(python3:*), Agent(cv-html-builder), Skill(anthropic-skills:humanizer)
@@ -34,17 +34,19 @@ track directory, `<Track>`, which you choose at Step 1: `CV/`, `Robotics/`, `LLM
 | Path | Use |
 |---|---|
 | `Dexter_Fernandes_Master_CV.md` | Single source of truth for every track. Read at Step 2 |
-| `Dexter_Fernandes_Resume_template.html` | Only permitted CV format. Read at Step 2 |
-| `Dexter_Fernandes_Cover_Letter_template.html` | Only permitted cover letter format. Read at Step 12 |
+| `Dexter_Fernandes_Resume_template_0.html` | Default CV format. Read at Step 2 |
+| `Dexter_Fernandes_Resume_template_1.html` | CV format when the invocation asks for template 1. Read at Step 2 instead of `_0` |
+| `Dexter_Fernandes_Cover_Letter_template_0.html` | Cover letter format when the CV used `_0`. Read at Step 12 |
+| `Dexter_Fernandes_Cover_Letter_template_1.html` | Cover letter format when the CV used `_1`. Read at Step 12 instead of `_0` |
 | `JDs/<Position>_<Company>_<Location>.md` | The job listing. Saved at Step 1 |
 | `<Track>/Resumes/HTML/Dexter_Fernandes_CV_<Company>_<Role>.html` | The tailored CV. Created at Step 10 |
 | `<Track>/Cover Letters/HTML/Dexter_Fernandes_Cover_Letter_<Company>_<Role>.html` | The cover letter. Created at Step 12, only if run and approved |
 | `.claude/skills/resume-tailor/guard.py` | Claude Code hooks, and the `audit FILE` check used at Steps 10 to 12 |
 | `.claude/agents/cv-html-builder.md` | Claude Code only. The Step 10 assembly agent |
 
-Never ask the user to upload these. If the master CV or CV template is missing,
+Never ask the user to upload these. If the master CV or the selected CV template is missing,
 unreadable, truncated or malformed, identify the problem at Step 2 and stop; check the
-cover letter template the same way at Step 12. Do not substitute another template, do
+selected cover letter template the same way at Step 12. Do not substitute another template, do
 not use any other copy of the master resume, and do not work from a previously seen CV.
 A missing file usually means the workflow is not running from the repo root. Say so,
 and stop.
@@ -102,13 +104,16 @@ only from the master CV. Do not go looking for a separate profile file.
 
 ## Modes
 
-The single source of truth for what each mode asks and where it stops. Read the mode
-from the invocation: fast and ultrafast are accepted only alongside the listing, and a
-later request for either is declined. "Step mode" is another name for plan mode.
+The single source of truth for what each mode asks and where it stops. Read the mode and
+the template from the invocation. Fast and ultrafast are accepted only alongside the
+listing, and a later request for either is declined. "Step mode" is another name for plan
+mode.
 
 | | Plan (default) | Fast | Ultrafast |
 |---|---|---|---|
 | Requested | Nothing, or "step mode" | "fast mode" with the listing | "ultrafast mode" with the listing |
+| CV template | `_0`, or `_1` if the invocation asks for template 1 | Same | Same |
+| Cover letter template | Same number as the CV template | Same | Same |
 | Missing Step 1 inputs | Ask | Defaults | Defaults |
 | Step 3 follow-up question | Ask if needed | Ask if needed | Omit |
 | Step 4 gate | Stop | Stop | Show briefly, report any sponsorship flag, proceed |
@@ -195,8 +200,8 @@ sponsorship constraint before any drafting begins.
 
 ## Step 2/12 -- Master Resume Intake
 
-Read the shared `Dexter_Fernandes_Master_CV.md` and
-`Dexter_Fernandes_Resume_template.html`, both from the repo root. Never take either from
+Read the shared `Dexter_Fernandes_Master_CV.md` and the selected template
+(`Dexter_Fernandes_Resume_template_0.html`, or `_1.html` if asked for), both from the repo root. Never take either from
 anywhere else, and never fall back to a copy found
 elsewhere in the repo. Report briefly:
 
@@ -239,6 +244,8 @@ Cover:
   Additional Experience and Certifications keep their template positions.
 - **Compress or cut.** Weak-fit content to shorten, reduce to one line, or remove.
   Include an explicit GrowthStage and Taco Bell inclusion recommendation for this role.
+  Under template `_1`, state that Additional Experience and Certifications are dropped:
+  `_1` has no slot for them.
 - **Seniority framing.** Senior: ownership, technical decisions, scope, strategic
   influence. Mid-level: execution depth, technical breadth, outcomes. Stretch:
   transferable methods and learning velocity without overselling.
@@ -334,17 +341,18 @@ Step 10 places it unchanged.
   `Esbaar: Django dashboard; PostgreSQL schema`). Write `Excluded: none` if nothing was
   left out.
 - Other sections show their content only.
-- End with the approximate word count against the 900 to 1,050 target.
+- End with the approximate word count against the 900 to 1,050 target (800 to 950 for
+  `_1`).
 
 ## Step 10/12 -- HTML Assembly
 
-Populate the fixed template with the approved Assembled preview. Save to
+Populate the selected template with the approved Assembled preview. Save to
 `<Track>/Resumes/HTML/Dexter_Fernandes_CV_<Company>_<Role>.html`, where `<Track>` is
 the track chosen at Step 1. Apart from the Step 1 listing and the optional Step 12 cover
 letter, this is the only file the workflow writes.
 
 **Delegation.** In Claude Code, check the output filename is free (ask before
-overwriting), then dispatch the `cv-html-builder` agent with: the absolute output path,
+overwriting), then dispatch the `cv-html-builder` agent with: the template filename, the absolute output path,
 the approved Assembled preview without its `Excluded:` lists and word count, the approved
 bold set, and the roles the strategy compressed. The preview carries the section order
 and bold placements. It assembles
@@ -355,7 +363,9 @@ judgement checks in Step 11 stay with you.
 - Use the company and role from the listing in the filename, underscore-separated, no
   spaces, for example `CV/Resumes/HTML/Dexter_Fernandes_CV_Acme_Robotics_Senior_CV_Engineer.html`.
 - If a file of that name already exists, say so and ask before overwriting.
-- Fill existing content slots only.
+- Fill existing content slots only. `_1` keeps its own headings (PROFESSIONAL OVERVIEW for
+  Summary, WORK EXPERIENCE for Relevant Experience), and its entry rows put the title before
+  the company.
 - Do not alter structure, CSS, classes, fonts, colours, margins or layout.
 - No columns, tables, text boxes, images, icons or background-layer text.
 - Preserve the template's DOM reading order, except that the Relevant Experience,
@@ -387,7 +397,8 @@ preview. If the HTML count is still outside the target, report it and ask before
 approved text. In ultrafast, decide the cuts or restorations yourself and edit the HTML
 directly.
 
-Target 900 to 1,050 words for two pages. Over budget, remove lower-value content:
+Target 900 to 1,050 words for two pages, or 800 to 950 for `_1`, whose larger type holds
+less. `guard.py audit` reports the right target for the file. Over budget, remove lower-value content:
 trim roles from 8 bullets toward 6 before cutting anything else, and tighten wording.
 Substantially under, restore unused relevant evidence up to the 8-bullet cap, but never
 pad. The 8-bullet cap outranks the word target; never exceed it to fill space. Flag to the user
@@ -463,8 +474,8 @@ Where the skill is not available (Codex), apply the Banned language rules yourse
 **3. Approval gate.** Show the full letter in the reply and stop. Write nothing until the
 user approves or adjusts it.
 
-**4. Assembly.** Populate the shared `Dexter_Fernandes_Cover_Letter_template.html`
-and save it to `<Track>/Cover Letters/HTML/Dexter_Fernandes_Cover_Letter_<Company>_<Role>.html`,
+**4. Assembly.** Populate the shared `Dexter_Fernandes_Cover_Letter_template_0.html`, or
+`_1.html` if the CV used template `_1` (see Modes), and save it to `<Track>/Cover Letters/HTML/Dexter_Fernandes_Cover_Letter_<Company>_<Role>.html`,
 using the same company and role strings as the CV. If that file exists, ask before
 overwriting. Fill the existing slots only; repeat the paragraph slot, one `<p>` per
 paragraph. Delete the optional parent-company span if the listing names none. The date
@@ -577,10 +588,10 @@ these caps are part of the feature.
 - Whole words only. Never open or close a tag mid-word.
 - Bold in Summary, Experience, Projects and Education only.
 - Never bold metrics, numbers, company names, job titles, dates, or anything in an entry
-  header row. Those are already at weight 800.
+  header row. Those are already set apart by the template.
 - Skills stays plain. Its category labels are already at weight 700 and bolded values
   would compete with them.
-- Skip the education `Dissertation:` line. It is already at weight 600, so bolding adds
+- Skip the education `Dissertation:` line. It is already styled apart, so bolding adds
   nothing.
 - In the summary, bold the 3 to 5 front-loaded terms from Step 5 and nothing else.
 - If a section ends up bold on most of its lines, cut back. Readability outranks coverage,

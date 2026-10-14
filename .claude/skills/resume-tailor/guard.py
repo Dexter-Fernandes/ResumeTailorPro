@@ -13,14 +13,19 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 MASTER = ROOT / "Dexter_Fernandes_Master_CV.md"
-TEMPLATE = ROOT / "Dexter_Fernandes_Resume_template.html"
-LETTER_TEMPLATE = ROOT / "Dexter_Fernandes_Cover_Letter_template.html"
+TEMPLATES = set(ROOT.glob("Dexter_Fernandes_*_template_*.html"))
 BUILDER = "cv-html-builder"
-PLACEHOLDERS = ["Full Name", "Company Name", "Job Title", "MM/YYYY", "Category",
-                "Comma-separated", "example.com", 'href="#"']
+PLACEHOLDERS = ["Full Name", "Target Job Title", "Company Name", "Job Title", "JOB TITLE",
+                "YYYY", "Category", "Comma-separated", "example.com", 'href="#"',
+                "username", "Project Name", "Dissertation: Title", "University Name"]
 LETTER_PLACEHOLDERS = ["Company Name", "Job Title", "Parent Company", "City, Region",
                        "DD Month YYYY", "Salutation", "Paragraph text"]
-TARGETS = {"cv": "900 to 1,050", "letter": "250 to 450"}
+# Two-page word budgets. Template _1 (EB Garamond, 11pt) holds ~100 fewer words than _0.
+TARGETS = {"cv": "900 to 1,050", "cv1": "800 to 950", "letter": "250 to 450"}
+
+
+def target(kind, text):
+    return TARGETS["cv1" if kind == "cv" and "EB+Garamond" in text else kind]
 
 
 def last_step(transcript):
@@ -57,7 +62,7 @@ def pre(event):
                                     "skill, after Step 4. The hook reads saved messages "
                                     "only: if Step 4 is in this reply, run the Step 10 "
                                     "filename check first, then dispatch again.")
-    elif path in (TEMPLATE, LETTER_TEMPLATE):
+    elif path in TEMPLATES:
         decision, reason = "deny", "Templates are fixed. Populate a copy in the track's HTML/ directory."
     elif path == MASTER:
         if last_step(event.get("transcript_path", "")) >= 5:
@@ -108,11 +113,12 @@ def post(event):
     if not kind:
         return None
     try:
-        problems, words = audit(path.read_text(encoding="utf-8"), kind)
+        text = path.read_text(encoding="utf-8")
     except OSError:
         return None
+    problems, words = audit(text, kind)
     label = "CV" if kind == "cv" else "Cover letter"
-    note = f"{label} word count: {words} (target {TARGETS[kind]})."
+    note = f"{label} word count: {words} (target {target(kind, text)})."
     out = {"hookSpecificOutput": {"hookEventName": "PostToolUse", "additionalContext": note}}
     if problems:
         out["decision"] = "block"
@@ -130,7 +136,12 @@ def selftest():
     assert last_step(t.name) == 5
     assert pre(ev(MASTER))["hookSpecificOutput"]["permissionDecision"] == "deny"
     assert pre({**ev(MASTER), "transcript_path": "/nonexistent"})["hookSpecificOutput"]["permissionDecision"] == "ask"
-    assert pre(ev(TEMPLATE))["hookSpecificOutput"]["permissionDecision"] == "deny"
+    assert len(TEMPLATES) >= 4, TEMPLATES
+    for tpl in TEMPLATES:
+        assert pre(ev(tpl))["hookSpecificOutput"]["permissionDecision"] == "deny"
+        assert audit(tpl.read_text(encoding="utf-8"))[0], f"{tpl.name}: placeholders not caught"
+    assert target("cv", (ROOT / "Dexter_Fernandes_Resume_template_1.html").read_text()) == TARGETS["cv1"]
+    assert target("cv", (ROOT / "Dexter_Fernandes_Resume_template_0.html").read_text()) == TARGETS["cv"]
     assert pre(ev(ROOT / "JDs" / "x.md")) is None
     agent = {"tool_input": {"subagent_type": BUILDER}, "transcript_path": t.name}
     assert pre(agent) is None
@@ -152,7 +163,6 @@ def selftest():
     assert audit("<p>Dear Ms Smith,</p><p>Text here.</p>", "letter") == ([], 5)
     problems, _ = audit("<p>1. First</p><ol><li>x</li></ol><p>Paragraph text</p>", "letter")
     assert len(problems) == 3, problems
-    assert pre(ev(LETTER_TEMPLATE))["hookSpecificOutput"]["permissionDecision"] == "deny"
     print("guard.py selftest ok")
 
 
@@ -162,8 +172,9 @@ if __name__ == "__main__":
         selftest()
     elif mode == "audit" and len(sys.argv) == 3:
         kind = kind_of(Path(sys.argv[2]).resolve()) or "cv"
-        problems, words = audit(Path(sys.argv[2]).read_text(encoding="utf-8"), kind)
-        print("\n".join(problems + [f"words: {words} (target {TARGETS[kind]})"]))
+        text = Path(sys.argv[2]).read_text(encoding="utf-8")
+        problems, words = audit(text, kind)
+        print("\n".join(problems + [f"words: {words} (target {target(kind, text)})"]))
         sys.exit(1 if problems else 0)
     elif mode in ("pre", "post"):
         result = (pre if mode == "pre" else post)(json.load(sys.stdin))

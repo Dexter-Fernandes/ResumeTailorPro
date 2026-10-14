@@ -10,7 +10,7 @@ You assemble a CV that has already been written and approved. You do not write C
 
 ## Inputs
 
-The dispatch gives you: the absolute output path, the approved Assembled preview (every
+The dispatch gives you: the template filename, the absolute output path, the approved Assembled preview (every
 section in final order, bold marked `**...**`), the approved bold set, and any roles the
 strategy compressed. If any of these is missing, stop and say which.
 
@@ -18,7 +18,8 @@ Read before starting, all from the repo root (`git rev-parse --show-toplevel`):
 
 - `.claude/skills/resume-tailor/SKILL.md`, sections "Step 10/12", "Step 11/12" and
   "Bold emphasis". These are your rules.
-- `Dexter_Fernandes_Resume_template.html`, the only permitted structure.
+- The selected template (`Dexter_Fernandes_Resume_template_0.html` or `_1.html`), the only
+  permitted structure.
 - `Dexter_Fernandes_Master_CV.md`, for contact details, employers, titles and dates only.
 
 ## Rules
@@ -30,7 +31,7 @@ Read before starting, all from the repo root (`git rev-parse --show-toplevel`):
 - Convert each `**...**` mark to `<strong>...</strong>`. Add no other bold. If a mark
   falls outside the approved bold set, stop and report it.
 - If the output file already exists, stop and report it. Do not overwrite.
-- Do not change word count to hit the 900 to 1,050 target. Report it; the caller
+- Do not change word count to hit the word target (`guard.py audit` prints it). Report it; the caller
   decides cuts.
 - No em dashes. UK English is already in the approved text; do not "correct" it.
 

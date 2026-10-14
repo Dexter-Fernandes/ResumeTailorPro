@@ -1,7 +1,7 @@
 # CV tailoring workspace -- source is tracked, rendered output is not.
 #
 # Every PDF and DOCX here is generated from the root
-# Dexter_Fernandes_Master_CV.md plus Dexter_Fernandes_Resume_template.html.
+# Dexter_Fernandes_Master_CV.md plus Dexter_Fernandes_Resume_template_<N>.html.
 # Re-render with ./html2pdf.sh from the repo root instead of committing binaries:
 # git cannot diff them, so each re-render would add a full copy to history.
 
