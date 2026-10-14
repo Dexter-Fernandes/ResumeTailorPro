@@ -44,7 +44,7 @@ Backend engineer with 3+ years shipping Python and C++ services in production. B
 **Modelling and optimisation**
 - Owned the end-to-end ML lifecycle for real-time perception on BP rigs, from data curation and training through deployment and on-site validation, improving F1 by 15% under 24/7 operation.
 - Designed adversarial-condition training experiments (occlusion, lighting variation, motion artefacts), benchmarking robustness on F1 and failure rate to reach a 15% F1 gain in 3 months.
-- Adapted YOLOv5 detectors in PyTorch, replacing backbone and neck layers and retraining for rig-specific classes, with Optuna sweeps and Weights & Biases tracking across runs.
+- Fine-tuned pre-trained YOLOv5 detectors in PyTorch, replacing backbone and neck layers and retraining for rig-specific classes, with Optuna sweeps and Weights & Biases tracking across runs.
 - Benchmarked YOLOv5 against EfficientDet on a repeatable harness, quantifying accuracy, latency and stability pre and post optimisation to catch regressions before release.
 - Ran TIDE error analysis on COCO-format production data to split live detector failures by error type, directing dataset fixes and threshold tuning at the dominant one.
 - Defined a repeatable baseline to FP16 to validation workflow with acceptance thresholds, giving consistent latency, memory and stability outcomes across deployments.
