@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Professional Resume Template</title>
+<style>
+  @font-face { font-family:"EB Garamond"; font-weight:400; font-style:normal; src:url(assets/fonts/EBGaramond-400-normal.woff2) format("woff2"); }
+  @font-face { font-family:"EB Garamond"; font-weight:400; font-style:italic; src:url(assets/fonts/EBGaramond-400-italic.woff2) format("woff2"); }
+  @font-face { font-family:"EB Garamond"; font-weight:700; font-style:normal; src:url(assets/fonts/EBGaramond-700-normal.woff2) format("woff2"); }
+  @font-face { font-family:"EB Garamond"; font-weight:700; font-style:italic; src:url(assets/fonts/EBGaramond-700-italic.woff2) format("woff2"); }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#f3f2f2; color:#595959; font:11pt/1.25 Garamond, "EB Garamond", Georgia, "Times New Roman", serif; }
+  .page { width:210mm; min-height:297mm; margin:16px auto; padding:0.6in 0.7in; background:#fff; box-shadow:0 1px 6px rgba(0,0,0,0.12); }
+  hr { border:0; border-top:1px solid #a6a6a6; }
+  header { text-align:center; }
+  h1 { font-size:30pt; font-weight:400; color:#2d2d2d; line-height:1.1; }
+  .title { font-size:12pt; font-style:italic; color:#666; margin:4px 0 14px; }
+  .contact { padding:8px 0; }
+  h2 { font-size:11pt; font-weight:700; color:#2d2d2d; letter-spacing:0.08em; margin:16px 0 6px; }
+  .row { display:flex; justify-content:space-between; gap:12px; }
+  .row span:last-child { white-space:nowrap; }
+  .role { margin-top:8px; }
+  .role:first-of-type { margin-top:0; }
+  ul { padding-left:20px; margin-top:2px; }
+  li { margin-bottom:1px; }
+  .skills { list-style:none; padding:0; display:grid; grid-template-columns:repeat(3, 1fr); gap:2px 12px; }
+  @page { size:A4; margin:0.6in 0.7in; }
+  @media print {
+    body { background:#fff; }
+    .page { width:auto; min-height:0; margin:0; padding:0; box-shadow:none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header>
+  <h1>Full Name</h1>
+  <p class="title">Target Job Title</p>
+  <hr>
+  <p class="contact">Phone number &nbsp;|&nbsp; email@example.com &nbsp;|&nbsp; City, Country &nbsp;|&nbsp; linkedin.com/in/username</p>
+  <hr>
+</header>
+
+<section>
+  <h2>PROFESSIONAL OVERVIEW</h2>
+  <p>Professional summary. Three to five lines. Front-load the most critical role-specific terms.</p>
+</section>
+
+<section>
+  <h2>WORK EXPERIENCE</h2>
+
+  <!-- role block (duplicate as needed) -->
+  <div class="role">
+    <p class="row"><span>JOB TITLE | Company Name, Location</span><span>MMM YYYY &ndash; MMM YYYY</span></p>
+    <ul>
+      <li>Flagship bullet: action, scope, method, metric, outcome.</li>
+      <li>Supporting bullet: action, scope, outcome.</li>
+      <li>Supporting bullet.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2>EDUCATION</h2>
+  <!-- one row per qualification -->
+  <p class="row"><span>Degree, Subject | University Name, Location</span><span>Graduated: YYYY</span></p>
+</section>
+
+<section>
+  <h2>SKILLS</h2>
+  <!-- fills three columns, left to right -->
+  <ul class="skills">
+    <li>Skill</li>
+    <li>Skill</li>
+    <li>Skill</li>
+  </ul>
+</section>
+
+</div>
+</body>
+</html>
