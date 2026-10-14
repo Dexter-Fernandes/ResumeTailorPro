@@ -4,11 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Professional Resume Template</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 <style>
-  @font-face { font-family:"EB Garamond"; font-weight:400; font-style:normal; src:url(assets/fonts/EBGaramond-400-normal.woff2) format("woff2"); }
-  @font-face { font-family:"EB Garamond"; font-weight:400; font-style:italic; src:url(assets/fonts/EBGaramond-400-italic.woff2) format("woff2"); }
-  @font-face { font-family:"EB Garamond"; font-weight:700; font-style:normal; src:url(assets/fonts/EBGaramond-700-normal.woff2) format("woff2"); }
-  @font-face { font-family:"EB Garamond"; font-weight:700; font-style:italic; src:url(assets/fonts/EBGaramond-700-italic.woff2) format("woff2"); }
   * { margin:0; padding:0; box-sizing:border-box; }
   body { background:#f3f2f2; color:#595959; font:11pt/1.25 Garamond, "EB Garamond", Georgia, "Times New Roman", serif; }
   .page { width:210mm; min-height:297mm; margin:16px auto; padding:0.6in 0.7in; background:#fff; box-shadow:0 1px 6px rgba(0,0,0,0.12); }
@@ -25,6 +24,7 @@
   .role:first-of-type { margin-top:0; }
   ul { padding-left:20px; margin-top:2px; }
   li { margin-bottom:1px; }
+  .dissertation { font-style:italic; }
   .skills { display:grid; grid-template-columns:max-content 1fr; gap:2px 14px; align-items:baseline; }
   .skills dt { font-weight:700; color:#2d2d2d; }
   h2, .row, .dissertation { break-after: avoid; }
@@ -66,9 +66,31 @@
 </section>
 
 <section>
+  <h2>PROJECTS</h2>
+
+  <!-- project block (duplicate as needed) -->
+  <div class="role">
+    <p class="row"><span>Project Name | <a href="https://github.com/username/repo">github.com/username/repo</a></span><span>MMM YYYY</span></p>
+    <ul>
+      <li>Problem and approach or stack.</li>
+      <li>Method and technical detail.</li>
+      <li>Metric or outcome.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
   <h2>EDUCATION</h2>
-  <!-- one row per qualification -->
-  <p class="row"><span>Degree, Subject | University Name, Location</span><span>Graduated: YYYY</span></p>
+
+  <!-- qualification block (duplicate as needed; dissertation line and bullets optional) -->
+  <div class="role">
+    <p class="row"><span>Degree, Subject | University Name, Location</span><span>Graduated: YYYY</span></p>
+    <p class="dissertation">Dissertation: Title</p>
+    <ul>
+      <li>Coursework, lab work, tools or research relevant to the target role.</li>
+      <li>Outcome or award.</li>
+    </ul>
+  </div>
 </section>
 
 <section>
