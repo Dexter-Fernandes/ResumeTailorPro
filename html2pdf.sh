@@ -170,6 +170,16 @@ FONT_CSS=""
 for w in "${WEIGHTS[@]}"; do
   FONT_CSS+="@font-face{font-family:'Archivo';font-style:normal;font-weight:$w;font-display:block;src:url($(file_uri "$FONT_DIR/Archivo-$w.woff2")) format('woff2');}"
 done
+# EB Garamond (template _1) is not fetched by --refresh-fonts; without these
+# files the template falls back to Georgia.
+for w in 400 700; do
+  for s in normal italic; do
+    f="$FONT_DIR/EBGaramond-$w-$s.woff2"
+    if [[ -s "$f" ]]; then
+      FONT_CSS+="@font-face{font-family:'EB Garamond';font-style:$s;font-weight:$w;font-display:block;src:url($(file_uri "$f")) format('woff2');}"
+    fi
+  done
+done
 HEAD_INJECT="<style>${FONT_CSS}@media print{*{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}</style>"
 
 # A PDF in an HTML/ directory goes to the sibling pdf/; anything else sits
