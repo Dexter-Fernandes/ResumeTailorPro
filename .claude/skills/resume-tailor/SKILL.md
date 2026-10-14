@@ -1,7 +1,7 @@
 ---
 name: resume-tailor
 description: Tailor Dexter Fernandes' CV to a specific job listing and draft a matching cover letter, using a gated 12-step ATS-first workflow. Use whenever a job listing, job description or job advert is supplied, or when asked to tailor, optimise, rewrite or target a CV or resume for a computer vision, robotics, perception, SLAM, edge ML or AI engineering role.
-argument-hint: "[fast mode | ultrafast mode] [template 1] <job listing>"
+argument-hint: "[fast mode | ultrafast mode] [template 0] <job listing>"
 model: opus
 effort: high
 allowed-tools: Read, Glob, Grep, Edit(/JDs/**), Edit(/*/Resumes/HTML/**), Edit(/*/Cover Letters/HTML/**), Bash(python3:*), Agent(cv-html-builder), Skill(anthropic-skills:humanizer)
@@ -34,10 +34,10 @@ track directory, `<Track>`, which you choose at Step 1: `CV/`, `Robotics/`, `LLM
 | Path | Use |
 |---|---|
 | `Dexter_Fernandes_Master_CV.md` | Single source of truth for every track. Read at Step 2 |
-| `Dexter_Fernandes_Resume_template_0.html` | Default CV format. Read at Step 2 |
-| `Dexter_Fernandes_Resume_template_1.html` | CV format when the invocation asks for template 1. Read at Step 2 instead of `_0` |
-| `Dexter_Fernandes_Cover_Letter_template_0.html` | Cover letter format when the CV used `_0`. Read at Step 12 |
-| `Dexter_Fernandes_Cover_Letter_template_1.html` | Cover letter format when the CV used `_1`. Read at Step 12 instead of `_0` |
+| `Dexter_Fernandes_Resume_template_0.html` | CV format when the invocation asks for template 0. Read at Step 2 instead of `_1` |
+| `Dexter_Fernandes_Resume_template_1.html` | Default CV format. Read at Step 2 |
+| `Dexter_Fernandes_Cover_Letter_template_0.html` | Cover letter format when the CV used `_0`. Read at Step 12 instead of `_1` |
+| `Dexter_Fernandes_Cover_Letter_template_1.html` | Cover letter format when the CV used `_1`. Read at Step 12 |
 | `JDs/<Position>_<Company>_<Location>.md` | The job listing. Saved at Step 1 |
 | `<Track>/Resumes/HTML/Dexter_Fernandes_CV_<Company>_<Role>.html` | The tailored CV. Created at Step 10 |
 | `<Track>/Cover Letters/HTML/Dexter_Fernandes_Cover_Letter_<Company>_<Role>.html` | The cover letter. Created at Step 12, only if run and approved |
@@ -112,7 +112,7 @@ mode.
 | | Plan (default) | Fast | Ultrafast |
 |---|---|---|---|
 | Requested | Nothing, or "step mode" | "fast mode" with the listing | "ultrafast mode" with the listing |
-| CV template | `_0`, or `_1` if the invocation asks for template 1 | Same | Same |
+| CV template | `_1`, or `_0` if the invocation asks for template 0 | Same | Same |
 | Cover letter template | Same number as the CV template | Same | Same |
 | Missing Step 1 inputs | Ask | Defaults | Defaults |
 | Step 3 follow-up question | Ask if needed | Ask if needed | Omit |
@@ -201,7 +201,7 @@ sponsorship constraint before any drafting begins.
 ## Step 2/12 -- Master Resume Intake
 
 Read the shared `Dexter_Fernandes_Master_CV.md` and the selected template
-(`Dexter_Fernandes_Resume_template_0.html`, or `_1.html` if asked for), both from the repo root. Never take either from
+(`Dexter_Fernandes_Resume_template_1.html`, or `_0.html` if asked for), both from the repo root. Never take either from
 anywhere else, and never fall back to a copy found
 elsewhere in the repo. Report briefly:
 
@@ -474,8 +474,8 @@ Where the skill is not available (Codex), apply the Banned language rules yourse
 **3. Approval gate.** Show the full letter in the reply and stop. Write nothing until the
 user approves or adjusts it.
 
-**4. Assembly.** Populate the shared `Dexter_Fernandes_Cover_Letter_template_0.html`, or
-`_1.html` if the CV used template `_1` (see Modes), and save it to `<Track>/Cover Letters/HTML/Dexter_Fernandes_Cover_Letter_<Company>_<Role>.html`,
+**4. Assembly.** Populate the shared `Dexter_Fernandes_Cover_Letter_template_1.html`, or
+`_0.html` if the CV used template `_0` (see Modes), and save it to `<Track>/Cover Letters/HTML/Dexter_Fernandes_Cover_Letter_<Company>_<Role>.html`,
 using the same company and role strings as the CV. If that file exists, ask before
 overwriting. Fill the existing slots only; repeat the paragraph slot, one `<p>` per
 paragraph. Delete the optional parent-company span if the listing names none. The date

@@ -14,8 +14,8 @@ hook in `.claude/settings.json`. Codex does every step itself.
 ## Layout
 
 - `Dexter_Fernandes_Master_CV.md` -- the single master resume, shared by every track.
-- `Dexter_Fernandes_Resume_template_0.html` -- the default output template;
-  `Dexter_Fernandes_Resume_template_1.html` is used when the invocation asks for template 1.
+- `Dexter_Fernandes_Resume_template_1.html` -- the default output template;
+  `Dexter_Fernandes_Resume_template_0.html` is used when the invocation asks for template 0.
 - `CV/`, `Robotics/`, `LLM/`, `SLAM/`, `Software/`, `PLC/` -- one directory per track.
   Run the workflow from the repo root; it picks the track and writes the CV to
   `<Track>/Resumes/HTML/`.
@@ -39,8 +39,8 @@ table wins.
 
 Step 12, the cover letter, is optional and runs only when asked. The draft is passed
 through the `humanizer` skill and shown for approval; once approved it is saved to the
-track's `Cover Letters/HTML/` from `Dexter_Fernandes_Cover_Letter_template_0.html`, or
-`_1` when the CV used template `_1`, and audited.
+track's `Cover Letters/HTML/` from `Dexter_Fernandes_Cover_Letter_template_1.html`, or
+`_0` when the CV used template `_0`, and audited.
 
 ## Exporting to PDF
 

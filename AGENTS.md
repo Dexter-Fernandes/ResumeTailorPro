@@ -12,8 +12,8 @@ below are relative to it.
 | Path | Role |
 |---|---|
 | `Dexter_Fernandes_Master_CV.md` | Single source of truth for all roles, dates, metrics, projects, skills, contact details. Shared across tracks |
-| `Dexter_Fernandes_Resume_template_0.html` | Shared across tracks. The default CV format. Structure and CSS are fixed |
-| `Dexter_Fernandes_Resume_template_1.html` | Shared across tracks. The CV format used when asked for template 1. Structure and CSS are fixed |
+| `Dexter_Fernandes_Resume_template_0.html` | Shared across tracks. The CV format used when asked for template 0. Structure and CSS are fixed |
+| `Dexter_Fernandes_Resume_template_1.html` | Shared across tracks. The default CV format. Structure and CSS are fixed |
 | `Dexter_Fernandes_Cover_Letter_template_0.html` | Shared across tracks. The cover letter format paired with CV template `_0`. Structure and CSS are fixed |
 | `Dexter_Fernandes_Cover_Letter_template_1.html` | Shared across tracks. The cover letter format paired with CV template `_1`. Structure and CSS are fixed |
 | `<Track>/Resumes/HTML/` | The only place a tailored CV is written |
