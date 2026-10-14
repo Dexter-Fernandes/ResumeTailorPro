@@ -263,7 +263,7 @@ render() {
 
 # Post-render checks. Prints one "; "-joined line of problems, or nothing.
 check_pdf() {
-  local pdf="$1" section="$2" pages="$3" fonts txt chars issues=()
+  local pdf="$1" section="$2" pages="$3" src="$4" fonts txt chars issues=()
 
   if [[ "$section" == */Resumes && -n "$pages" && "$pages" != "2" ]]; then
     issues+=("expected 2 pages")
@@ -276,7 +276,7 @@ check_pdf() {
     fonts="$(pdffonts "$pdf" 2>/dev/null)"
     if grep -q 'Type 3' <<<"$fonts"; then
       issues+=("Type 3 fonts, run --refresh-fonts")
-    elif ! grep -qi archivo <<<"$fonts"; then
+    elif grep -qi archivo -- "$src" && ! grep -qi archivo <<<"$fonts"; then
       issues+=("Archivo not embedded")
     fi
   fi
@@ -340,7 +340,7 @@ for src in "${srcs[@]}"; do
   info="$size"
   [[ -n "$pages" ]] && info="$pages page$( [[ "$pages" == 1 ]] || printf s ), $size"
 
-  issues="$(check_pdf "$dest" "$section" "$pages")"
+  issues="$(check_pdf "$dest" "$section" "$pages" "$src")"
   if [[ -n "$issues" ]]; then
     echo "$row built    $info  ! $issues"
     (( ++warnings ))
