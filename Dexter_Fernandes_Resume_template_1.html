@@ -17,6 +17,7 @@
   h1 { font-size:30pt; font-weight:400; color:#2d2d2d; line-height:1.1; }
   .title { font-size:12pt; font-style:italic; color:#666; margin:4px 0 14px; }
   .contact { padding:8px 0; }
+  a { color:#1f4e79; text-decoration:underline; text-underline-offset:2px; }
   h2 { font-size:11pt; font-weight:700; color:#2d2d2d; letter-spacing:0.08em; margin:16px 0 6px; }
   .row { display:flex; justify-content:space-between; gap:12px; }
   .row span:last-child { white-space:nowrap; }
@@ -24,7 +25,8 @@
   .role:first-of-type { margin-top:0; }
   ul { padding-left:20px; margin-top:2px; }
   li { margin-bottom:1px; }
-  .skills { list-style:none; padding:0; display:grid; grid-template-columns:repeat(3, 1fr); gap:2px 12px; }
+  .skills { display:grid; grid-template-columns:max-content 1fr; gap:2px 14px; align-items:baseline; }
+  .skills dt { font-weight:700; color:#2d2d2d; }
   @page { size:A4; margin:0.6in 0.7in; }
   @media print {
     body { background:#fff; }
@@ -39,7 +41,7 @@
   <h1>Full Name</h1>
   <p class="title">Target Job Title</p>
   <hr>
-  <p class="contact">Phone number &nbsp;|&nbsp; email@example.com &nbsp;|&nbsp; City, Country &nbsp;|&nbsp; linkedin.com/in/username</p>
+  <p class="contact">Phone number &nbsp;|&nbsp; <a href="mailto:email@example.com">email@example.com</a> &nbsp;|&nbsp; City, Country &nbsp;|&nbsp; <a href="https://linkedin.com/in/username">linkedin.com/in/username</a> &nbsp;|&nbsp; <a href="https://github.com/username">github.com/username</a></p>
   <hr>
 </header>
 
@@ -70,12 +72,11 @@
 
 <section>
   <h2>SKILLS</h2>
-  <!-- fills three columns, left to right -->
-  <ul class="skills">
-    <li>Skill</li>
-    <li>Skill</li>
-    <li>Skill</li>
-  </ul>
+  <dl class="skills">
+    <dt>Category</dt><dd>Comma-separated skills</dd>
+    <dt>Category</dt><dd>Comma-separated skills</dd>
+    <dt>Category</dt><dd>Comma-separated skills</dd>
+  </dl>
 </section>
 
 </div>
