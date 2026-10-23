@@ -120,6 +120,16 @@ Backend engineer with 3+ years shipping Python and C++ services in production. B
 
 ## PROJECTS
 
+### Real-Time Vision Inference Pipeline (10/2026 - Present) -- github.com/Dexter-Fernandes/inference
+- Built a multithreaded C++20 pipeline for files, cameras, RTSP and UDP streams, running YOLOv5s on TensorRT 8.5.3, with frames and device buffers allocated once at start.
+- Built an ImGui desktop viewer for live runs, with a per-class legend and show/hide switches, a seven-segment FPS and box-count readout, and a per-stage timing display.
+- Cut inference from 83 to 35.7 ms a frame by moving from cv::dnn to TensorRT and filtering detections on the GPU with a CUDA kernel, shrinking each download from 8.6 MB to about 150 KB.
+- Raised throughput from 22.6 fps serial to 26.8 fps, the inference-bound ceiling on a GeForce 940MX, at 70 ms median latency; a latest-wins live policy cut latency 17% for 4% fps.
+- Traced an NPP stream race with nsys that made detections differ between runs of the same binary, and fixed it so outputs match a serialised reference byte for byte.
+- Wrote 82 GoogleTest tests, including GPU parity checks against CPU and cv::dnn references (288 of 288 detections matched), plus ThreadSanitizer runs on the queue, pool and ring.
+- Published detections to other processes through a seqlock ring in POSIX shared memory (p50 3.2 µs) and added H.264, H.265 and VP9 encoding that cannot stall the pipeline.
+- Built with Claude Code as the AI-assisted development workflow: all 53 commits in two weeks co-authored with Claude.
+
 ### ResumeTailorPro (08/2026 - Present) -- github.com/Dexter-Fernandes/ResumeTailorPro
 - Built a 12-step agentic workflow in Claude Code and Codex that tailors a CV to a job listing. HTML assembly goes to a separate subagent, and both tools read one shared rules file.
 - Wrote a Python guard script that runs as Claude Code hooks. It reads the session transcript to enforce the workflow's stages: it blocks template edits, locks the source CV once the plan is approved, and stops the subagent from running early.
@@ -208,13 +218,13 @@ Dissertation: Radiological SLAM with LiDAR Odometry
 
 ## SKILLS (master pool, cut down per application)
 
-**Languages:** Python, C++17, CUDA C++, Bash, SQL
+**Languages:** Python, C++17, C++20, CUDA C++, Bash, SQL
 
 **Computer vision and deep learning:** object detection, image classification, semantic and instance segmentation (Mask R-CNN, DeepLabv3+, U-Net, SegFormer), object tracking (ByteTrack, NvDCF, NvSORT), optical flow, anomaly detection, defect detection, data augmentation, convolutional neural networks (CNNs), YOLO (v5/v8/v10/v26), RT-DETR, EfficientDet, EfficientViT, Grounding DINO, MobileSAM, Depth Anything v2, PyTorch, TensorFlow, Keras, OpenCV, scikit-image, torchvision, Pillow, NumPy, HuggingFace
 
-**Edge inference and optimisation:** TensorRT (custom plugins, dynamic batching), OpenVINO, ONNX, quantisation-aware training, post-training quantisation, FP16/INT8, structured pruning, layer fusion, latency and throughput profiling, VRAM profiling, Intel VTune, Intel Movidius Myriad VPU, Intel Core i7 industrial edge (VTC7252-7C4IP), NVIDIA Jetson AGX Xavier, JetPack
+**Edge inference and optimisation:** TensorRT (custom plugins, dynamic batching), OpenVINO, ONNX, quantisation-aware training, post-training quantisation, FP16/INT8, structured pruning, layer fusion, latency and throughput profiling, VRAM profiling, NVIDIA NPP, Nsight Systems (nsys), Intel VTune, Intel Movidius Myriad VPU, Intel Core i7 industrial edge (VTC7252-7C4IP), NVIDIA Jetson AGX Xavier, JetPack
 
-**Video pipelines:** NVIDIA DeepStream 6.x/9.0, GStreamer, FFmpeg, RTSP, nvinfer, nvstreammux, nvtracker, nvdsosd, NvDCF, NvSORT, ByteTrack, multi-stream video analytics, multi-camera synchronisation, multi-target multi-camera (MTMC) tracking, homography calibration, ground-plane projection, union-find clustering, ISP and camera tuning (RGB and IR)
+**Video pipelines:** NVIDIA DeepStream 6.x/9.0, GStreamer, FFmpeg, libavcodec, RTSP, nvinfer, nvstreammux, nvtracker, nvdsosd, NvDCF, NvSORT, ByteTrack, multi-stream video analytics, multi-camera synchronisation, multi-target multi-camera (MTMC) tracking, homography calibration, ground-plane projection, union-find clustering, ISP and camera tuning (RGB and IR)
 
 **Robotics and SLAM:** ROS2 (Robot Operating System 2) Humble and Jazzy, rclcpp, rclpy, tf2, rosbag2, Gazebo Harmonic, RTAB-Map, LIO-SAM, Cartographer, GLIM, Nav2, LiDAR SLAM, pose graph optimisation, ICP (Iterative Closest Point), scan matching, LiDAR extrinsics calibration, sensor fusion, PCL (Point Cloud Library), Open3D, Eigen, Ceres, g2o, GTSAM, robot_localization, EKF
 
@@ -222,7 +232,7 @@ Dissertation: Radiological SLAM with LiDAR Odometry
 
 **MLOps and experimentation:** MLflow, DVC (Data Version Control), Apache Airflow, Apache Kafka, Optuna, Weights & Biases, Jupyter, CVAT (Computer Vision Annotation Tool), automated labelling, dataset versioning, synthetic data generation, benchmarking harnesses, ablation studies, hypothesis testing, Bayesian optimisation, failure-mode analysis, drift tracking, Grad-CAM, TIDE (Toolbox for Identifying Detection Errors), COCO annotation format, model-promotion gates
 
-**Production and cloud:** Docker, CI/CD, GitHub Actions, Git, CMake, test-driven development, pytest, unittest, gtest, linting, regression checks, Microsoft Azure, REST API design, FastAPI, containerised microservices, queue-based async processing, multiprocessing, PostgreSQL, Django (views, templates, forms), Bootstrap, structured logging, timeouts and retries, health monitoring, health checks, observability, production monitoring, Linux
+**Production and cloud:** Docker, CI/CD, GitHub Actions, Git, CMake, test-driven development, pytest, unittest, gtest, ThreadSanitizer, linting, regression checks, Microsoft Azure, REST API design, FastAPI, containerised microservices, queue-based async processing, multiprocessing, POSIX shared memory, PostgreSQL, Django (views, templates, forms), Bootstrap, ImGui, structured logging, timeouts and retries, health monitoring, health checks, observability, production monitoring, Linux
 
 **Time series and classical ML:** MultiRocket, gradient boosting, random forests, scikit-learn, Pandas, multivariate time-series classification
 
