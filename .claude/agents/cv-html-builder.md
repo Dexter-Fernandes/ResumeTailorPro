@@ -17,10 +17,13 @@ strategy compressed. If any of these is missing, stop and say which.
 Read before starting, all from the repo root (`git rev-parse --show-toplevel`):
 
 - `.claude/skills/resume-tailor/SKILL.md`, sections "Step 10/12", "Step 11/12" and
-  "Bold emphasis". These are your rules.
+  "Bold emphasis" only. These are your rules. Grep their headings for line numbers and
+  Read just those ranges with offset and limit; do not read the whole file.
 - The selected template (`Dexter_Fernandes_Resume_template_0.html` or `_1.html`), the only
   permitted structure.
-- `Dexter_Fernandes_Master_CV.md`, for contact details, employers, titles and dates only.
+
+Do not read the master CV. The approved preview already carries the header, contact
+details, employers, titles and dates; the caller checks them against the master at Step 11.
 
 ## Rules
 

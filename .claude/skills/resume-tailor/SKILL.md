@@ -203,11 +203,10 @@ sponsorship constraint before any drafting begins.
 Read the shared `Dexter_Fernandes_Master_CV.md` and the selected template
 (`Dexter_Fernandes_Resume_template_1.html`, or `_0.html` if asked for), both from the repo root. Never take either from
 anywhere else, and never fall back to a copy found
-elsewhere in the repo. Report briefly:
-
-- Roles, education and projects found, with dates.
-- Template sections the master CV cannot fill.
-- Missing dates, metrics, links or other gaps that may limit tailoring.
+elsewhere in the repo. The master CV rarely changes, so do not list the roles,
+education or projects found. Report in one line: `Master CV and template read`, plus
+any template sections the master CV cannot fill and any missing dates, metrics, links
+or other gaps that may limit tailoring for this listing.
 
 If a file is missing or malformed, name the affected file and stop rather than guessing.
 
