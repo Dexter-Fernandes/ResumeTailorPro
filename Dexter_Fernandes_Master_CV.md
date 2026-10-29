@@ -61,9 +61,7 @@ Backend engineer with 3+ years shipping Python and C++ services in production. B
 **Field validation and communication**
 - Led on-site validation on BP rig deployments, diagnosing model failures under lighting, motion and environmental stressors and turning findings into fixes for live operation.
 - Owned post-deployment monitoring and drift tracking for fielded vision systems, catching regressions early and feeding failure analysis back into retraining.
-- Built an internal Django and Bootstrap dashboard surfacing inference outputs, system health and performance metrics, cutting debugging time on deployed systems.
-- Built the dashboard's Django views, templates and forms and responsive Bootstrap layout, letting operators inspect live feeds and inference results without an engineer.
-- Built the Django dashboard's front-end interface in JavaScript and Bootstrap.
+- Built an internal Django dashboard (views, templates, forms; JavaScript and responsive Bootstrap front end) letting operators inspect live feeds, inference results, system health and performance metrics without an engineer, cutting debugging time on deployed systems.
 - Documented failure modes, recovery procedures and deployment guardrails for engineers supporting fielded systems.
 - Presented performance findings to leadership, project managers and rig operators, turning production signals into rollout and optimisation decisions.
 - Ran formal peer code reviews and QA activities inside each Agile sprint, improving maintainability and reducing defects.
@@ -72,6 +70,7 @@ Backend engineer with 3+ years shipping Python and C++ services in production. B
 
 **Leadership and ownership**
 - Led four engineers delivering a two-stage detection and helmet-colour classification system for construction safety in Texas, cutting false positives by 33% within latency and power budgets.
+- A/B tested a two-stage helmet detection system against the previous model for three weeks on construction vehicle cameras, where a SciPy chi-squared test on manually reviewed alerts showed a statistically significant 33% drop in false positives, all within latency and power budgets.
 - Coordinated task allocation, code reviews, releases and production support for the four-engineer team.
 - Set experimentation standards, reviewed model performance and mentored junior engineers, guiding optimisation strategy for production deployments.
 - Owned production ML pipelines end to end, from ingestion and labelling through training, optimisation, deployment, monitoring and field validation for industrial safety systems.
@@ -94,6 +93,7 @@ Backend engineer with 3+ years shipping Python and C++ services in production. B
 - Built a driver alertness and liveness-check pilot with MediaPipe, designed to work reliably across varying lighting conditions.
 - Implemented optical flow based ego-motion estimation feeding CNN classifiers in PyTorch to infer vehicle state, supporting collision avoidance on moving vehicles.
 - Built YOLOv5 visual quality inspection for John Deere engine paintjobs on a conveyor line, detecting paint defects, contamination and colour inconsistency.
+- Used Faster-RCNN for building Mask Detection/Covering models.
 - Tuned camera and ISP settings to keep models reliable on RGB and IR streams across 24/7 operation, cutting false positives on IR and reducing manual recalibration.
 - Ran adversarial-condition training and validation simulating occlusion, lighting variation and motion artefacts, cutting performance variance by 25%.
 - Used confusion-matrix failure clustering and TIDE error analysis on COCO-format production data to diagnose recurring detector failures and prioritise dataset fixes across camera feeds.
@@ -220,7 +220,7 @@ Dissertation: Radiological SLAM with LiDAR Odometry
 
 **Languages:** Python, C++17, C++20, CUDA C++, Bash, SQL
 
-**Computer vision and deep learning:** object detection, image classification, semantic and instance segmentation (Mask R-CNN, DeepLabv3+, U-Net, SegFormer), object tracking (ByteTrack, NvDCF, NvSORT), optical flow, anomaly detection, defect detection, data augmentation, convolutional neural networks (CNNs), YOLO (v5/v8/v10/v26), RT-DETR, EfficientDet, EfficientViT, Grounding DINO, MobileSAM, Depth Anything v2, PyTorch, TensorFlow, Keras, OpenCV, scikit-image, torchvision, Pillow, NumPy, HuggingFace
+**Computer vision and deep learning:** object detection, image classification, Faster R-CNN, semantic and instance segmentation (Mask R-CNN, DeepLabv3+, U-Net, SegFormer), object tracking (ByteTrack, NvDCF, NvSORT), optical flow, anomaly detection, defect detection, data augmentation, convolutional neural networks (CNNs), YOLO (v5/v8/v10/v26), RT-DETR, EfficientDet, EfficientViT, Grounding DINO, MobileSAM, Depth Anything v2, PyTorch, TensorFlow, Keras, OpenCV, scikit-image, torchvision, Pillow, NumPy, HuggingFace
 
 **Edge inference and optimisation:** TensorRT (custom plugins, dynamic batching), OpenVINO, ONNX, quantisation-aware training, post-training quantisation, FP16/INT8, structured pruning, layer fusion, latency and throughput profiling, VRAM profiling, NVIDIA NPP, Nsight Systems (nsys), Intel VTune, Intel Movidius Myriad VPU, Intel Core i7 industrial edge (VTC7252-7C4IP), NVIDIA Jetson AGX Xavier, JetPack
 
@@ -230,7 +230,7 @@ Dissertation: Radiological SLAM with LiDAR Odometry
 
 **LLMs and retrieval:** RAG pipelines, dense and hybrid retrieval, FAISS, ChromaDB, BM25, cross-encoder reranking, reciprocal rank fusion, LangChain, LangGraph, LangSmith, LLM-as-judge, hallucination detection, embedding model evaluation, Ollama, structured outputs, Pydantic, MCP, fine-tuning, LoRA
 
-**MLOps and experimentation:** MLflow, DVC (Data Version Control), Apache Airflow, Apache Kafka, Optuna, Weights & Biases, Jupyter, CVAT (Computer Vision Annotation Tool), automated labelling, dataset versioning, synthetic data generation, benchmarking harnesses, ablation studies, hypothesis testing, Bayesian optimisation, failure-mode analysis, drift tracking, Grad-CAM, TIDE (Toolbox for Identifying Detection Errors), COCO annotation format, model-promotion gates
+**MLOps and experimentation:** MLflow, DVC (Data Version Control), Apache Airflow, Apache Kafka, Optuna, Weights & Biases, Jupyter, CVAT (Computer Vision Annotation Tool), automated labelling, dataset versioning, synthetic data generation, benchmarking harnesses, ablation studies, hypothesis testing, A/B testing, chi-squared test, SciPy, Bayesian optimisation, failure-mode analysis, drift tracking, Grad-CAM, TIDE (Toolbox for Identifying Detection Errors), COCO annotation format, model-promotion gates
 
 **Production and cloud:** Docker, CI/CD, GitHub Actions, Git, CMake, test-driven development, pytest, unittest, gtest, ThreadSanitizer, linting, regression checks, Microsoft Azure, REST API design, FastAPI, containerised microservices, queue-based async processing, multiprocessing, POSIX shared memory, PostgreSQL, Django (views, templates, forms), Bootstrap, ImGui, structured logging, timeouts and retries, health monitoring, health checks, observability, production monitoring, Linux
 
